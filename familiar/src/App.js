@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.min";
+import {Route, Routes} from "react-router-dom";
+import ListFriendShipComponent from "./component/friendship/list";
+import UserDetailComponent from "./component/user/UserDetailComponent";
+import NavbarApp from "./component/layout/NavbarApp";
+import {FooterApp} from "./component/layout/FooterApp";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+
+        <>
+            <NavbarApp/>
+            <Routes>
+                <Route
+                    path="/friendships-list"
+                    element={<ListFriendShipComponent/>}
+                ></Route>
+                <Route
+                    path="/users/detail/:id"
+                    element={<UserDetailComponent/>}
+                ></Route>
+            </Routes>
+            <FooterApp/>
+        </>
+    );
 }
 
 export default App;
