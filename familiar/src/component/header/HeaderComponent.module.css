@@ -1,0 +1,221 @@
+/*.navbar {*/
+/*    background-color: #9370DB;*/
+/*    !*display: flex;*!*/
+/*    !*align-items: center;*!*/
+/*    padding: 0 16px;*/
+/*}*/
+
+/*.avatar {*/
+/*    width: 32px;*/
+/*    height: 32px;*/
+/*    border-radius: 50%;*/
+/*    object-fit: cover;*/
+/*    margin-right: 8px;*/
+/*}*/
+
+/*.dropdownMenu {*/
+/*    right: 0;*/
+/*    left: auto;*/
+
+/*}*/
+
+/*.logoutButton {*/
+/*    background: none;*/
+/*    border: none;*/
+/*    color: rgba(255,255,255,.55);*/
+/*    padding: 0.5rem 1rem;*/
+/*    text-decoration: none;*/
+/*}*/
+
+/*.logoutButton:hover {*/
+/*    color: rgba(255,255,255,.75);*/
+/*}*/
+
+/*.navbarContent {*/
+/*    display: flex;*/
+/*    justify-content: space-between;*/
+/*    align-items: center;*/
+/*    width: 100%;*/
+/*    max-width: 1200px;*/
+/*    margin: 0 auto;*/
+/*}*/
+
+/*.logo {*/
+/*    height: 80px; !* Adjust this value to your preferred size *!*/
+/*    width: auto;*/
+/*    margin-right: auto;*/
+
+/*}*/
+
+.navIconContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.navIcon {
+    font-size: 1.4rem;
+    padding: 10px 15px;
+    margin: 0 10px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    position: relative;
+}
+
+
+.navIcon:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.navIcon.active {
+    color: royalblue;
+}
+
+.navIcon.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: royalblue;
+}
+
+
+/*.navIcon i {*/
+/*    vertical-align: middle;*/
+/*}*/
+
+/*!*.rightSection {*!*/
+/*!*    margin-left: auto;*!*/
+/*!*    display: flex;*!*/
+/*!*    !*align-items: center;*!*!*/
+/*!*}*!*/
+
+/*.avatar{*/
+/*    margin-left: auto;*/
+/*}*/
+
+
+/* HeaderComponent.module.css */
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 10px;
+    background-color: #9370DB;
+    color: #fff;
+}
+
+.navbarContent {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.logo {
+    height: 80px;
+}
+
+/*.navIconContainer {*/
+/*    display: flex;*/
+/*    gap: 15px;*/
+/*    margin-left: 20px;*/
+/*}*/
+
+/*.navIcon {*/
+/*    color: #fff;*/
+/*    font-size: 20px;*/
+/*    text-decoration: none;*/
+/*    transition: color 0.3s;*/
+/*}*/
+
+.navIcon:hover,
+.navIcon.active {
+    color: #00aaff;
+}
+
+.rightSection {
+    margin-left: auto; /* Push avatar to the right */
+    display: flex;
+    align-items: center;
+}
+
+.avatarLink {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 8px; /* Space between avatar and name */
+    object-fit: cover;
+}
+
+.dropdownMenu {
+    min-width: 200px;
+    right: 0; /* Align menu with the right edge */
+    left: auto;
+}
+
+.navLink {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    margin-right: 15px;
+    transition: color 0.3s;
+}
+
+.navLink:hover {
+    color: #00aaff;
+}
+
+/* HeaderComponent.module.css */
+
+.searchBar {
+    display: flex;
+    align-items: center;
+    background-color: #f0f2f5;
+    border-radius: 20px;
+    padding: 5px 10px;
+    margin-left: 20px;
+    width: 300px;
+}
+
+.searchInput {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    flex-grow: 1;
+    font-size: 14px;
+    color: #333;
+    padding: 5px;
+}
+
+.searchInput::placeholder {
+    color: #aaa;
+}
+
+.searchButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #555;
+    font-size: 16px;
+}
+
+.searchButton:hover {
+    color: #000;
+}
+
