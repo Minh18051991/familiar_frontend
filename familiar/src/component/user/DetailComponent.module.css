@@ -1,0 +1,54 @@
+.container {
+    margin-top: 2rem;
+}
+
+.profileCard {
+    margin-bottom: 1rem;
+}
+
+.profileImage {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.editProfileButton {
+    width: 100%;
+}
+
+.detailsCard {
+    margin-bottom: 1rem;
+}
+
+.bioCard {
+    margin-top: 1rem;
+}
+
+.noInfo {
+    color: #999;
+    font-style: italic;
+}
+
+.editButton {
+    float: right;
+}
+
+.saveButton {
+    margin-right: 0.5rem;
+}
+
+.formControl {
+    margin-bottom: 0.5rem;
+}
+
+.cardTitle {
+    margin-bottom: 1rem;
+}
+
+.table th {
+    width: 30%;
+}
+
+.table td {
+    width: 70%;
+}
