@@ -2,19 +2,37 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:8080/api';
 
+const getAuthHeader = () => {
+  const token = localStorage.getItem('token');
+  return { Authorization: `Bearer ${token}` };
+};
+
 export const getPosts = async (page = 0, size = 10) => {
   try {
-    const response = await axios.get(`${API_URL}/posts?page=${page}&size=${size}`);
+    const response = await axios.get(`${API_URL}/posts?page=${page}&size=${size}`, {
+      headers: getAuthHeader()
+    });
     return response.data;
   } catch (error) {
     console.error('Error fetching posts:', error);
-    return [];
+    throw error;
   }
 };
 
-export const createPost = async (postDTO) => {
+export const createPost = async (postData, files) => {
   try {
-    const response = await axios.post(`${API_URL}/posts`, postDTO);
+    const formData = new FormData();
+    formData.append('post', JSON.stringify(postData));
+    if (files && files.length > 0) {
+      files.forEach(file => formData.append('files', file));
+    }
+
+    const response = await axios.post(`${API_URL}/posts`, formData, {
+      headers: {
+        ...getAuthHeader(),
+        'Content-Type': 'multipart/form-data'
+      }
+    });
     return response.data;
   } catch (error) {
     console.error('Error creating post:', error);
@@ -22,19 +40,11 @@ export const createPost = async (postDTO) => {
   }
 };
 
-export const getPostById = async (postId) => {
+export const updatePost = async (id, postData) => {
   try {
-    const response = await axios.get(`${API_URL}/posts/${postId}`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching post by id:', error);
-    throw error;
-  }
-};
-
-export const updatePost = async (postId, postDTO) => {
-  try {
-    const response = await axios.put(`${API_URL}/posts/${postId}`, postDTO);
+    const response = await axios.put(`${API_URL}/posts/${id}`, postData, {
+      headers: getAuthHeader()
+    });
     return response.data;
   } catch (error) {
     console.error('Error updating post:', error);
@@ -42,9 +52,11 @@ export const updatePost = async (postId, postDTO) => {
   }
 };
 
-export const deletePost = async (postId) => {
+export const deletePost = async (id) => {
   try {
-    await axios.delete(`${API_URL}/posts/${postId}`);
+    await axios.delete(`${API_URL}/posts/${id}`, {
+      headers: getAuthHeader()
+    });
   } catch (error) {
     console.error('Error deleting post:', error);
     throw error;
@@ -53,30 +65,12 @@ export const deletePost = async (postId) => {
 
 export const getPostsByUserId = async (userId, page = 0, size = 10) => {
   try {
-    const response = await axios.get(`${API_URL}/posts/user/${userId}?page=${page}&size=${size}`);
+    const response = await axios.get(`${API_URL}/posts/user/${userId}?page=${page}&size=${size}`, {
+      headers: getAuthHeader()
+    });
     return response.data;
   } catch (error) {
-    console.error('Error fetching posts by user id:', error);
-    return [];
-  }
-};
-
-export const getRecentPosts = async (limit = 10) => {
-  try {
-    const response = await axios.get(`${API_URL}/posts/recent?limit=${limit}`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching recent posts:', error);
-    return [];
-  }
-};
-
-export const getPostCountForUser = async (userId) => {
-  try {
-    const response = await axios.get(`${API_URL}/posts/count/${userId}`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching post count for user:', error);
-    return 0;
+    console.error('Error fetching user posts:', error);
+    throw error;
   }
 };

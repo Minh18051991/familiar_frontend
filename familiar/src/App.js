@@ -20,7 +20,7 @@ function App() {
       <Routes>
 
         <Route path={'/register'} element={<RegisterComponent/>}/>
-        <Route path={'/account'} element={<LoginComponent/>}/>
+        <Route path={'/login'} element={<LoginComponent/>}/>
           <Route path={'/'} element={<HomeComponent/>}/>
 
           <Route path="/" element={<PrivateRoute />}>

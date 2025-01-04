@@ -1,68 +1,83 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState } from 'react';
+import { Card, CardContent, TextField, Button, Box, Typography } from '@mui/material';
 import { createPost } from '../../services/postService';
-import { getIcons } from '../../services/iconService';
 
-const CreatePost = ({ onNewPost }) => {
+const CreatePost = ({ onPostCreated }) => {
   const [content, setContent] = useState('');
-  const [attachments, setAttachments] = useState([]);
-  const [selectedIcons, setSelectedIcons] = useState([]);
-  const [availableIcons, setAvailableIcons] = useState([]);
+  const [files, setFiles] = useState([]);
 
-  useEffect(() => {
-    fetchIcons();
-  }, []);
+  const handleContentChange = (event) => {
+    setContent(event.target.value);
+  };
 
-  const fetchIcons = async () => {
+  const handleFileChange = (event) => {
+    setFiles(Array.from(event.target.files));
+  };
+
+  const handleRemoveFile = (index) => {
+    setFiles(files.filter((_, i) => i !== index));
+  };
+
+  const handleSubmit = async () => {
     try {
-      const icons = await getIcons();
-      setAvailableIcons(icons);
-    } catch (error) {
-      console.error('Error fetching icons:', error);
-    }
-  };
-
-  const handleContentChange = (e) => {
-    setContent(e.target.value);
-  };
-
-  const handleFileChange = (e) => {
-    setAttachments([...e.target.files]);
-  };
-
-  const handleIconSelect = (icon) => {
-    setSelectedIcons([...selectedIcons, icon]);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const newPost = await createPost(content, attachments, selectedIcons);
-      onNewPost(newPost);
+      const newPost = await createPost(content, files);
+      onPostCreated(newPost);
       setContent('');
-      setAttachments([]);
-      setSelectedIcons([]);
+      setFiles([]);
     } catch (error) {
       console.error('Error creating post:', error);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="create-post">
-      <textarea
-        value={content}
-        onChange={handleContentChange}
-        placeholder="Bạn đang nghĩ gì?"
-      />
-      <input type="file" multiple onChange={handleFileChange} />
-      <div className="icon-selector">
-        {availableIcons.map(icon => (
-          <button key={icon.id} type="button" onClick={() => handleIconSelect(icon)}>
-            {icon.icon_name}
-          </button>
-        ))}
-      </div>
-      <button type="submit">Đăng bài</button>
-    </form>
+    <Card sx={{ marginBottom: 2 }}>
+      <CardContent>
+        <TextField
+          fullWidth
+          multiline
+          rows={3}
+          variant="outlined"
+          placeholder="What's on your mind?"
+          value={content}
+          onChange={handleContentChange}
+          sx={{ marginBottom: 2 }}
+        />
+        <input
+          accept="image/*,video/*"
+          style={{ display: 'none' }}
+          id="raised-button-file"
+          multiple
+          type="file"
+          onChange={handleFileChange}
+        />
+        <label htmlFor="raised-button-file">
+          <Button variant="contained" component="span" sx={{ marginRight: 2 }}>
+            Upload Files
+          </Button>
+        </label>
+        <Button variant="contained" onClick={handleSubmit}>
+          Post
+        </Button>
+
+        {files.length > 0 && (
+          <Box sx={{ marginTop: 2 }}>
+            <Typography variant="subtitle2">Selected files:</Typography>
+            {files.map((file, index) => (
+              <Box key={index} sx={{ display: 'flex', alignItems: 'center', marginTop: 1 }}>
+                <Typography variant="body2">{file.name}</Typography>
+                <Button 
+                  size="small" 
+                  onClick={() => handleRemoveFile(index)}
+                  sx={{ marginLeft: 1 }}
+                >
+                  Remove
+                </Button>
+              </Box>
+            ))}
+          </Box>
+        )}
+      </CardContent>
+    </Card>
   );
 };
 
