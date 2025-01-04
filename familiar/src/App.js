@@ -1,4 +1,3 @@
-
 import './App.css';
 import HeaderComponent from "./component/header/HeaderComponent";
 import {Route, Routes} from "react-router-dom";
@@ -10,6 +9,7 @@ import RegisterComponent from "./component/register/RegisterComponent";
 import {ToastContainer} from "react-toastify";
 import DetailComponent from "./component/user/DetailComponent";
 import PrivateRoute from "./component/login/PrivateRoute";
+import PostList from "./components/post/PostList";
 
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
       <Routes>
 
         <Route path={'/register'} element={<RegisterComponent/>}/>
-        <Route path={'/account'} element={<LoginComponent/>}/>
+        <Route path={'/login'} element={<LoginComponent/>}/>
           <Route path={'/'} element={<HomeComponent/>}/>
 
           <Route path="/" element={<PrivateRoute />}>
@@ -28,6 +28,7 @@ function App() {
               {/* Thêm các route khác cần bảo vệ ở đây */}
           </Route>
       </Routes>
+        <PostList/>
     </>
   );
 }
