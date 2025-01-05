@@ -138,16 +138,15 @@ function LoginComponent() {
                         </button>
                     </form>
                     <div className={styles.registerSection}>
-                        <p>Chưa có tài khoản?</p>
+                        <Link to="/forgot-password" className={styles.forgotPasswordLink}>
+                            Quên mật khẩu?
+                        </Link>
                         <Link to="/register" className={styles.registerButton}>
                             Đăng ký ngay
                         </Link>
                     </div>
                 </div>
             </div>
-            <footer className={styles.footer}>
-                <p>&copy; 2023 Your Company Name. All rights reserved.</p>
-            </footer>
         </div>
     )
 }

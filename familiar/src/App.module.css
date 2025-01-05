@@ -38,3 +38,13 @@
     transform: rotate(360deg);
   }
 }
+
+.appContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Đảm bảo container chiếm toàn bộ chiều cao của viewport */
+}
+
+.mainContent {
+  flex: 1; /* Cho phép nội dung chính mở rộng để đẩy footer xuống */
+}

@@ -18,6 +18,7 @@ export async function checkLogin(loginInfo) {
 }
 
 export async function createAccount(account) {
+
     try {
         await axios.post('http://localhost:8080/api/register/account/create', account);
         return true; // Trả về dữ liệu từ phản hồi
@@ -35,5 +36,17 @@ export async function checkUsernameExists(username) {
     } catch (error) {
         console.error("Error checking username:", error);
         return false;
+    }
+}
+
+
+export async function updatePassword(account) {
+    const token = localStorage.getItem('token');
+    console.log("------account-------", account)
+    try {
+        await axios.post('http://localhost:8080/api/account/change-password', account,{headers: { Authorization: `Bearer ${token}` }  });
+        return true; // Trả về dữ liệu từ phản hồi
+    } catch (error) {
+        return false
     }
 }

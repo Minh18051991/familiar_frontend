@@ -60,150 +60,6 @@ function DetailComponent() {
         setEditingField(null);
         setEditValue("");
     };
-    // const renderGenderField = (label, field, value) => (
-    //     <tr>
-    //         <th>{label}</th>
-    //         <td>
-    //             {editingField === field ? (
-    //                 <>
-    //                     <select
-    //                         value={editValue}
-    //                         onChange={(e) => setEditValue(e.target.value)}
-    //                         className="form-select"
-    //                     >
-    //                         <option value="male">Nam</option>
-    //                         <option value="female">Nữ</option>
-    //                         <option value="other">Khác</option>
-    //                     </select>
-    //                     <div className="mt-2">
-    //                         <button onClick={() => handleSave(field)} className="btn btn-sm btn-success me-2">
-    //                             Lưu
-    //                         </button>
-    //                         <button onClick={handleCancel} className="btn btn-sm btn-secondary">
-    //                             Hủy
-    //                         </button>
-    //                     </div>
-    //                 </>
-    //             ) : (
-    //                 <>
-    //                 <span className={value ? '' : 'no-info'}>
-    //                     {value === 'male' ? 'Nam' : value === 'female' ? 'Nữ' : value === 'other' ? 'Khác' : 'Chưa có thông tin'}
-    //                 </span>
-    //                     <button onClick={() => handleEdit(field, value)}
-    //                             className="btn btn-sm btn-outline-primary float-end">
-    //                         Chỉnh sửa
-    //                     </button>
-    //                 </>
-    //             )}
-    //         </td>
-    //     </tr>
-    // );
-    //
-    // const renderField = (label, field, value) => (
-    //     <tr>
-    //         <th>{label}</th>
-    //         <td>
-    //             {editingField === field ? (
-    //                 <>
-    //                     <input
-    //                         type="text"
-    //                         value={editValue}
-    //                         onChange={(e) => setEditValue(e.target.value)}
-    //                         className="form-control"
-    //                     />
-    //                     <div className="mt-2">
-    //                         <button onClick={() => handleSave(field)} className="btn btn-sm btn-success me-2">
-    //                             Lưu
-    //                         </button>
-    //                         <button onClick={handleCancel} className="btn btn-sm btn-secondary">
-    //                             Hủy
-    //                         </button>
-    //                     </div>
-    //                 </>
-    //             ) : (
-    //                 <>
-    //                     <span className={value ? '' : 'no-info'}>
-    //                         {field === 'dateOfBirth' ? formatDateForDisplay(value) : (value || "Chưa có thông tin")}
-    //                     </span>
-    //                     <button onClick={() => handleEdit(field, field === 'dateOfBirth' ? formatDateForDisplay(value) : value)}
-    //                             className="btn btn-sm btn-outline-primary float-end">
-    //                         Chỉnh sửa
-    //                     </button>
-    //                 </>
-    //             )}
-    //         </td>
-    //     </tr>
-    // );
-
-
-    // return (
-    //     <div className="container mt-4">
-    //         <div className="row">
-    //             <div className="col-md-4">
-    //                 <div className="card">
-    //                     <img src={user.profilePictureUrl || 'https://via.placeholder.com/150'}
-    //                          className="card-img-top" alt="Profile Picture"/>
-    //                     <div className="card-body">
-    //                         <h5 className="card-title">{user.firstName} {user.lastName}</h5>
-    //                         <button className="btn btn-sm btn-outline-primary mt-2">Chỉnh sửa ảnh đại diện</button>
-    //                     </div>
-    //                 </div>
-    //             </div>
-    //             <div className="col-md-8">
-    //                 <div className="card">
-    //                     <div className="card-body">
-    //                         <h5 className="card-title">Thông tin chi tiết</h5>
-    //                         <table className="table">
-    //                             <tbody>
-    //                             {renderGenderField("Giới tính", "gender", user.gender)}
-    //                             {renderField("Địa chỉ", "address", user.address)}
-    //                             {renderField("Nghề nghiệp", "occupation", user.occupation)}
-    //                             {renderField("Email", "email", user.email)}
-    //                             {renderField("Ngày sinh", "dateOfBirth", user.dateOfBirth ? new Date(user.dateOfBirth).toLocaleDateString() : null)}
-    //                             {renderField("Thời gian tạo", "createdAt", user.createdAt ? new Date(user.createdAt).toLocaleString() : null)}
-    //                             </tbody>
-    //                         </table>
-    //                     </div>
-    //                 </div>
-    //                 <div className="card mt-3">
-    //                     <div className="card-body">
-    //                         <h5 className="card-title">Tiểu sử</h5>
-    //                         {editingField === 'bio' ? (
-    //                             <>
-    //                                 <textarea
-    //                                     value={editValue}
-    //                                     onChange={(e) => setEditValue(e.target.value)}
-    //                                     className="form-control"
-    //                                 />
-    //                                 <div className="mt-2">
-    //                                     <button onClick={() => handleSave('bio')}
-    //                                             className="btn btn-sm btn-success me-2">
-    //                                         Lưu
-    //                                     </button>
-    //                                     <button onClick={handleCancel} className="btn btn-sm btn-secondary">
-    //                                         Hủy
-    //                                     </button>
-    //                                 </div>
-    //
-    //                             </>
-    //                         ) : (
-    //                             <>
-    //                                 <p className={`card-text ${user.bio ? '' : 'no-info'}`}>
-    //                                     {user.bio || "Chưa có thông tin"}
-    //                                 </p>
-    //                                 <button onClick={() => handleEdit('bio', user.bio)}
-    //                                         className="btn btn-sm btn-outline-primary">
-    //                                     Chỉnh sửa tiểu sử
-    //                                 </button>
-    //                             </>
-    //                         )}
-    //                     </div>
-    //                 </div>
-    //             </div>
-    //         </div>
-    //     </div>
-    // );
-
 
     const renderGenderField = (label, field, value) => (
         <tr>
@@ -221,7 +77,7 @@ function DetailComponent() {
                             <option value="other">Khác</option>
                         </select>
                         <div className="mt-2">
-                            <button onClick={() => handleSave(field)} className={`btn btn-sm btn-success ${styles.saveButton}`}>
+                            <button onClick={() => handleSave(field)} className={`btn btn-sm btn-primary ${styles.saveButton}`}>
                                 Lưu
                             </button>
                             <button onClick={handleCancel} className="btn btn-sm btn-secondary">
@@ -257,7 +113,7 @@ function DetailComponent() {
                             className={`form-control ${styles.formControl}`}
                         />
                         <div className="mt-2">
-                            <button onClick={() => handleSave(field)} className={`btn btn-sm btn-success ${styles.saveButton}`}>
+                            <button onClick={() => handleSave(field)} className={`btn btn-sm btn-primary ${styles.saveButton}`}>
                                 Lưu
                             </button>
                             <button onClick={handleCancel} className="btn btn-sm btn-secondary">
@@ -322,7 +178,7 @@ function DetailComponent() {
                                     />
                                     <div className="mt-2">
                                         <button onClick={() => handleSave('bio')}
-                                                className={`btn btn-sm btn-success ${styles.saveButton}`}>
+                                                className={`btn btn-sm btn-primary ${styles.saveButton}`}>
                                             Lưu
                                         </button>
                                         <button onClick={handleCancel} className="btn btn-sm btn-secondary">
