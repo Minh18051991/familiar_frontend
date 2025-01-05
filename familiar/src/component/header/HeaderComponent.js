@@ -6,7 +6,7 @@ import styles from './HeaderComponent.module.css';
 
 
 function HeaderComponent() {
-    const info = useSelector(state => state.user);
+    const info= useSelector(state => state.user);
     const account = info ? info.account : null;
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -14,7 +14,7 @@ function HeaderComponent() {
 
     const handleLogout = () => {
         dispatch(logout());
-        navigate('/');
+        navigate('/login');
     }
 
     const isActive = (path) => location.pathname === path ? styles.active : '';
@@ -68,7 +68,7 @@ function HeaderComponent() {
                                 aria-labelledby="navbarDropdown">
                                 <li><Link className="dropdown-item" to={`/user/detail/${account.userId}`}>Xem
                                     thông tin cá nhân</Link></li>
-                                <li><Link className="dropdown-item" to="/change-password">Đổi mật
+                                <li><Link className="dropdown-item" to={`/account/change-password/${account.username}`}>Đổi mật
                                     khẩu</Link></li>
                                 <li>
                                     <hr className="dropdown-divider"/>
