@@ -12,6 +12,8 @@ import PrivateRoute from "./component/login/PrivateRoute";
 import FooterComponent from "./component/footer/FooterComponent";
 import UpdateAccountComponent from "./component/account/UpdateAccountComponent";
 import DashboardComponent from "./component/dashboard/DashboardComponent";
+import ListFriendShipComponent from "./component/friendship/list";
+import UserDetailComponent from "./component/user/UserDetailComponent";
 
 function App() {
     return (
@@ -27,6 +29,14 @@ function App() {
                         <Route path={'/user/detail/:id'} element={<DetailComponent/>}/>
                         <Route path={'/account/change-password/:username'} element={<UpdateAccountComponent/>}/>
                         {/* Thêm các route khác cần bảo vệ ở đây */}
+                        <Route
+                            path="/friendships-list"
+                            element={<ListFriendShipComponent/>}
+                        ></Route>
+                        <Route
+                            path="/users/detail/:id"
+                            element={<UserDetailComponent/>}
+                        ></Route>
                     </Route>
                 </Routes>
             </main>
