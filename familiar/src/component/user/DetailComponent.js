@@ -88,7 +88,7 @@ function DetailComponent() {
                 ) : (
                     <>
                     <span className={value ? '' : styles.noInfo}>
-                        {value === 'male' ? 'Nam' : value === 'female' ? 'Nữ' : value === 'other' ? 'Khác' : 'Chưa có thông tin'}
+                        {value === 'Nam' ? 'Nam' : value === 'Nữ' ? 'Nữ' : value === 'Khác' ? 'Khác' : 'Chưa có thông tin'}
                     </span>
                         <button onClick={() => handleEdit(field, value)}
                                 className={`btn btn-sm btn-outline-primary ${styles.editButton}`}>
