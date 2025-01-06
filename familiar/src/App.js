@@ -17,7 +17,7 @@ function App() {
     return (
         <div className={styles.appContainer}>
             <HeaderComponent/>
-            <ToastContainer autoClose={1000}/>
+            <ToastContainer autoClose={500}/>
             <main className={styles.mainContent}>
                 <Routes>
                     <Route path={'/register'} element={<RegisterComponent/>}/>
