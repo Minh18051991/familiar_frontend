@@ -1,12 +1,14 @@
 import React from "react";
 import {deleteFriendship} from "../../service/friendship/friendshipService";
+import {useSelector} from "react-redux";
 
 function DeleteFriendModal({isShowModal, friendship, handleCloseModal, handleIsLoading}) {
 
+    const userId = useSelector(state => state.user.account.userId);
+
     const handleUnFriend = async () => {
-        const userId1 = 1;
         const userId2 = friendship.userId;
-        await deleteFriendship(userId1, userId2);
+        await deleteFriendship(userId, userId2);
 
         handleIsLoading();
         handleCloseModal();

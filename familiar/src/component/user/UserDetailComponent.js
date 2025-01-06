@@ -3,20 +3,22 @@ import {Link, useParams} from "react-router-dom";
 import {findUserById} from "../../service/user/userService";
 import {cancelFriendship, sendFriendship, suggestedFriendsList} from "../../service/friendship/friendshipService";
 import styles from "../user/userDetail.module.css";
+import {useSelector} from "react-redux";
 
 function UserDetailComponent() {
     const [user, setUser] = useState({});
     const {id} = useParams();
     const [friendList, setFriendList] = useState([]);
     const [isFriend, setIsFriend] = useState(true);
+    const [userId, setUserId] = useState(useSelector(state => state.user.account.userId));
 
     useEffect(() => {
         const fetchFriendships = async () => {
-            const userId1 = 1;
-            const userId2 = id;
+
+            const friendId = id;
 
             try {
-                const list = await suggestedFriendsList(userId1, userId2);
+                const list = await suggestedFriendsList(userId, friendId);
 
                 if (Array.isArray(list)) {
                     const updateList = list.map(friend => ({
@@ -58,23 +60,22 @@ function UserDetailComponent() {
         return <div>Loading...</div>;
     }
 
-    const handleAddFriend = async (userId) => {
+    const handleAddFriend = async (friendId) => {
         try {
-            const userId1 = 1;
 
             let updatedFriendStatus;
 
             if (isFriend) {
-                await cancelFriendship(userId1, userId);
+                await cancelFriendship(userId, friendId);
                 updatedFriendStatus = false;
             } else {
-                await sendFriendship(userId1, userId);
+                await sendFriendship(userId, friendId);
                 updatedFriendStatus = true;
             }
 
             setFriendList(prevList =>
                 prevList.map(friend =>
-                    friend.userId === userId
+                    friend.userId === friendId
                         ? { ...friend, isFriend: updatedFriendStatus }
                         : friend
                 )

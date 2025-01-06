@@ -2,14 +2,16 @@ import React, {useEffect, useState} from "react";
 import styles from "./ListFriendShip.module.css";
 import {FriendItem} from "../FriendItem";
 import {getFriendShips, searchNameFriendship} from "../../service/friendship/friendshipService";
+import {useSelector} from "react-redux";
 
 function ListFriendShipComponent() {
     const [searchValue, setSearchValue] = useState("");
     const [users, setUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [userId, setUserId] = useState(useSelector(state => state.user.account.userId));
 
     useEffect(() => {
-        const userId = 1;
+        
         getFriendShips(userId)
             .then((res) => {
                 setUsers(res);
@@ -24,7 +26,6 @@ function ListFriendShipComponent() {
     }
 
     const handleSearchName = async () => {
-        const userId = 1;
         const searchList = await searchNameFriendship(userId, searchValue);
         setUsers(searchList);
 
