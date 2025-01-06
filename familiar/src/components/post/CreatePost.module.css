@@ -1,0 +1,45 @@
+.createPostCard {
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.createPostCard:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.createPostCard form {
+  display: flex;
+  flex-direction: column;
+}
+
+.createPostCard textarea {
+  margin-bottom: 16px;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.submitButton {
+  align-self: flex-end;
+  margin-top: 16px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.submitButton:hover {
+  background-color: #1565c0; /* Darker shade of primary color */
+}
+
+.submitButton:disabled {
+  background-color: #bdbdbd;
+  color: #757575;
+}
+
+@media (max-width: 600px) {
+  .createPostCard {
+    margin-bottom: 16px;
+  }
+
+  .submitButton {
+    width: 100%;
+  }
+}

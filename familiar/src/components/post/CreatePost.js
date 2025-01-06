@@ -1,83 +1,75 @@
 import React, { useState } from 'react';
-import { Card, CardContent, TextField, Button, Box, Typography } from '@mui/material';
-import { createPost } from '../../services/postService';
+import { useNavigate } from 'react-router-dom';
+import PostService from "../../services/PostService";
 
-const CreatePost = ({ onPostCreated }) => {
+const CreatePost = () => {
   const [content, setContent] = useState('');
   const [files, setFiles] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  const handleContentChange = (event) => {
-    setContent(event.target.value);
+  const handleContentChange = (e) => {
+    setContent(e.target.value);
   };
 
-  const handleFileChange = (event) => {
-    setFiles(Array.from(event.target.files));
+  const handleFileChange = (e) => {
+    setFiles(Array.from(e.target.files));
   };
 
-  const handleRemoveFile = (index) => {
-    setFiles(files.filter((_, i) => i !== index));
-  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
 
-  const handleSubmit = async () => {
     try {
-      const newPost = await createPost(content, files);
-      onPostCreated(newPost);
-      setContent('');
-      setFiles([]);
-    } catch (error) {
-      console.error('Error creating post:', error);
+      const postData = {
+        content: content,
+        // Add any other necessary fields here, e.g., userId, privacy settings, etc.
+      };
+
+      const response = await PostService.createPost(postData, files);
+      console.log('Post created successfully:', response.data);
+      navigate('/'); // Redirect to home page or post list
+    } catch (err) {
+      console.error('Error creating post:', err);
+      setError('Failed to create post. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <Card sx={{ marginBottom: 2 }}>
-      <CardContent>
-        <TextField
-          fullWidth
-          multiline
-          rows={3}
-          variant="outlined"
-          placeholder="What's on your mind?"
-          value={content}
-          onChange={handleContentChange}
-          sx={{ marginBottom: 2 }}
-        />
-        <input
-          accept="image/*,video/*"
-          style={{ display: 'none' }}
-          id="raised-button-file"
-          multiple
-          type="file"
-          onChange={handleFileChange}
-        />
-        <label htmlFor="raised-button-file">
-          <Button variant="contained" component="span" sx={{ marginRight: 2 }}>
-            Upload Files
-          </Button>
-        </label>
-        <Button variant="contained" onClick={handleSubmit}>
-          Post
-        </Button>
-
-        {files.length > 0 && (
-          <Box sx={{ marginTop: 2 }}>
-            <Typography variant="subtitle2">Selected files:</Typography>
-            {files.map((file, index) => (
-              <Box key={index} sx={{ display: 'flex', alignItems: 'center', marginTop: 1 }}>
-                <Typography variant="body2">{file.name}</Typography>
-                <Button 
-                  size="small" 
-                  onClick={() => handleRemoveFile(index)}
-                  sx={{ marginLeft: 1 }}
-                >
-                  Remove
-                </Button>
-              </Box>
-            ))}
-          </Box>
-        )}
-      </CardContent>
-    </Card>
+    <div className="create-post">
+      <h2>Create New Post</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="content">Post Content:</label>
+          <textarea
+            id="content"
+            value={content}
+            onChange={handleContentChange}
+            required
+            rows="4"
+            className="form-control"
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="files">Upload Files:</label>
+          <input
+            type="file"
+            id="files"
+            onChange={handleFileChange}
+            multiple
+            className="form-control-file"
+          />
+        </div>
+        {error && <div className="alert alert-danger">{error}</div>}
+        <button type="submit" className="btn btn-primary" disabled={isLoading}>
+          {isLoading ? 'Creating...' : 'Create Post'}
+        </button>
+      </form>
+    </div>
   );
 };
 
