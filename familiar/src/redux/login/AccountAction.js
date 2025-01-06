@@ -7,6 +7,7 @@ export function login(loginInfo){
         const account = await checkLogin(loginInfo);
         if(account!= null){
             localStorage.setItem('token', account.token);
+            localStorage.setItem('userId', account.userId);
             dispatch({
                 type: 'LOGIN',
                 payload: {
@@ -16,6 +17,7 @@ export function login(loginInfo){
                     userId: account.userId
                 }
             });
+            console.log("Login thành công", account.userId);
             return true;
         }else {
             console.log("Tài khoản không tồn tại");
