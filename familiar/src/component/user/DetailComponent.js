@@ -88,7 +88,7 @@ function DetailComponent() {
                 ) : (
                     <>
                     <span className={value ? '' : styles.noInfo}>
-                        {value === 'male' ? 'Nam' : value === 'female' ? 'Nữ' : value === 'other' ? 'Khác' : 'Chưa có thông tin'}
+                        {value === 'Nam' ? 'Nam' : value === 'Nữ' ? 'Nữ' : value === 'Khác' ? 'Khác' : 'Chưa có thông tin'}
                     </span>
                         <button onClick={() => handleEdit(field, value)}
                                 className={`btn btn-sm btn-outline-primary ${styles.editButton}`}>
@@ -137,15 +137,30 @@ function DetailComponent() {
     );
 
 
+
+    const getDefaultProfilePicture = (gender) => {
+        switch(gender) {
+            case 'female':
+                return "https://antimatter.vn/wp-content/uploads/2022/04/anh-avatar-trang-co-gai-toc-tem.jpg";
+            case 'male':
+                return "https://static2.yan.vn/YanNews/2167221/202003/dan-mang-du-trend-thiet-ke-avatar-du-kieu-day-mau-sac-tu-anh-mac-dinh-b0de2bad.jpg";
+            default:
+                return "https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg";
+        }
+    };
+
     return (
         <div className={`container ${styles.container}`}>
             <div className="row">
                 <div className="col-md-4">
                     <div className={`card ${styles.profileCard}`}>
-                        <img src={user.profilePictureUrl || 'https://via.placeholder.com/150'}
-                             className={`card-img-top ${styles.profileImage}`} alt="Profile Picture"/>
+                        <img
+                            src={user.profilePictureUrl || getDefaultProfilePicture(user.gender)}
+                            className={`card-img-top ${styles.profileImage}`}
+                            alt="Profile Picture"
+                        />
                         <div className="card-body">
-                            <h5 className="card-title">{user.firstName} {user.lastName}</h5>
+                        <h5 className="card-title">{user.firstName} {user.lastName}</h5>
                             <button className={`btn btn-sm btn-outline-primary mt-2 ${styles.editProfileButton}`}>Chỉnh sửa ảnh đại diện</button>
                         </div>
                     </div>

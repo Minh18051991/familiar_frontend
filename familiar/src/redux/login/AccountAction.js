@@ -14,7 +14,8 @@ export function login(loginInfo){
                     username: account.username,
                     role: account.role,
                     profilePictureUrl: account.profilePictureUrl,
-                    userId: account.userId
+                    userId: account.userId,
+                    gender: account.gender
                 }
             });
             console.log("Login thành công", account.userId);
