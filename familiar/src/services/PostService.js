@@ -1,76 +1,88 @@
 import axios from 'axios';
+import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
+import {storage} from '../firebaseConfig';
 
 const API_URL = 'http://localhost:8080/api/posts';
 
 class PostService {
-    getAllPosts(page = 0, size = 10) {
-        return axios.get(`${API_URL}?page=${page}&size=${size}`, {
-            headers: this.authHeader(),
+    constructor() {
+        this.axiosInstance = axios.create({
+            baseURL: API_URL,
             withCredentials: true
+        });
+
+        this.axiosInstance.interceptors.request.use((config) => {
+            const token = localStorage.getItem('token');
+            const userId = localStorage.getItem('userId');
+            if (token) {
+                config.headers['Authorization'] = `Bearer ${token}`;
+            }
+            if (userId) {
+                config.headers['User-Id'] = userId;
+            }
+            return config;
+        }, (error) => {
+            return Promise.reject(error);
         });
     }
 
-    createPost(postData, files) {
-        const formData = new FormData();
-        formData.append('post', JSON.stringify(postData));
-        if (files && files.length > 0) {
-            files.forEach((file) => {
-                formData.append('files', file);
-            });
-        }
-        console.log(formData)
-        console.log("----------")
-        const headers = this.authHeader();
-        console.log('Headers:', headers);
-        return axios.post(API_URL, formData, {
-            headers: {
-                ...this.authHeader(),
-                'Content-Type': 'multipart/form-data'
-            },
-            withCredentials: true
+    getAllPosts(page = 0, size = 10) {
+        return this.axiosInstance.get('', {
+            params: {page, size}
         });
+    }
+
+    async createPost(postData, files) {
+        try {
+            const attachmentUrls = await this.uploadFiles(files);
+            const formData = {
+                ...postData,
+                attachmentUrls: attachmentUrls
+            };
+            console.log('FormData sending :', formData);
+            const response = await this.axiosInstance.post('', formData, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error creating post:', error);
+            throw error;
+        }
+    }
+
+    async uploadFiles(files) {
+        const urls = [];
+        for (const file of files) {
+            const storageRef = ref(storage, 'posts/' + file.name);
+            await uploadBytes(storageRef, file);
+            const url = await getDownloadURL(storageRef);
+            urls.push(url);
+        }
+        return urls;
     }
 
     getPostById(id) {
-        return axios.get(`${API_URL}/${id}`, {
-            headers: this.authHeader(),
-            withCredentials: true
-        });
+        return this.axiosInstance.get(`/${id}`);
     }
 
     updatePost(id, postData) {
-        return axios.put(`${API_URL}/${id}`, postData, {
+        return this.axiosInstance.put(`/${id}`, postData, {
             headers: {
-                ...this.authHeader(),
                 'Content-Type': 'application/json'
-            },
-            withCredentials: true
+            }
         });
     }
 
     deletePost(id) {
-        return axios.delete(`${API_URL}/${id}`, {
-            headers: this.authHeader(),
-            withCredentials: true
-        });
+        return this.axiosInstance.delete(`/${id}`);
     }
 
     getPostsByUserId(userId, page = 0, size = 10) {
-        return axios.get(`${API_URL}/user/${userId}?page=${page}&size=${size}`, {
-            headers: this.authHeader(),
-            withCredentials: true
+        return this.axiosInstance.get(`/user/${userId}`, {
+            params: {page, size}
         });
-    }
-
-    authHeader() {
-        const token = localStorage.getItem('token');
-        console.log('token from local storage is: ', token);        if (token) {
-            return {
-                'Authorization': `Bearer ${token}`
-            };
-        } else {
-            return {};
-        }
     }
 }
 
