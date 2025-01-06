@@ -19,6 +19,9 @@ function UserDetailComponent() {
 
             try {
                 const list = await suggestedFriendsList(userId, friendId);
+                console.log("==============");
+                console.log("userID" + userId);
+                console.log("friendID" + friendId)
 
                 if (Array.isArray(list)) {
                     const updateList = list.map(friend => ({
@@ -60,22 +63,24 @@ function UserDetailComponent() {
         return <div>Loading...</div>;
     }
 
-    const handleAddFriend = async (friendId) => {
+    const handleAddFriend = async (userId2) => {
         try {
+            console.log("======================")
+            console.log(userId2)
 
             let updatedFriendStatus;
 
             if (isFriend) {
-                await cancelFriendship(userId, friendId);
+                await cancelFriendship(userId, userId2);
                 updatedFriendStatus = false;
             } else {
-                await sendFriendship(userId, friendId);
+                await sendFriendship(userId, userId2);
                 updatedFriendStatus = true;
             }
 
             setFriendList(prevList =>
                 prevList.map(friend =>
-                    friend.userId === friendId
+                    friend.userId === userId2
                         ? { ...friend, isFriend: updatedFriendStatus }
                         : friend
                 )

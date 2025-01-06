@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import styles from "./ListFriendShip.module.css";
+import styles from "../friendship/ListFriendShip.module.css";
 import {FriendItem} from "../FriendItem";
 import {getFriendShips, searchNameFriendship} from "../../service/friendship/friendshipService";
 import {useSelector} from "react-redux";
