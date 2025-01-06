@@ -44,7 +44,7 @@ function HeaderComponent() {
                     </Link>
 
 
-                    <Link className={`${styles.navIcon} ${isActive('/friends')}`} to="/friends" title="Bạn bè">
+                    <Link className={`${styles.navIcon} ${isActive('/friends')}`} to="/friendships-list" title="Bạn bè">
                         <i className="fas fa-user-friends"></i>
                     </Link>
                     <Link className={`${styles.navIcon} ${isActive('/messages')}`} to="/messages" title="Tin nhắn">
