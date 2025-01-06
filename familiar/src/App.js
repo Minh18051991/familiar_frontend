@@ -23,14 +23,14 @@ function App() {
                 <Routes>
                     <Route path={'/register'} element={<RegisterComponent/>}/>
                     <Route path={'/login'} element={<LoginComponent/>}/>
-                    <Route path={'/'} element={<HomeComponent/>}/>
+                    <Route path={'/'} element={<PostList/>}/>
                     <Route path="/" element={<PrivateRoute/>}>
                         <Route path={'/user/detail/:id'} element={<DetailComponent/>}/>
                         <Route path={'/account/change-password/:username'} element={<UpdateAccountComponent/>}/>
                         {/* Thêm các route khác cần bảo vệ ở đây */}
                     </Route>
                 </Routes>
-                <PostList/>
+
             </main>
             <FooterComponent/>
         </div>

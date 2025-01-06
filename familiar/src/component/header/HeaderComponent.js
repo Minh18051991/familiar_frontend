@@ -61,7 +61,11 @@ function HeaderComponent() {
                             <a className={`nav-link dropdown-toggle d-flex align-items-center ${styles.avatarLink}`}
                                id="navbarDropdown"
                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src={account.profilePictureUrl} alt="Avatar" className={styles.avatar}/>
+                                <img
+                                    src={account.profilePictureUrl || "https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg"}
+                                    alt="Avatar"
+                                    className={styles.avatar}
+                                />
                                 <span>{account.name}</span>
                             </a>
                             <ul className={`dropdown-menu dropdown-menu-end ${styles.dropdownMenu}`}

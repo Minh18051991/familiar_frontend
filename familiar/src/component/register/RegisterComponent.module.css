@@ -1,0 +1,117 @@
+/* General container styling */
+.container {
+    margin-top: 50px;
+    padding: 20px;
+}
+
+.registerContainer {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.registerCard {
+    border: none;
+    border-radius: 10px;
+    background-color: #ffffff;
+    padding: 20px;
+}
+
+.registerTitle {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #343a40;
+}
+
+.formGroup {
+    margin-bottom: 15px;
+}
+
+.formLabel {
+    font-weight: 500;
+    color: #495057;
+}
+
+.formControl {
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    padding: 10px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.formControl:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+}
+
+.errorMessage {
+    color: #e74c3c;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.submitButton {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.submitButton:hover {
+    background-color: #0056b3;
+}
+
+.submitButton:active {
+    background-color: #004085;
+    transform: scale(0.98);
+}
+
+.submitButton:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.cancelButton {
+    margin-top: 15px;
+    width: 100%;
+    padding: 12px;
+    background-color: #6c757d;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.cancelButton:hover {
+    background-color: #5a6268;
+}
+
+.cancelButton:active {
+    background-color: #545b62;
+    transform: scale(0.98);
+}
+
+.cancelButton:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(108, 117, 125, 0.5);
+}
+
+/* Additional styling for responsiveness */
+@media (max-width: 768px) {
+    .registerContainer {
+        padding: 20px;
+    }
+    .registerCard {
+        padding: 15px;
+    }
+}
