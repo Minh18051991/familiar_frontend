@@ -23,7 +23,7 @@ export async function searchNameFriendship(userId, searchName) {
 export async function sendFriendship(userId1, userId2) {
   const token = localStorage.getItem('token');
   try {
-    const response = await axios.post(`http://localhost:8080/api/friendships/send/${userId1}/${userId2}`,{headers: {Authorization: `Bearer ${token}`}});
+    const response = await axios.post(`http://localhost:8080/api/friendships/send/${userId1}/${userId2}`,null,{headers: {Authorization: `Bearer ${token}`}});
     return response.data;
   } catch (error) {
     console.log("loi:" + error.message);
@@ -43,7 +43,7 @@ export async function deleteFriendship(userId1, userId2) {
 export async function acceptFriendship(userId1, userId2) {
   const token = localStorage.getItem('token');
   try {
-    const response = await axios.put(`http://localhost:8080/api/friendships/accept/${userId1}/${userId2}`,{headers: {Authorization: `Bearer ${token}`}});
+    const response = await axios.put(`http://localhost:8080/api/friendships/accept/${userId1}/${userId2}`,null,{headers: {Authorization: `Bearer ${token}`}});
     return response.data;
   } catch (error) {
     console.log("loi:" + error.message);
@@ -52,7 +52,7 @@ export async function acceptFriendship(userId1, userId2) {
 export async function cancelFriendship(userId1, userId2) {
   const token = localStorage.getItem('token');
   try {
-    const response = await axios.put(`http://localhost:8080/api/friendships/cancel/${userId1}/${userId2}`,{headers: {Authorization: `Bearer ${token}`}});
+    const response = await axios.put(`http://localhost:8080/api/friendships/cancel/${userId1}/${userId2}`,null,{headers: {Authorization: `Bearer ${token}`}});
     return response.data;
   } catch (error) {
     console.log("loi:" + error.message);
