@@ -1,74 +1,100 @@
 import React, { useState, useEffect } from 'react';
-import { getPosts } from '../../services/postService';
-import { Box, Card, CardContent, Typography, Avatar, CardMedia } from '@mui/material';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import {
+  Card,
+  CardHeader,
+  CardMedia,
+  CardContent,
+  Avatar,
+  Typography,
+  CircularProgress,
+  Alert,
+  Pagination
+} from '@mui/material';
+import PostService from '../../services/PostService';
 import CreatePost from './CreatePost';
+import styles from './PostList.module.css';
 
 const PostList = () => {
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
-
-  const fetchPosts = async () => {
-    try {
-      const response = await getPosts(page);
-      if (response.content.length === 0) {
-        setHasMore(false);
-      } else {
-        setPosts(prevPosts => [...prevPosts, ...response.content]);
-        setPage(prevPage => prevPage + 1);
-      }
-    } catch (error) {
-      console.error('Error fetching posts:', error);
-    }
-  };
+  const [size, setSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchPosts();
-  }, []);
+  }, [page, size]);
 
-  const handlePostCreated = (newPost) => {
-    setPosts(prevPosts => [newPost, ...prevPosts]);
+  const fetchPosts = async () => {
+    setLoading(true);
+    try {
+      const response = await PostService.getAllPosts(page, size);
+      setPosts(response.data.content);
+      setTotalPages(response.data.totalPages);
+      setError(null);
+    } catch (err) {
+      setError('Failed to fetch posts. Please try again later.');
+      console.error('Error fetching posts:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  return (
-    <Box sx={{ maxWidth: 600, margin: 'auto' }}>
-      <CreatePost onPostCreated={handlePostCreated} />
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage - 1);
+  };
 
-      <InfiniteScroll
-        dataLength={posts.length}
-        next={fetchPosts}
-        hasMore={hasMore}
-        loader={<h4>Loading...</h4>}
-      >
-        {posts.map(post => (
-          <Card key={post.id} sx={{ marginBottom: 2 }}>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
-                <Avatar src={post.userProfilePictureUrl} sx={{ marginRight: 2 }} />
-                <Typography variant="subtitle1">
-                  {`${post.userFirstName} ${post.userLastName}`}
-                </Typography>
-              </Box>
-              <Typography variant="body1" sx={{ marginBottom: 2 }}>
-                {post.content}
-              </Typography>
-              {post.attachmentUrls && post.attachmentUrls.length > 0 && (
-                <CardMedia
-                  component="img"
-                  height="194"
-                  image={post.attachmentUrls[0]}
-                  alt="Post attachment"
-                />
-              )}
-              <Typography variant="caption" color="text.secondary">
-                Posted on: {new Date(post.createdAt).toLocaleString()}
-              </Typography>
-            </CardContent>
-          </Card>
-        ))}
-      </InfiniteScroll>
-    </Box>
+  const handleNewPost = (newPost) => {
+    setPosts([newPost, ...posts]);
+  };
+
+  if (loading && page === 0) return <CircularProgress />;
+  if (error) return <Alert severity="error">{error}</Alert>;
+
+  return (
+    <div className={styles.postList}>
+      <Typography variant="h4" component="h2" gutterBottom>
+        Posts
+      </Typography>
+      <CreatePost onPostCreated={handleNewPost} />
+      {posts.map((post) => (
+        <Card key={post.id} className={styles.postCard}>
+          <CardHeader
+            avatar={
+              <Avatar
+                src={post.profilePictureUrl}
+                alt={`${post.userFirstName} ${post.userLastName}`}
+              >
+                {post.userFirstName ? post.userLastName.charAt(0) : 'U'}
+              </Avatar>
+            }
+            title={`${post.userFirstName} ${post.userLastName}`}
+            subheader={new Date(post.createdAt).toLocaleString()}
+          />
+          {post.attachmentUrls && post.attachmentUrls.length > 0 && (
+            <CardMedia
+              component="img"
+              height="194"
+              image={post.attachmentUrls[0]}
+              alt="Post attachment"
+            />
+          )}
+          <CardContent>
+            <Typography variant="body1" color="text.primary">
+              {post.content}
+            </Typography>
+          </CardContent>
+        </Card>
+      ))}
+      <Pagination
+        count={totalPages}
+        page={page + 1}
+        onChange={handlePageChange}
+        color="primary"
+        className={styles.pagination}
+      />
+    </div>
   );
 };
 
