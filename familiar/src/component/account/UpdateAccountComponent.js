@@ -65,6 +65,7 @@ export default function UpdateAccountComponent() {
                             <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
                                 {isSubmitting ? 'Đang xử lý...' : 'Thay đổi mật khẩu'}
                             </button>
+                            <button type="button" className={styles.cancelButton} onClick={() => navigate(-1)}>Hủy</button>
                         </Form>
                     )}
                 </Formik>
