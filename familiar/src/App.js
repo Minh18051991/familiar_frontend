@@ -14,6 +14,7 @@ import UpdateAccountComponent from "./component/account/UpdateAccountComponent";
 import DashboardComponent from "./component/dashboard/DashboardComponent";
 import ListFriendShipComponent from "./component/friendship/list";
 import UserDetailComponent from "./component/user/UserDetailComponent";
+import FriendRequestList from "./component/friendship/FriendRequestList";
 
 function App() {
     return (
@@ -36,6 +37,10 @@ function App() {
                         <Route
                             path="/users/detail/:id"
                             element={<UserDetailComponent/>}
+                        ></Route>
+                        <Route
+                            path="/friendships/request"
+                            element={<FriendRequestList/>}
                         ></Route>
                     </Route>
                 </Routes>
