@@ -26,7 +26,7 @@ class PostService {
         });
     }
 
-    getAllPosts(page = 0, size = 10) {
+    getAllPosts(page = 0, size = 5) {
         return this.axiosInstance.get('', {
             params: {page, size}
         });
@@ -79,7 +79,7 @@ class PostService {
         return this.axiosInstance.delete(`/${id}`);
     }
 
-    getPostsByUserId(userId, page = 0, size = 10) {
+    getPostsByUserId(userId, page = 0, size = 5) {
         return this.axiosInstance.get(`/user/${userId}`, {
             params: {page, size}
         });

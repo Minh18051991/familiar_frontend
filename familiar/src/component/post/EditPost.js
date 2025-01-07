@@ -5,15 +5,13 @@ import {
   DialogContent,
   DialogActions,
   TextField,
-  Button,
-  Box
+  Button
 } from '@mui/material';
 import PostService from "../../services/PostService";
 
-const EditPost = ({ post, open, handleClose, onPostUpdated }) => {
+const EditPost = ({ post, open, onClose, onUpdate,handleChange }) => {
   const [editedContent, setEditedContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (post) {
@@ -23,28 +21,26 @@ const EditPost = ({ post, open, handleClose, onPostUpdated }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setError(null);
+    setIsSubmitting( prev => !prev);
 
     try {
       const token = localStorage.getItem('token');
       if (!token) {
         throw new Error('No authentication token found');
       }
-
       const updatedPost = await PostService.updatePost(post.id, { content: editedContent }, token);
-      onPostUpdated(updatedPost);
-      handleClose();
+      onUpdate(updatedPost);
+      onClose();
+      handleChange()
     } catch (err) {
       console.error('Error updating post:', err);
-      setError('Failed to update post. Please try again.');
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
+
+
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <DialogTitle>Cập nhập bài viết </DialogTitle>
       <form onSubmit={handleSubmit}>
         <DialogContent>
@@ -60,14 +56,9 @@ const EditPost = ({ post, open, handleClose, onPostUpdated }) => {
             value={editedContent}
             onChange={(e) => setEditedContent(e.target.value)}
           />
-          {error && (
-            <Box sx={{ color: 'error.main', mt: 2 }}>
-              {error}
-            </Box>
-          )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Hủy</Button>
+          <Button onClick={onClose}>Hủy</Button>
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? 'Đang cập nhật...' :  'Cập nhật'}
           </Button>

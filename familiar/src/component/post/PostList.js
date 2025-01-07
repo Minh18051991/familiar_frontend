@@ -14,6 +14,7 @@ import CommentModal from '../comment/CommentModal';
 
 const PostList = () => {
   const [posts, setPosts] = useState([]);
+  const [changePost, setChangePost] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(0);
@@ -22,8 +23,10 @@ const PostList = () => {
   const [editingPost, setEditingPost] = useState(null);
   const [commentModalOpen, setCommentModalOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const currentUserId = localStorage.getItem('userId');
+
 
   const fetchPosts = useCallback(async () => {
     if (!hasMore || isLoading) return;
@@ -63,7 +66,7 @@ const PostList = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [page, hasMore, posts, isLoading]);
+  }, [page, hasMore, posts, isLoading,changePost]);
 
   useEffect(() => {
     fetchPosts();
@@ -83,17 +86,20 @@ const PostList = () => {
 
   const handleEditClick = (post) => {
     setEditingPost(post);
+    setIsEditModalOpen(true);
   };
 
   const handleEditClose = () => {
     setEditingPost(null);
+    setIsEditModalOpen(false);
   };
 
   const handlePostUpdated = (updatedPost) => {
     setPosts(prevPosts => prevPosts.map(post =>
-      post.id === updatedPost.id ? updatedPost : post
+      post.id === updatedPost.id ? {...post,...updatedPost } : post
     ));
     setEditingPost(null);
+    setIsEditModalOpen(false);
   };
 
   const handleCommentClick = (post) => {
@@ -105,6 +111,10 @@ const PostList = () => {
     setCommentModalOpen(false);
     setSelectedPost(null);
   };
+
+  const handleChangePost = () => {
+    setChangePost(prev => !prev);
+  }
 
   return (
     <Box sx={{ maxWidth: 800, margin: 'auto', p: 2 }}>
@@ -160,7 +170,7 @@ const PostList = () => {
                 <CommentIcon />
               </IconButton>
               <Typography variant="body2" sx={{ marginLeft: 1 }}>
-                Bình luận ({post.commentCount || 0})
+                ({post.commentCount || 0}) bình luận
               </Typography>
             </Box>
           </CardContent>
@@ -192,8 +202,10 @@ const PostList = () => {
       {editingPost && (
         <EditPost
           post={editingPost}
+          open={isEditModalOpen}
           onClose={handleEditClose}
           onUpdate={handlePostUpdated}
+          handleChange={handleChangePost}
         />
       )}
 
