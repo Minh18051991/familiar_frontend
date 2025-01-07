@@ -70,3 +70,29 @@ export async function suggestedFriendsList(userId1, userId2) {
     console.log("Loi:" + error.message);
   }
 }
+
+export async function suggestedFriendsListPage(userId1, userId2, page, size) {
+  const token = localStorage.getItem('token');
+  try {
+    const response = await axios.get(`http://localhost:8080/api/friendships/suggestions-page/${userId1}/${userId2}?_page=${page}&_limit=${size}`,{headers: {Authorization: `Bearer ${token}`}});
+    const data = response.data.content
+    const totalPages = response.data.totalPages;
+    return {
+      data: data,
+      totalPages: totalPages
+
+    };
+  } catch (error) {
+    console.log("loi:" + error.message);
+  }
+}
+
+export async function friendRequestList(userId) {
+  const token = localStorage.getItem('token');
+  try {
+    const response = await axios.get(`http://localhost:8080/api/friendships/request/${userId}`, {headers: {Authorization: `Bearer ${token}`}});
+    return response.data;
+  }catch (error) {
+    console.log("Loi:" + error.message);
+  }
+}
