@@ -80,7 +80,7 @@ const CreatePost = ({ onPostCreated }) => {
         <Card sx={{ maxWidth: 600, margin: 'auto', mt: 2 }}>
             <CardContent>
                 <Typography variant="h6" gutterBottom>
-                    Create a New Post
+                    Tạo bài viết
                 </Typography>
                 <form onSubmit={handleSubmit}>
                     <TextField
@@ -90,7 +90,7 @@ const CreatePost = ({ onPostCreated }) => {
                         variant="outlined"
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
-                        placeholder="What's on your mind?"
+                        placeholder="Bạn muốn đăng gì.."
                         sx={{ mb: 2 }}
                     />
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>

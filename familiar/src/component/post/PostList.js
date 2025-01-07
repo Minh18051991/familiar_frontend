@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import PostService from "../../services/PostService";
-import CreatePost from './CreatePost';
-import EditPost from './EditPost';
 import {
   Box, Card, CardContent, Typography, Avatar,
   CircularProgress, Alert, Button, Modal, IconButton
 } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
 import styles from './PostList.module.css';
+import EditPost from './EditPost';
+import CreatePost from './CreatePost';
 import moment from 'moment';
+import PostService from "../../services/PostService";
+import EditIcon from '@mui/icons-material/Edit';
+import CommentIcon from '@mui/icons-material/Comment';
+import CommentModal from '../comment/CommentModal';
 
 const PostList = () => {
   const [posts, setPosts] = useState([]);
@@ -18,6 +20,8 @@ const PostList = () => {
   const [hasMore, setHasMore] = useState(true);
   const [openImage, setOpenImage] = useState(null);
   const [editingPost, setEditingPost] = useState(null);
+  const [commentModalOpen, setCommentModalOpen] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
 
   const currentUserId = localStorage.getItem('userId');
 
@@ -41,7 +45,8 @@ const PostList = () => {
             const updatedPosts = [...prevPosts, ...newPosts];
             return updatedPosts.filter((post, index, self) =>
                 index === self.findIndex((t) => t.id === post.id)
-            );
+            )
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
           });
           setPage(prevPage => prevPage + 1);
         } else {
@@ -91,6 +96,16 @@ const PostList = () => {
     setEditingPost(null);
   };
 
+  const handleCommentClick = (post) => {
+    setSelectedPost(post);
+    setCommentModalOpen(true);
+  };
+
+  const handleCloseCommentModal = () => {
+    setCommentModalOpen(false);
+    setSelectedPost(null);
+  };
+
   return (
     <Box sx={{ maxWidth: 800, margin: 'auto', p: 2 }}>
       <CreatePost onPostCreated={handlePostCreated} />
@@ -137,31 +152,30 @@ const PostList = () => {
                 ))}
               </Box>
             )}
+            <Box className={styles.postActions}>
+              <IconButton
+                onClick={() => handleCommentClick(post)}
+                size="small"
+              >
+                <CommentIcon />
+              </IconButton>
+              <Typography variant="body2" sx={{ marginLeft: 1 }}>
+                Bình luận ({post.commentCount || 0})
+              </Typography>
+            </Box>
           </CardContent>
         </Card>
       ))}
 
-      {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
-
-      {!isLoading && !error && hasMore && (
-        <Button
-          onClick={fetchPosts}
-          variant="contained"
-          color="primary"
-          fullWidth
-          className={styles.loadMoreButton}
-        >
-          Load More
-        </Button>
+      {isLoading && <CircularProgress />}
+      {error && <Alert severity="error">{error}</Alert>}
+      {hasMore && !isLoading && (
+        <Button onClick={fetchPosts}>Load More</Button>
       )}
-
-      {isLoading && <CircularProgress sx={{ display: 'block', margin: 'auto', mt: 2 }} />}
 
       <Modal
         open={!!openImage}
         onClose={handleCloseImage}
-        aria-labelledby="image-modal"
-        aria-describedby="full-size-image"
       >
         <Box sx={{
           position: 'absolute',
@@ -171,18 +185,24 @@ const PostList = () => {
           maxWidth: '90%',
           maxHeight: '90%',
         }}>
-          <img src={openImage} alt="Full size" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+          <img src={openImage} alt="Enlarged view" style={{maxWidth: '100%', maxHeight: '100%'}} />
         </Box>
       </Modal>
 
       {editingPost && (
         <EditPost
           post={editingPost}
-          open={!!editingPost}
-          handleClose={handleEditClose}
-          onPostUpdated={handlePostUpdated}
+          onClose={handleEditClose}
+          onUpdate={handlePostUpdated}
         />
       )}
+
+      <CommentModal
+        open={commentModalOpen}
+        handleClose={handleCloseCommentModal}
+        post={selectedPost}
+        currentUserId={currentUserId}
+      />
     </Box>
   );
 };

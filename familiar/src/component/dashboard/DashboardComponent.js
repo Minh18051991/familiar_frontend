@@ -1,6 +1,6 @@
 import React from 'react';
 import HomeComponent from '../login/HomeComponent';
-import PostList from '../../components/post/PostList';
+import PostList from '../post/PostList';
 
 function DashboardComponent() {
     return (
