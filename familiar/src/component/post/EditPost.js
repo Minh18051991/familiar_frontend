@@ -45,7 +45,7 @@ const EditPost = ({ post, open, handleClose, onPostUpdated }) => {
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-      <DialogTitle>Edit Post</DialogTitle>
+      <DialogTitle>Cập nhập bài viết </DialogTitle>
       <form onSubmit={handleSubmit}>
         <DialogContent>
           <TextField
@@ -67,9 +67,9 @@ const EditPost = ({ post, open, handleClose, onPostUpdated }) => {
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose}>Hủy</Button>
           <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Updating...' : 'Update'}
+            {isSubmitting ? 'Đang cập nhật...' :  'Cập nhật'}
           </Button>
         </DialogActions>
       </form>
