@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import PostService from '../../services/PostService';
 import { Card, CardContent, TextField, Button, Typography, Box, IconButton } from '@mui/material';
 import { styled } from '@mui/system';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DeleteIcon from '@mui/icons-material/Delete';
+import CameraIcon from '@mui/icons-material/Camera';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -94,22 +94,18 @@ const CreatePost = ({ onPostCreated }) => {
                         sx={{ mb: 2 }}
                     />
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                        <Button
+                        <IconButton
                             component="label"
                             variant="outlined"
-                            startIcon={<CloudUploadIcon />}
                         >
-                            Upload files
+                            <CameraIcon />
                             <VisuallyHiddenInput
                                 type="file"
                                 multiple
                                 onChange={handleFileChange}
-                                accept="image/*"
+                                accept="image/*,video/*"
                             />
-                        </Button>
-                        <Typography variant="body2">
-                            {files.length > 0 ? `${files.length} file(s) selected` : 'No files selected'}
-                        </Typography>
+                        </IconButton>
                     </Box>
                     <ThumbnailContainer>
                         {files.map((file, index) => (
@@ -138,7 +134,7 @@ const CreatePost = ({ onPostCreated }) => {
                         fullWidth
                         sx={{ mt: 2 }}
                     >
-                        {isLoading ? 'Posting...' : 'Post'}
+                        {isLoading ? 'Đăng bài...' : 'Đăng bài'}
                     </Button>
                 </form>
             </CardContent>

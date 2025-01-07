@@ -4,8 +4,7 @@ import {
   DialogTitle, 
   DialogContent, 
   DialogActions, 
-  Button, 
-  TextField, 
+  Button,
   Box,
   Typography,
   Avatar
@@ -91,24 +90,6 @@ const CommentModal = ({ open, handleClose, post, currentUserId }) => {
           currentUserId={currentUserId}
           onCommentAdded={fetchComments}
         />
-        <Box sx={{ mt: 2 }}>
-          <TextField
-            fullWidth
-            variant="outlined"
-            placeholder="Thêm bình luận..."
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            sx={{ mb: 1 }}
-          />
-          <Button 
-            variant="contained" 
-            color="primary" 
-            onClick={handleAddComment}
-            disabled={!newComment.trim()}
-          >
-            Gửi bình luận
-          </Button>
-        </Box>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} variant="contained" color="primary">Đóng</Button>
