@@ -1,48 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PostService from '../../services/PostService';
-import { Card, CardContent, TextField, Button, Typography, Box, IconButton } from '@mui/material';
-import { styled } from '@mui/system';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CameraIcon from '@mui/icons-material/Camera';
-
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
-  height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  whiteSpace: 'nowrap',
-  width: 1,
-});
-
-const ThumbnailContainer = styled(Box)({
-  display: 'flex',
-  flexWrap: 'wrap',
-  gap: '10px',
-  marginTop: '10px',
-});
-
-const Thumbnail = styled(Box)({
-  position: 'relative',
-  width: '100px',
-  height: '100px',
-});
-
-const ThumbnailImage = styled('img')({
-  width: '100%',
-  height: '100%',
-  objectFit: 'cover',
-  borderRadius: '4px',
-});
+import { findUserById } from '../../service/user/userService';
+import { Form, Button, Modal } from 'react-bootstrap';
+import { BsCamera, BsTrash, BsEmojiSmile } from 'react-icons/bs';
+import styles from './CreatePost.module.css';
 
 const CreatePost = ({ onPostCreated }) => {
+    const [showModal, setShowModal] = useState(false);
     const [content, setContent] = useState('');
     const [files, setFiles] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [userData, setUserData] = useState({
+        userProfilePictureUrl: '',
+        userFirstName: '',
+        userLastName: ''
+    });
 
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const userId = localStorage.getItem('userId');
+            if (userId) {
+                try {
+                    const fetchedUserData = await findUserById(parseInt(userId));
+                    setUserData({
+                        userProfilePictureUrl: fetchedUserData.userProfilePictureUrl,
+                        userFirstName: fetchedUserData.userFirstName,
+                        userLastName: fetchedUserData.userLastName
+                    });
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                }
+            }
+        };
+
+        fetchUserData();
+    }, []);
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
@@ -52,13 +46,13 @@ const CreatePost = ({ onPostCreated }) => {
             content: content,
             userId: parseInt(localStorage.getItem('userId')),
         };
-        console.log('Post data:', postData);
+
         try {
             const createdPost = await PostService.createPost(postData, files);
             onPostCreated(createdPost);
             setContent('');
             setFiles([]);
-            console.log('Post created successfully:', createdPost);
+            setShowModal(false);
         } catch (error) {
             console.error('Error creating post:', error);
             setError('Failed to create post. Please try again.');
@@ -76,69 +70,87 @@ const CreatePost = ({ onPostCreated }) => {
         setFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
     };
 
+    const CompactCreatePost = () => (
+        <div className={styles.compactCreatePost} onClick={() => setShowModal(true)}>
+            <img src={userData.userProfilePictureUrl} alt="Profile" className={styles.profilePicture} />
+            <div className={styles.fakeTextArea}>{`${userData.userFirstName} ${userData.userLastName}, bạn đang nghĩ gì thế?`}</div>
+        </div>
+    );
+
     return (
-        <Card sx={{ maxWidth: 600, margin: 'auto', mt: 2 }}>
-            <CardContent>
-                <Typography variant="h6" gutterBottom>
-                    Tạo bài viết
-                </Typography>
-                <form onSubmit={handleSubmit}>
-                    <TextField
-                        fullWidth
-                        multiline
-                        rows={4}
-                        variant="outlined"
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                        placeholder="Bạn muốn đăng gì.."
-                        sx={{ mb: 2 }}
-                    />
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                        <IconButton
-                            component="label"
-                            variant="outlined"
-                        >
-                            <CameraIcon />
-                            <VisuallyHiddenInput
-                                type="file"
-                                multiple
-                                onChange={handleFileChange}
-                                accept="image/*,video/*"
+        <>
+            <CompactCreatePost />
+            <Modal show={showModal} onHide={() => setShowModal(false)} size="lg">
+                <Modal.Header closeButton>
+                    <Modal.Title>Create a Post</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form onSubmit={handleSubmit}>
+                        <div className={styles.textareaWrapper}>
+                            <Form.Control
+                                as="textarea"
+                                rows={4}
+                                value={content}
+                                onChange={(e) => setContent(e.target.value)}
+                                placeholder={`${userData.userFirstName} ${userData.userLastName}, bạn đang nghĩ gì thế?`}
+                                className={styles.textarea}
                             />
-                        </IconButton>
-                    </Box>
-                    <ThumbnailContainer>
-                        {files.map((file, index) => (
-                            <Thumbnail key={index}>
-                                <ThumbnailImage src={URL.createObjectURL(file)} alt={`Preview ${index}`} />
-                                <IconButton
-                                    size="small"
-                                    sx={{ position: 'absolute', top: 0, right: 0, bgcolor: 'rgba(255,255,255,0.7)' }}
-                                    onClick={() => handleRemoveFile(index)}
-                                >
-                                    <DeleteIcon fontSize="small" />
-                                </IconButton>
-                            </Thumbnail>
-                        ))}
-                    </ThumbnailContainer>
-                    {error && (
-                        <Typography color="error" sx={{ mb: 2 }}>
-                            {error}
-                        </Typography>
-                    )}
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        disabled={isLoading}
-                        fullWidth
-                        sx={{ mt: 2 }}
-                    >
-                        {isLoading ? 'Đăng bài...' : 'Đăng bài'}
+                        </div>
+                        <div className={styles.actionBar}>
+                            <div className={styles.fileUpload}>
+                                <label htmlFor="file-upload" className={styles.fileUploadLabel}>
+                                    <BsCamera size={20} />
+                                    <span>Photo/Video</span>
+                                </label>
+                                <Form.Control
+                                    id="file-upload"
+                                    type="file"
+                                    multiple
+                                    onChange={handleFileChange}
+                                    accept="image/*,video/*"
+                                    className={styles.hiddenInput}
+                                />
+                            </div>
+                            <Button variant="link" className={styles.emojiButton}>
+                                <BsEmojiSmile size={20} />
+                            </Button>
+                        </div>
+                        {files.length > 0 && (
+                            <div className={styles.previewContainer}>
+                                {files.map((file, index) => (
+                                    <div key={index} className={styles.previewItem}>
+                                        <img src={URL.createObjectURL(file)} alt={`Preview ${index}`} className={styles.previewImage} />
+                                        <Button 
+                                            variant="light" 
+                                            size="sm" 
+                                            className={styles.removeButton}
+                                            onClick={() => handleRemoveFile(index)}
+                                        >
+                                            <BsTrash />
+                                        </Button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                        {error && (
+                            <p className={styles.errorMessage}>{error}</p>
+                        )}
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowModal(false)}>
+                        Close
                     </Button>
-                </form>
-            </CardContent>
-        </Card>
+                    <Button
+                        variant="primary"
+                        onClick={handleSubmit}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? 'Posting...' : 'Post'}
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
     );
 };
 

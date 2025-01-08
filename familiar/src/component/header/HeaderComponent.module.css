@@ -185,38 +185,8 @@
 /* HeaderComponent.module.css */
 
 .searchBar {
-    display: flex;
-    align-items: center;
-    background-color: #f0f2f5;
-    border-radius: 20px;
-    padding: 5px 10px;
-    margin-left: 20px;
-    width: 300px;
-}
-
-.searchInput {
-    border: none;
-    outline: none;
-    background-color: transparent;
     flex-grow: 1;
-    font-size: 14px;
-    color: #333;
-    padding: 5px;
-}
+    margin-right: 10px;
 
-.searchInput::placeholder {
-    color: #aaa;
-}
-
-.searchButton {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #555;
-    font-size: 16px;
-}
-
-.searchButton:hover {
-    color: #000;
 }
 
