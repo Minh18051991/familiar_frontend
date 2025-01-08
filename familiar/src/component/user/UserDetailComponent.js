@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {findUserById} from "../../service/user/userService";
-import { suggestedFriendsListPage} from "../../service/friendship/friendshipService";
+import {suggestedFriendsListPage} from "../../service/friendship/friendshipService";
 import styles from "../user/userDetail.module.css";
 import {useSelector} from "react-redux";
 import DetailUserFriend from "./DetailUserFriend";
-import UserPosts from "../user/UserPosts";
+import UserPosts from "./UserPosts";
 
 function UserDetailComponent() {
     const [user, setUser] = useState({});
@@ -169,7 +169,6 @@ function UserDetailComponent() {
 
                 </div>
             </div>
-
         </>
     )
 }

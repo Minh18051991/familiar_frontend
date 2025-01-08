@@ -4,7 +4,6 @@ import {FriendItem} from "../FriendItem";
 import {getFriendShips, searchNameFriendship} from "../../service/friendship/friendshipService";
 import {useSelector} from "react-redux";
 import {Link} from "react-router-dom";
-import {login} from "../../redux/login/AccountAction";
 
 function ListFriendShipComponent() {
     const [searchValue, setSearchValue] = useState("");
