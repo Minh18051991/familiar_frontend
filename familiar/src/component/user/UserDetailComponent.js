@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from "react";
-import {Link, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {findUserById} from "../../service/user/userService";
 import {cancelFriendship, sendFriendship, suggestedFriendsList} from "../../service/friendship/friendshipService";
 import styles from "../user/userDetail.module.css";
 import {useSelector} from "react-redux";
+import UserPosts from "../user/UserPosts";
 
 function UserDetailComponent() {
     const [user, setUser] = useState({});
@@ -76,7 +77,7 @@ function UserDetailComponent() {
             setFriendList(prevList =>
                 prevList.map(friend =>
                     friend.userId === friendId
-                        ? { ...friend, isFriend: updatedFriendStatus }
+                        ? {...friend, isFriend: updatedFriendStatus}
                         : friend
                 )
             );
@@ -135,10 +136,11 @@ function UserDetailComponent() {
 
                     {/* Danh sách gợi ý bạn bè */}
                     {
-                        friendList.length >0 && <div className="col-12 col-md-8 order-md-2">
+                        friendList.length > 0 && <div className="col-12 col-md-8 order-md-2">
                             <div className={`${styles.card} shadow-lg rounded-4 border-0`}>
                                 <div className={`${styles.cardBody}`}>
-                                    <h5 className={`${styles.suggestedFriendsTitle} mb-3 text-primary`}>Có thể bạn biết?</h5>
+                                    <h5 className={`${styles.suggestedFriendsTitle} mb-3 text-primary`}>Có thể bạn
+                                        biết?</h5>
                                     <div className="row">
                                         {friendList.map((friend, index) => (
                                             <div className="col-12 col-sm-6 col-md-4 mb-4" key={index}>
@@ -175,7 +177,7 @@ function UserDetailComponent() {
                     }
                 </div>
             </div>
-
+            <UserPosts userId={id}/>
         </>
     )
 }
