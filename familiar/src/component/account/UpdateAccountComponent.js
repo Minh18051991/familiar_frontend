@@ -57,13 +57,13 @@ export default function UpdateAccountComponent() {
                     {({isSubmitting}) => (
                         <Form>
                             <div className={styles.formGroup}>
-                                <label htmlFor="newPassword" className={styles.label}>Mật khẩu mới</label>
+                                <label htmlFor="newPassword" className={`form-label ${styles.formLabel} ${styles.requiredField}`}>Mật khẩu mới</label>
                                 <Field type="password" name="newPassword" className={styles.input}/>
                                 <ErrorMessage name="newPassword" component="div" className={styles.errorMessage}/>
                             </div>
 
                             <div className={styles.formGroup}>
-                                <label htmlFor="confirmPassword" className={styles.label}>Xác nhận mật khẩu mới</label>
+                                <label htmlFor="confirmPassword" className={`form-label ${styles.formLabel} ${styles.requiredField}`}>Xác nhận mật khẩu mới</label>
                                 <Field type="password" name="confirmPassword" className={styles.input}/>
                                 <ErrorMessage name="confirmPassword" component="div" className={styles.errorMessage}/>
                             </div>
