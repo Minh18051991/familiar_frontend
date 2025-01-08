@@ -1,11 +1,12 @@
 import {checkLogin} from "../../service/account/account";
+import {purgeStore} from "./Store";
 
 
-export function login(loginInfo){
+export function login(loginInfo) {
     return async (dispatch) => {
         console.log("--loGIN")
         const account = await checkLogin(loginInfo);
-        if(account!= null){
+        if (account != null) {
             localStorage.setItem('token', account.token);
             localStorage.setItem('userId', account.userId);
             dispatch({
@@ -20,19 +21,22 @@ export function login(loginInfo){
             });
             console.log("Login thành công", account.userId);
             return true;
-        }else {
+        } else {
             console.log("Tài khoản không tồn tại");
             return false;
         }
     }
 }
 
-export function logout(){
-    localStorage.removeItem('token');
-    return {
-        type: 'LOGOUT',
-        payload: null
-    }
+export function logout() {
+    return (dispatch) => {
+        // Xóa token từ localStorage
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+        purgeStore()
+
+        dispatch({type: 'LOGOUT'});
+    };
 }
 
 export function updateAvatar(newAvatarUrl) {

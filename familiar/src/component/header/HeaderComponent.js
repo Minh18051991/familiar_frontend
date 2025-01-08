@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { logout } from "../../redux/login/AccountAction";
-import { useDispatch, useSelector } from "react-redux";
+import React, {useState} from 'react';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
+import {logout} from "../../redux/login/AccountAction";
+import {useDispatch, useSelector} from "react-redux";
 import styles from './HeaderComponent.module.css';
-import { sendOtp } from "../../service/otp/otp";
+import {sendOtp} from "../../service/otp/otp";
 import SearchComponent from "../search/SearchComponent";
 import LoadingSpinner from "../otp/LoadingSpinner";
 
@@ -24,7 +24,7 @@ function HeaderComponent() {
 
     const handleChangePassword = async () => {
         if (account && account.username) {
-            const object = { username: account.username };
+            const object = {username: account.username};
             setIsLoading(true);
             await sendOtp(object);
             setIsLoading(false);
@@ -42,13 +42,14 @@ function HeaderComponent() {
                             alt="Logo" className={styles.logo}/>
                     </Link>
                     <div className={styles.searchBar}>
-                        <SearchComponent />
+                        <SearchComponent/>
                     </div>
                     <div className={styles.navIconContainer}>
                         <Link className={`${styles.navIcon} ${isActive('/')}`} to="/" title="Trang chủ">
                             <i className="fas fa-home"></i>
                         </Link>
-                        <Link className={`${styles.navIcon} ${isActive('/friends')}`} to="/friendships-list" title="Bạn bè">
+                        <Link className={`${styles.navIcon} ${isActive('/friends')}`} to="/friendships-list"
+                              title="Bạn bè">
                             <i className="fas fa-user-friends"></i>
                         </Link>
                         <Link className={`${styles.navIcon} ${isActive('/messages')}`} to="/messages" title="Tin nhắn">
@@ -76,10 +77,18 @@ function HeaderComponent() {
                                 </a>
                                 <ul className={`dropdown-menu dropdown-menu-end ${styles.dropdownMenu}`}
                                     aria-labelledby="navbarDropdown">
-                                    <li><Link className="dropdown-item" to={`/user/detail/${account.userId}`}>Xem thông tin cá nhân</Link></li>
-                                    <li><button className="dropdown-item" onClick={handleChangePassword}>Đổi mật khẩu</button></li>
-                                    <li><hr className="dropdown-divider"/></li>
-                                    <li><button onClick={handleLogout} className="dropdown-item">Đăng xuất</button></li>
+                                    <li><Link className="dropdown-item" to={`/user/detail/${account.userId}`}>Xem thông
+                                        tin cá nhân</Link></li>
+                                    <li>
+                                        <button className="dropdown-item" onClick={handleChangePassword}>Đổi mật khẩu
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <hr className="dropdown-divider"/>
+                                    </li>
+                                    <li>
+                                        <button onClick={handleLogout} className="dropdown-item">Đăng xuất</button>
+                                    </li>
                                 </ul>
                             </div>
                         )}
