@@ -11,6 +11,7 @@ import PostService from "../../services/PostService";
 import EditIcon from '@mui/icons-material/Edit';
 import CommentIcon from '@mui/icons-material/Comment';
 import CommentModal from '../comment/CommentModal';
+import { Link } from'react-router-dom';
 
 const PostList = () => {
   const [posts, setPosts] = useState([]);
@@ -124,6 +125,7 @@ const PostList = () => {
         <Card key={`${post.id}-${index}`} className={styles.postCard}>
           <CardContent className={styles.postContent}>
             <Box className={styles.userInfo}>
+              <Link to={`/users/detail/${post.userId}`} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
               <Avatar
                 src={post.userProfilePictureUrl}
                 alt={`${post.userFirstName} ${post.userLastName}`}
@@ -136,6 +138,7 @@ const PostList = () => {
                   {moment(post.createdAt).format('MMMM D, YYYY [at] h:mm A')}
                 </Typography>
               </Box>
+              </Link>
               {currentUserId && currentUserId === post.userId.toString() && (
                 <IconButton
                   onClick={() => handleEditClick(post)}

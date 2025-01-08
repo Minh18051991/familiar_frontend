@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from "react";
-import {Link, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {findUserById} from "../../service/user/userService";
-import {suggestedFriendsList, suggestedFriendsListPage} from "../../service/friendship/friendshipService";
+import {cancelFriendship, sendFriendship, suggestedFriendsListPage} from "../../service/friendship/friendshipService";
 import styles from "../user/userDetail.module.css";
 import {useSelector} from "react-redux";
 import DetailUserFriend from "./DetailUserFriend";
+import UserPosts from "../user/UserPosts";
 
 function UserDetailComponent() {
     const [user, setUser] = useState({});
@@ -33,7 +34,7 @@ function UserDetailComponent() {
                         ...friend,
                         isFriend: false
                     }));
-                    setFriendList(pre=>[
+                    setFriendList(pre => [
                         ...pre,
                         ...updateList,
                     ]);
@@ -58,7 +59,7 @@ function UserDetailComponent() {
         }
     }, [page, totalPages]);
 
-    const handleMore = () =>{
+    const handleMore = () => {
         if (page < totalPages - 1) {
             setPage(prevPage => prevPage + 1);
         }
@@ -84,6 +85,34 @@ function UserDetailComponent() {
     if (!user) {
         return <div>Loading...</div>;
     }
+
+    const handleAddFriend = async (friendId) => {
+        try {
+
+            let updatedFriendStatus;
+
+            if (isFriend) {
+                await cancelFriendship(userId, friendId);
+                updatedFriendStatus = false;
+            } else {
+                await sendFriendship(userId, friendId);
+                updatedFriendStatus = true;
+            }
+
+            setFriendList(prevList =>
+                prevList.map(friend =>
+                    friend.userId === friendId
+                        ? {...friend, isFriend: updatedFriendStatus}
+                        : friend
+                )
+            );
+
+            setIsFriend(updatedFriendStatus);
+
+        } catch (error) {
+            console.error("Lỗi xử lý bạn bè:", error);
+        }
+    };
 
     return (
         <>
@@ -134,10 +163,11 @@ function UserDetailComponent() {
                     <div className="col-12 col-md-8 order-md-2">
                         <div>
                             {
-                                friendList.length >0 && <div>
+                                friendList.length > 0 && <div>
                                     <div className={`${styles.card} shadow-lg rounded-4 border-0`}>
                                         <div className={`${styles.cardBody}`}>
-                                            <h5 className={`${styles.suggestedFriendsTitle} mb-3 text-primary`}>Có thể bạn biết?</h5>
+                                            <h5 className={`${styles.suggestedFriendsTitle} mb-3 text-primary`}>Có thể bạn
+                                                biết?</h5>
                                             <div className="row">
                                                 {friendList.map((friend, index) => (
                                                     <DetailUserFriend friend={friend} col={3}
@@ -160,13 +190,13 @@ function UserDetailComponent() {
                             }
                         </div>
                         <div>
-                           Bài post
+                            Bài post
                         </div>
                     </div>
 
                 </div>
             </div>
-
+            <UserPosts userId={id}/>
         </>
     )
 }
