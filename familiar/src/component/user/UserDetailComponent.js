@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from "react";
 import {Link, useParams} from "react-router-dom";
 import {findUserById} from "../../service/user/userService";
-import {suggestedFriendsList, suggestedFriendsListPage} from "../../service/friendship/friendshipService";
+import {suggestedFriendsListPage} from "../../service/friendship/friendshipService";
 import styles from "../user/userDetail.module.css";
 import {useSelector} from "react-redux";
 import DetailUserFriend from "./DetailUserFriend";
+import PostService from "../../services/PostService";
 
 function UserDetailComponent() {
     const [user, setUser] = useState({});
@@ -17,6 +18,8 @@ function UserDetailComponent() {
     const [size, setSize] = useState(2);
     const [hasMore, setHasMore] = useState(true);
     const [totalPages, setTotalPages] = useState(0);
+
+    const [listPost, setListPost] = useState([])
 
     useEffect(() => {
         const fetchFriendships = async () => {
@@ -33,7 +36,7 @@ function UserDetailComponent() {
                         ...friend,
                         isFriend: false
                     }));
-                    setFriendList(pre=>[
+                    setFriendList(pre => [
                         ...pre,
                         ...updateList,
                     ]);
@@ -58,7 +61,7 @@ function UserDetailComponent() {
         }
     }, [page, totalPages]);
 
-    const handleMore = () =>{
+    const handleMore = () => {
         if (page < totalPages - 1) {
             setPage(prevPage => prevPage + 1);
         }
@@ -71,6 +74,16 @@ function UserDetailComponent() {
         }
         fetchUser();
     }, [id])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const friendId = id;
+            const list = await PostService.getPostsByUserId(friendId);
+            setListPost(list);
+        }
+        fetchData();
+    }, [id]);
+
 
     function formatDate(dateString) {
         if (!dateString) return "";
@@ -134,10 +147,11 @@ function UserDetailComponent() {
                     <div className="col-12 col-md-8 order-md-2">
                         <div>
                             {
-                                friendList.length >0 && <div>
+                                friendList.length > 0 && <div>
                                     <div className={`${styles.card} shadow-lg rounded-4 border-0`}>
                                         <div className={`${styles.cardBody}`}>
-                                            <h5 className={`${styles.suggestedFriendsTitle} mb-3 text-primary`}>Có thể bạn biết?</h5>
+                                            <h5 className={`${styles.suggestedFriendsTitle} mb-3 text-primary`}>Có thể bạn
+                                                biết?</h5>
                                             <div className="row">
                                                 {friendList.map((friend, index) => (
                                                     <DetailUserFriend friend={friend} col={3}
@@ -160,7 +174,7 @@ function UserDetailComponent() {
                             }
                         </div>
                         <div>
-                           Bài post
+                            Bài post
                         </div>
                     </div>
 
