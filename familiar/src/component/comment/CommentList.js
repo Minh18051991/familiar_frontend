@@ -15,9 +15,10 @@ const CommentList = ({ postId }) => {
   const fetchComments = async () => {
     try {
       const response = await CommentService.getCommentsByPostId(postId);
-      setComments(response);
+      setComments(response || []);
     } catch (error) {
       console.error('Error fetching comments:', error);
+      setComments([]);
     }
   };
 
@@ -86,7 +87,12 @@ const CommentList = ({ postId }) => {
     return null;
   };
 
-  const renderComments = (comments) => {
+  const renderComments = (commentsToRender) => {
+    if(!commentsToRender || commentsToRender.length === 0)
+    {
+      return
+      <Typography>Không có bình luận nào</Typography>;
+    }
     return comments.map(comment => (
       <Box key={comment.id} ml={comment.level * 4}>
         <Comment

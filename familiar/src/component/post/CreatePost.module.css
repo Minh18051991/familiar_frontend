@@ -1,45 +1,129 @@
-.createPostCard {
-  margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease-in-out;
+.compactCreatePost {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin-bottom: 20px;
+    cursor: pointer;
 }
 
-.createPostCard:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.profilePicture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
 }
 
-.createPostCard form {
-  display: flex;
-  flex-direction: column;
+.fakeTextArea {
+    flex-grow: 1;
+    background-color: #f0f2f5;
+    border-radius: 20px;
+    padding: 8px 12px;
+    color: #65676b;
 }
 
-.createPostCard textarea {
-  margin-bottom: 16px;
-  resize: vertical;
-  min-height: 100px;
+.createPostContainer {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.createPostTitle {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #1a1a1a;
+}
+
+.textareaWrapper {
+    margin-bottom: 15px;
+}
+
+.textarea {
+    border: none;
+    resize: none;
+    font-size: 1rem;
+}
+
+.textarea:focus {
+    box-shadow: none;
+    border-color: transparent;
+}
+
+.actionBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 15px;
+}
+
+.fileUpload {
+    display: flex;
+    align-items: center;
+}
+
+.fileUploadLabel {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: #4267B2;
+    font-weight: 500;
+}
+
+.fileUploadLabel svg {
+    margin-right: 5px;
+}
+
+.hiddenInput {
+    display: none;
+}
+
+.emojiButton {
+    color: #4267B2;
+    padding: 0;
+}
+
+.previewContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.previewItem {
+    position: relative;
+    width: 100px;
+    height: 100px;
+}
+
+.previewImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.removeButton {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 2px;
+    line-height: 1;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.errorMessage {
+    color: #dc3545;
+    margin-top: 10px;
 }
 
 .submitButton {
-  align-self: flex-end;
-  margin-top: 16px;
-  transition: background-color 0.3s ease-in-out;
-}
-
-.submitButton:hover {
-  background-color: #1565c0; /* Darker shade of primary color */
-}
-
-.submitButton:disabled {
-  background-color: #bdbdbd;
-  color: #757575;
-}
-
-@media (max-width: 600px) {
-  .createPostCard {
-    margin-bottom: 16px;
-  }
-
-  .submitButton {
     width: 100%;
-  }
 }
