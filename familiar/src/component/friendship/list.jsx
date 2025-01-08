@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from "react";
-import styles from "./ListFriendShip.module.css";
+import styles from "../friendship/ListFriendShip.module.css";
 import {FriendItem} from "../FriendItem";
 import {getFriendShips, searchNameFriendship} from "../../service/friendship/friendshipService";
 import {useSelector} from "react-redux";
+import {Link} from "react-router-dom";
+import {login} from "../../redux/login/AccountAction";
 
 function ListFriendShipComponent() {
     const [searchValue, setSearchValue] = useState("");
@@ -38,8 +40,12 @@ function ListFriendShipComponent() {
     return (
         <>
             <div className={styles.wrapper}>
-
-                <h3 className={`${styles.customTitle} title text-center mb-5`}>Danh sách bạn bè</h3>
+                <div className="d-flex justify-content-between align-items-center mb-4">
+                    <h3 className={`${styles.customTitle} title mb-0`}>Danh sách bạn bè</h3>
+                    <Link to={`/friendships/request`} className="btn btn-primary">
+                        Lời mời kết bạn
+                    </Link>
+                </div>
 
                 <form className={styles.searchContainer}>
                     <input
@@ -69,11 +75,12 @@ function ListFriendShipComponent() {
                         ))
                     ) : (
                         <div className="alert alert-warning text-center" role="alert">
-                            Tên bạn tìm không tìm thấy trong danh sách bạn bè của bạn.
+                            Không tìm thấy trong danh sách bạn bè của bạn.
                         </div>
                     )}
                 </div>
             </div>
+
         </>
     );
 }

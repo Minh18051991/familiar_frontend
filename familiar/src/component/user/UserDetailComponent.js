@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {findUserById} from "../../service/user/userService";
-import {cancelFriendship, sendFriendship, suggestedFriendsList} from "../../service/friendship/friendshipService";
+import {cancelFriendship, sendFriendship, suggestedFriendsListPage} from "../../service/friendship/friendshipService";
 import styles from "../user/userDetail.module.css";
 import {useSelector} from "react-redux";
+import DetailUserFriend from "./DetailUserFriend";
 import UserPosts from "../user/UserPosts";
 
 function UserDetailComponent() {
@@ -11,7 +12,12 @@ function UserDetailComponent() {
     const {id} = useParams();
     const [friendList, setFriendList] = useState([]);
     const [isFriend, setIsFriend] = useState(true);
-    const [userId, setUserId] = useState(useSelector(state => state.user.account.userId));
+    const userId = useSelector(state => state.user.account.userId);
+
+    const [page, setPage] = useState(0);
+    const [size, setSize] = useState(2);
+    const [hasMore, setHasMore] = useState(true);
+    const [totalPages, setTotalPages] = useState(0);
 
     useEffect(() => {
         const fetchFriendships = async () => {
@@ -19,14 +25,19 @@ function UserDetailComponent() {
             const friendId = id;
 
             try {
-                const list = await suggestedFriendsList(userId, friendId);
+                const {data, totalPages} = await suggestedFriendsListPage(userId, friendId, page, size);
 
-                if (Array.isArray(list)) {
-                    const updateList = list.map(friend => ({
+                setTotalPages(totalPages);
+
+                if (Array.isArray(data)) {
+                    const updateList = data.map(friend => ({
                         ...friend,
                         isFriend: false
                     }));
-                    setFriendList(updateList);
+                    setFriendList(pre => [
+                        ...pre,
+                        ...updateList,
+                    ]);
                 } else {
                     setFriendList([]);
                 }
@@ -37,8 +48,22 @@ function UserDetailComponent() {
         };
 
         fetchFriendships();
-    }, [id]);
+    }, [userId, id, page, size]);
 
+    useEffect(() => {
+        // Kiểm tra nếu page đạt totalPages - 1 thì cập nhật lại hasMore
+        if (page >= totalPages - 1) {
+            setHasMore(false);
+        } else {
+            setHasMore(true);
+        }
+    }, [page, totalPages]);
+
+    const handleMore = () => {
+        if (page < totalPages - 1) {
+            setPage(prevPage => prevPage + 1);
+        }
+    }
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -46,7 +71,7 @@ function UserDetailComponent() {
             setUser(user);
         }
         fetchUser();
-    }, [])
+    }, [id])
 
     function formatDate(dateString) {
         if (!dateString) return "";
@@ -135,46 +160,40 @@ function UserDetailComponent() {
                     </div>
 
                     {/* Danh sách gợi ý bạn bè */}
-                    {
-                        friendList.length > 0 && <div className="col-12 col-md-8 order-md-2">
-                            <div className={`${styles.card} shadow-lg rounded-4 border-0`}>
-                                <div className={`${styles.cardBody}`}>
-                                    <h5 className={`${styles.suggestedFriendsTitle} mb-3 text-primary`}>Có thể bạn
-                                        biết?</h5>
-                                    <div className="row">
-                                        {friendList.map((friend, index) => (
-                                            <div className="col-12 col-sm-6 col-md-4 mb-4" key={index}>
-                                                <div className={`${styles.card} shadow-sm border-light hoverShadow`}>
-                                                    <div className={`${styles.cardBody} text-center`}>
-                                                        <img
-                                                            src={friend?.userProfilePictureUrl}
-                                                            alt="Friend Avatar"
-                                                            className={`${styles.friendAvatar} mb-3`}
-                                                            style={{
-                                                                width: '100px',
-                                                                height: '100px',
-                                                                objectFit: 'cover',
-                                                                borderRadius: '50%',
-                                                            }}
-                                                        />
-                                                        <p className="card-title mb-2">{friend?.userFirstName} {friend?.userLastName}</p>
-                                                        <div className="d-flex justify-content-center mt-3">
-                                                            <button
-                                                                onClick={() => handleAddFriend(friend.userId)}
-                                                                className={`${styles.actionBtn} btn btn-primary btn-sm px-3`}
-                                                            >
-                                                                {friend.isFriend ? "Huỷ kết bạn" : "Kết bạn"}
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                    <div className="col-12 col-md-8 order-md-2">
+                        <div>
+                            {
+                                friendList.length > 0 && <div>
+                                    <div className={`${styles.card} shadow-lg rounded-4 border-0`}>
+                                        <div className={`${styles.cardBody}`}>
+                                            <h5 className={`${styles.suggestedFriendsTitle} mb-3 text-primary`}>Có thể bạn
+                                                biết?</h5>
+                                            <div className="row">
+                                                {friendList.map((friend, index) => (
+                                                    <DetailUserFriend friend={friend} col={3}
+                                                                      userId={userId} setFriendList={setFriendList}/>
+                                                ))}
                                             </div>
-                                        ))}
+                                            {hasMore && (
+                                                <div className="text-center mt-3">
+                                                    <button
+                                                        className="btn btn-light"
+                                                        onClick={handleMore}
+                                                    >
+                                                        Xem thêm
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            }
                         </div>
-                    }
+                        <div>
+                            Bài post
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <UserPosts userId={id}/>
