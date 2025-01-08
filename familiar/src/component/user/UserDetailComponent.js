@@ -6,6 +6,7 @@ import styles from "../user/userDetail.module.css";
 import {useSelector} from "react-redux";
 import DetailUserFriend from "./DetailUserFriend";
 import PostService from "../../services/PostService";
+import UserPosts from "./UserPosts";
 
 function UserDetailComponent() {
     const [user, setUser] = useState({});
@@ -175,6 +176,7 @@ function UserDetailComponent() {
                         </div>
                         <div>
                             Bài post
+                            <UserPosts userId={id}/>
                         </div>
                     </div>
 
