@@ -34,3 +34,10 @@ export function logout(){
         payload: null
     }
 }
+
+export function updateAvatar(newAvatarUrl) {
+    return {
+        type: 'UPDATE_AVATAR',
+        payload: newAvatarUrl
+    }
+}
