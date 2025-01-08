@@ -1,17 +1,61 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {useParams} from "react-router-dom";
 import {checkEmailExists, getUserById, updateUser} from "../../service/user/user";
 import {toast} from "react-toastify";
 import moment from 'moment';
 import styles from './DetailComponent.module.css';
+import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
+import {v4 as uuidv4} from 'uuid';
+import {useDispatch} from "react-redux";
+import {updateAvatar} from "../../redux/login/AccountAction";
+import LoadingSpinner from "../otp/LoadingSpinner";
 
 function DetailComponent() {
     const {id} = useParams();
     let userId = parseInt(id);
+    const dispatch = useDispatch();
     const [user, setUser] = useState(null);
     const [editingField, setEditingField] = useState(null);
     const [editValue, setEditValue] = useState("");
     const [emailError, setEmailError] = useState('');
+
+    const [isUploading, setIsUploading] = useState(false);
+    const fileInputRef = useRef(null);
+
+    const uploadImage = async (file) => {
+        const storage = getStorage();
+        const fileName = `${uuidv4()}_${file.name}`;
+        const storageRef = ref(storage, `profile_pictures/${fileName}`);
+
+        try {
+            setIsUploading(true);
+            const snapshot = await uploadBytes(storageRef, file);
+            const downloadURL = await getDownloadURL(snapshot.ref);
+            return downloadURL;
+        } catch (error) {
+            console.error("Error uploading image: ", error);
+            toast.error("Lỗi khi tải ảnh lên");
+            return null;
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
+    const handleImageChange = async (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const imageUrl = await uploadImage(file);
+            if (imageUrl) {
+                const updatedUser = await updateUser(userId, {...user, profilePictureUrl: imageUrl});
+                setUser(updatedUser);
+                dispatch(updateAvatar(imageUrl));
+                console.log(imageUrl)
+                toast.success("Cập nhật ảnh đại diện thành công!");
+            }
+        }
+    };
+
+
     useEffect(() => {
         const fetchData = async () => {
             const userDetail = await getUserById(userId);
@@ -72,7 +116,8 @@ function DetailComponent() {
                             <option value="Khác">Khác</option>
                         </select>
                         <div className="mt-2">
-                            <button onClick={() => handleSave(field)} className={`btn btn-sm btn-primary ${styles.saveButton}`}>
+                            <button onClick={() => handleSave(field)}
+                                    className={`btn btn-sm btn-primary ${styles.saveButton}`}>
                                 Lưu
                             </button>
                             <button onClick={handleCancel} className="btn btn-sm btn-secondary">
@@ -175,73 +220,92 @@ function DetailComponent() {
     };
 
     return (
-        <div className={`container ${styles.container}`}>
-            <div className="row">
-                <div className="col-md-4">
-                    <div className={`card ${styles.profileCard}`}>
-                        <img
-                            src={user.profilePictureUrl || getDefaultProfilePicture(user.gender)}
-                            className={`card-img-top ${styles.profileImage}`}
-                            alt="Profile Picture"
-                        />
-                        <div className="card-body">
-                        <h5 className="card-title">{user.firstName} {user.lastName}</h5>
-                            <button className={`btn btn-sm btn-outline-primary mt-2 ${styles.editProfileButton}`}>Chỉnh sửa ảnh đại diện</button>
+        <>
+            <div className={`container ${styles.container}`}>
+                <div className="row">
+                    <div className="col-md-4">
+                        <div className={`card ${styles.profileCard}`}>
+                            <div className={styles.avatarContainer}>
+                                <img
+                                    src={user.profilePictureUrl || getDefaultProfilePicture(user.gender)}
+                                    className={`${styles.avatarImage}`}
+                                    alt="Profile Picture"
+                                />
+                            </div>
+                            <div className="card-body">
+                                <h5 className="card-title">{user.firstName} {user.lastName}</h5>
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    onChange={handleImageChange}
+                                    style={{display: 'none'}}
+                                    accept="image/*"
+                                />
+                                <button
+                                    className={`btn btn-sm btn-outline-primary mt-2 ${styles.editProfileButton}`}
+                                    onClick={() => fileInputRef.current.click()}
+                                    disabled={isUploading}
+                                >
+                                    {isUploading ? 'Đang tải...' : 'Chỉnh sửa ảnh đại diện'}
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div className="col-md-8">
-                    <div className={`card ${styles.detailsCard}`}>
-                        <div className="card-body">
-                            <h5 className={`card-title ${styles.cardTitle}`}>Thông tin chi tiết</h5>
-                            <table className={`table ${styles.table}`}>
-                                <tbody>
-                                {renderGenderField("Giới tính", "gender", user.gender)}
-                                {renderField("Địa chỉ", "address", user.address)}
-                                {renderField("Nghề nghiệp", "occupation", user.occupation)}
-                                {renderField("Email", "email", user.email)}
-                                {renderField("Ngày sinh", "dateOfBirth", user.dateOfBirth)}
-                                {renderField("Thời gian tạo", "createdAt", user.createdAt ? new Date(user.createdAt).toLocaleString() : null)}
-                                </tbody>
-                            </table>
+                    <div className="col-md-8">
+                        <div className={`card ${styles.detailsCard}`}>
+                            <div className="card-body">
+                                <h5 className={`card-title ${styles.cardTitle}`}>Thông tin chi tiết</h5>
+                                <table className={`table ${styles.table}`}>
+                                    <tbody>
+                                    {renderGenderField("Giới tính", "gender", user.gender)}
+                                    {renderField("Địa chỉ", "address", user.address)}
+                                    {renderField("Nghề nghiệp", "occupation", user.occupation)}
+                                    {renderField("Email", "email", user.email)}
+                                    {renderField("Ngày sinh", "dateOfBirth", user.dateOfBirth)}
+                                    {renderField("Thời gian tạo", "createdAt", user.createdAt ? new Date(user.createdAt).toLocaleString() : null)}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-                    <div className={`card ${styles.bioCard}`}>
-                        <div className="card-body">
-                            <h5 className={`card-title ${styles.cardTitle}`}>Tiểu sử</h5>
-                            {editingField === 'bio' ? (
-                                <>
+                        <div className={`card ${styles.bioCard}`}>
+                            <div className="card-body">
+                                <h5 className={`card-title ${styles.cardTitle}`}>Tiểu sử</h5>
+                                {editingField === 'bio' ? (
+                                    <>
                                     <textarea
                                         value={editValue}
                                         onChange={(e) => setEditValue(e.target.value)}
                                         className={`form-control ${styles.formControl}`}
                                     />
-                                    <div className="mt-2">
-                                        <button onClick={() => handleSave('bio')}
-                                                className={`btn btn-sm btn-primary ${styles.saveButton}`}>
-                                            Lưu
+                                        <div className="mt-2">
+                                            <button onClick={() => handleSave('bio')}
+                                                    className={`btn btn-sm btn-primary ${styles.saveButton}`}>
+                                                Lưu
+                                            </button>
+                                            <button onClick={handleCancel} className="btn btn-sm btn-secondary">
+                                                Hủy
+                                            </button>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <p className={`card-text ${user.bio ? '' : styles.noInfo}`}>
+                                            {user.bio || "Chưa có thông tin"}
+                                        </p>
+                                        <button onClick={() => handleEdit('bio', user.bio)}
+                                                className={`btn btn-sm btn-outline-primary ${styles.editButton}`}>
+                                            Chỉnh sửa tiểu sử
                                         </button>
-                                        <button onClick={handleCancel} className="btn btn-sm btn-secondary">
-                                            Hủy
-                                        </button>
-                                    </div>
-                                </>
-                            ) : (
-                                <>
-                                    <p className={`card-text ${user.bio ? '' : styles.noInfo}`}>
-                                        {user.bio || "Chưa có thông tin"}
-                                    </p>
-                                    <button onClick={() => handleEdit('bio', user.bio)}
-                                            className={`btn btn-sm btn-outline-primary ${styles.editButton}`}>
-                                        Chỉnh sửa tiểu sử
-                                    </button>
-                                </>
-                            )}
+                                    </>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
+
             </div>
-        </div>
+            <LoadingSpinner show={isUploading}/>
+        </>
     );
 }
 
