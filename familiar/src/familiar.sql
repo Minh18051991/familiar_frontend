@@ -93,7 +93,7 @@ CREATE TABLE attachments
     id INT AUTO_INCREMENT PRIMARY KEY,
     post_id       INT          NOT NULL,
     file_url      VARCHAR(255) NOT NULL,
-    file_name     VARCHAR(255) NOT NULL,
+    file_name     VARCHAR(255) ,
     file_type     VARCHAR(100),
     file_size     INT,
     created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
