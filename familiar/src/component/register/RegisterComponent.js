@@ -2,7 +2,7 @@ import React from 'react';
 import * as Yup from "yup";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {checkUsernameExists, createAccount} from "../../service/account/account";
-import {createUser} from "../../service/user/user";
+import {checkEmailExists, createUser} from "../../service/user/user";
 import {useNavigate} from "react-router-dom";
 import moment from 'moment'; // Đảm bảo bạn đã import moment
 import debounce from 'lodash/debounce';
@@ -10,25 +10,45 @@ import styles from "./RegisterComponent.module.css";
 
 export default function RegisterComponent() {
 
+    const [initialValues, setInitialValues] = React.useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        dateOfBirth: '',
+        gender: '',
+        address: '',
+        phoneNumber: '',
+        username: '',
+        password: '',
+        confirmPassword: ''
+    });
+
     const navigate = useNavigate();
 
     const validationSchema = Yup.object({
         firstName: Yup.string().required("Tên không được để trống"),
         lastName: Yup.string().required("Họ không được để trống"),
-        email: Yup.string().email("Email không hợp lệ").required("Email không được để trống"),
+        email: Yup.string()
+            .required("Email không được để trống")
+            .email("Email không hợp lệ")
+            .test('unique-email', 'Email đã tồn tại', async function (value) {
+                if (!value) return true; // Skip validation if empty
+                const result = await debouncedEmailCheck(value, this.createError);
+                return result;
+            }),
         dateOfBirth: Yup.date()
-            .required("Ngày sinh không được để trống")
-            .max(moment().subtract(16, 'years'), "Bạn phải đủ 16 tuổi trở lên")
+            .nullable()
             .test(
                 "is-over-16",
                 "Bạn phải đủ 16 tuổi trở lên",
                 function (value) {
+                    if (!value) return true; // Cho phép giá trị null (không nhập)
                     return moment().diff(moment(value), 'years') >= 16;
                 }
             ),
         gender: Yup.string().required("Giới tính không được để trống"),
-        address: Yup.string().required("Địa chỉ không được để trống"),
-        phoneNumber: Yup.string().matches(/^[0-9]+$/, "Số điện thoại không hợp lệ").required("Số điện thoại không được để trống"),
+        address: Yup.string(),
+        phoneNumber: Yup.string().matches(/^[0-9]+$/, "Số điện thoại không hợp lệ"),
         username: Yup.string()
             .min(4, "Tên đăng nhập phải có ít nhất 4 ký tự")
             .required("Tên đăng nhập không được để trống")
@@ -41,18 +61,23 @@ export default function RegisterComponent() {
         confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Mật khẩu xác nhận phải trùng khớp').required("Mật khẩu xác nhận không được để trống")
     });
 
-    const initialValues = {
-        firstName: '',
-        lastName: '',
-        email: '',
-        dateOfBirth: '',
-        gender: '',
-        address: '',
-        phoneNumber: '',
-        username: '',
-        password: '',
-        confirmPassword: ''
-    }
+    const debouncedEmailCheck = debounce(async (email, setFieldError) => {
+        try {
+            const object = {email: email};
+            const exists = await checkEmailExists(object);
+            if (exists) {
+                setFieldError('email', 'Email đã tồn tại');
+                return false;
+            }
+            setFieldError('email', null);
+            return true;
+        } catch (error) {
+            console.error("Lỗi khi kiểm tra email:", error);
+            setFieldError('email', 'Lỗi khi kiểm tra email');
+            return false;
+        }
+    }, 500);
+
 
     const debouncedUsernameCheck = debounce(async (username, setFieldError) => {
         try {
@@ -68,6 +93,10 @@ export default function RegisterComponent() {
             return false;
         }
     }, 500);
+
+
+
+
 
     const handleOnSubmit = async (values, {resetForm}) => {
         // Tách dữ liệu user và account
@@ -96,26 +125,26 @@ export default function RegisterComponent() {
 
         // Gọi API để tạo user
         const createdUser = await createUser(userData);
-
-        // Nếu tạo user thành công, tạo account
-        if (createdUser && createdUser.id) {
+        if (!createdUser){
+            console.log("Tạo account không thành công")
+            setInitialValues(values)
+            return;
+        }else {
             accountData.userId = createdUser.id;
             console.log("----------")
             console.log(accountData)
             const check = await createAccount(accountData);
             if (check) {
                 resetForm();
-                navigate('/login');
+                navigate('/login',{state:{username: accountData.username,name: userData.firstName + " " + userData.lastName,gender: userData.gender}});
+                // navigate('/login',{state:{name: userData.firstName + " " + userData.lastName}});
             } else {
                 console.log("Tạo account không thành công")
-                resetForm();
+                setInitialValues(values)
                 return;
             }
 
         }
-
-
-        resetForm();
     }
 
     return (
@@ -126,31 +155,43 @@ export default function RegisterComponent() {
                 <div className={`card ${styles.registerCard}`}>
                     <div className="card-body">
                         <h2 className={`card-title text-center ${styles.registerTitle}`}>Đăng ký tài khoản</h2>
+                        <p className={styles.requiredFieldNote}>Các ô có dấu * là bắt buộc</p>
                         <Formik
-                            initialValues = {initialValues}
-                            validationSchema = {validationSchema}
-                            onSubmit = {handleOnSubmit}
-                            validateOnChange = {true}
-                            validateOnBlur = {true}
+                            initialValues={initialValues}
+                            validationSchema={validationSchema}
+                            onSubmit={handleOnSubmit}
+                            validateOnChange={true}
+                            validateOnBlur={true}
                         >
                             {({isSubmitting, setFieldError}) => (
                                 <Form className="row g-3">
                                     <div className={`col-md-6 ${styles.formGroup}`}>
                                         <label htmlFor="firstName"
-                                               className={`form-label ${styles.formLabel}`}>Tên</label>
+                                               className={`form-label ${styles.formLabel} ${styles.requiredField}`}>Tên</label>
                                         <Field className={`form-control ${styles.formControl}`} type="text"
                                                name="firstName" id="firstName"/>
                                         <ErrorMessage name="firstName" component="div" className={styles.errorMessage}/>
                                     </div>
                                     <div className="col-md-6">
-                                        <label htmlFor="lastName" className="form-label">Họ</label>
+                                        <label htmlFor="lastName"
+                                               className={`form-label ${styles.requiredField}`}>Họ</label>
                                         <Field className="form-control" type="text" name="lastName" id="lastName"/>
                                         <ErrorMessage name="lastName" component="div" className="text-danger"/>
                                     </div>
 
                                     <div className="col-md-6">
-                                        <label htmlFor="email" className="form-label">Email</label>
-                                        <Field className="form-control" type="email" name="email" id="email"/>
+                                        <label htmlFor="email"
+                                               className={`form-label ${styles.requiredField}`}>Email:</label>
+                                        <Field
+                                            className="form-control"
+                                            type="text"
+                                            name="email"
+                                            id="email"
+                                            validate={(value) => {
+                                                debouncedEmailCheck(value, setFieldError);
+                                            }}
+
+                                        />
                                         <ErrorMessage name="email" component="div" className="text-danger"/>
                                     </div>
 
@@ -162,7 +203,8 @@ export default function RegisterComponent() {
                                     </div>
 
                                     <div className="col-md-6">
-                                        <label htmlFor="gender" className="form-label">Giới tính</label>
+                                        <label htmlFor="gender" className={`form-label ${styles.requiredField}`}>Giới
+                                            tính</label>
                                         <Field as="select" className="form-select" name="gender" id="gender">
                                             <option value="">Chọn giới tính</option>
                                             <option value="Nam">Nam</option>
@@ -186,7 +228,8 @@ export default function RegisterComponent() {
                                     </div>
 
                                     <div className="col-md-6">
-                                        <label htmlFor="username" className="form-label">Tên đăng nhập</label>
+                                        <label htmlFor="username" className={`form-label ${styles.requiredField}`}>Tên
+                                            đăng nhập</label>
                                         <Field
                                             className="form-control"
                                             type="text"
@@ -201,14 +244,16 @@ export default function RegisterComponent() {
                                     </div>
 
                                     <div className="col-md-6">
-                                        <label htmlFor="password" className="form-label">Mật khẩu</label>
+                                        <label htmlFor="password" className={`form-label ${styles.requiredField}`}>Mật
+                                            khẩu</label>
                                         <Field className="form-control" type="password" name="password"
                                                id="password"/>
                                         <ErrorMessage name="password" component="div" className="text-danger"/>
                                     </div>
 
                                     <div className="col-md-6">
-                                        <label htmlFor="confirmPassword" className="form-label">Xác nhận mật
+                                        <label htmlFor="confirmPassword"
+                                               className={`form-label ${styles.requiredField}`}>Xác nhận mật
                                             khẩu</label>
                                         <Field className="form-control" type="password" name="confirmPassword"
                                                id="confirmPassword"/>

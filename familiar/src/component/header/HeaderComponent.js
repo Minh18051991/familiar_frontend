@@ -3,10 +3,11 @@ import {Link, useNavigate, useLocation} from 'react-router-dom';
 import {logout} from "../../redux/login/AccountAction";
 import {useDispatch, useSelector} from "react-redux";
 import styles from './HeaderComponent.module.css';
+import {sendOtp} from "../../service/otp/otp";
 
 
 function HeaderComponent() {
-    const info= useSelector(state => state.user);
+    const info = useSelector(state => state.user);
     const account = info ? info.account : null;
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -18,6 +19,17 @@ function HeaderComponent() {
     }
 
     const isActive = (path) => location.pathname === path ? styles.active : '';
+
+    const handleChangePassword = async () => {
+            if (account && account.username) {
+                const object = {username: account.username};
+                await sendOtp(object);
+
+                navigate(`/account/change-password/${account.username}`);
+
+            }
+        }
+    ;
 
 
     return (
@@ -44,7 +56,8 @@ function HeaderComponent() {
                     </Link>
 
 
-                    <Link className={`${styles.navIcon} ${isActive('/friends')}`} to="/friendships-list" title="Bạn bè">
+                    <Link className={`${styles.navIcon} ${isActive('/friends')}`} to="/friendships-list"
+                          title="Bạn bè">
                         <i className="fas fa-user-friends"></i>
                     </Link>
                     <Link className={`${styles.navIcon} ${isActive('/messages')}`} to="/messages" title="Tin nhắn">
@@ -62,7 +75,10 @@ function HeaderComponent() {
                                id="navbarDropdown"
                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img
-                                    src={account.profilePictureUrl || "https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg"}
+                                    src={account.profilePictureUrl ||
+                                        (account.gender === 'Nam' ? "https://static2.yan.vn/YanNews/2167221/202003/dan-mang-du-trend-thiet-ke-avatar-du-kieu-day-mau-sac-tu-anh-mac-dinh-b0de2bad.jpg" :
+                                            account.gender === 'Nữ' ? "https://antimatter.vn/wp-content/uploads/2022/04/anh-avatar-trang-co-gai-toc-tem.jpg" :
+                                                "https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg")}
                                     alt="Avatar"
                                     className={styles.avatar}
                                 />
@@ -72,8 +88,12 @@ function HeaderComponent() {
                                 aria-labelledby="navbarDropdown">
                                 <li><Link className="dropdown-item" to={`/user/detail/${account.userId}`}>Xem
                                     thông tin cá nhân</Link></li>
-                                <li><Link className="dropdown-item" to={`/account/change-password/${account.username}`}>Đổi mật
-                                    khẩu</Link></li>
+                                {/*<li><Link className="dropdown-item" to={`/account/change-password/${account.username}`}>Đổi mật*/}
+                                {/*    khẩu</Link></li>*/}
+                                <li>
+                                    <button className="dropdown-item" onClick={handleChangePassword}>Đổi mật khẩu
+                                    </button>
+                                </li>
                                 <li>
                                     <hr className="dropdown-divider"/>
                                 </li>

@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {findUserById} from "../../service/user/userService";
-import {cancelFriendship, sendFriendship, suggestedFriendsListPage} from "../../service/friendship/friendshipService";
+import {suggestedFriendsListPage} from "../../service/friendship/friendshipService";
 import styles from "../user/userDetail.module.css";
 import {useSelector} from "react-redux";
 import DetailUserFriend from "./DetailUserFriend";
-import UserPosts from "../user/UserPosts";
+import UserPosts from "./UserPosts";
 
 function UserDetailComponent() {
     const [user, setUser] = useState({});
@@ -86,34 +86,6 @@ function UserDetailComponent() {
         return <div>Loading...</div>;
     }
 
-    const handleAddFriend = async (friendId) => {
-        try {
-
-            let updatedFriendStatus;
-
-            if (isFriend) {
-                await cancelFriendship(userId, friendId);
-                updatedFriendStatus = false;
-            } else {
-                await sendFriendship(userId, friendId);
-                updatedFriendStatus = true;
-            }
-
-            setFriendList(prevList =>
-                prevList.map(friend =>
-                    friend.userId === friendId
-                        ? {...friend, isFriend: updatedFriendStatus}
-                        : friend
-                )
-            );
-
-            setIsFriend(updatedFriendStatus);
-
-        } catch (error) {
-            console.error("Lỗi xử lý bạn bè:", error);
-        }
-    };
-
     return (
         <>
             <div className="container mt-5">
@@ -190,14 +162,13 @@ function UserDetailComponent() {
                             }
                         </div>
                         <div>
-                            Bài Post
+                            Bài post
                             <UserPosts userId={id}/>
                         </div>
                     </div>
 
                 </div>
             </div>
-
         </>
     )
 }

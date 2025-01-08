@@ -70,3 +70,13 @@ export async function createUser(user) {
         return null;
     }
 }
+
+export async function checkEmailExists(email) {
+    try {
+        const response = await axios.post('http://localhost:8080/api/user/checkEmail',email);
+        return response.data;
+    } catch (error) {
+        console.error("Error checking username:", error);
+        return false;
+    }
+}

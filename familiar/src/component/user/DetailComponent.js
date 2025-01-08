@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {getUserById, updateUser} from "../../service/user/user";
+import {checkEmailExists, getUserById, updateUser} from "../../service/user/user";
 import {toast} from "react-toastify";
 import moment from 'moment';
 import styles from './DetailComponent.module.css';
@@ -11,7 +11,7 @@ function DetailComponent() {
     const [user, setUser] = useState(null);
     const [editingField, setEditingField] = useState(null);
     const [editValue, setEditValue] = useState("");
-
+    const [emailError, setEmailError] = useState('');
     useEffect(() => {
         const fetchData = async () => {
             const userDetail = await getUserById(userId);
@@ -19,6 +19,7 @@ function DetailComponent() {
         }
         fetchData();
     }, [userId]);
+
 
     if (!user) {
         return <div className="text-center mt-5">Loading...</div>;
@@ -34,26 +35,20 @@ function DetailComponent() {
         return moment(isoDate).format('DD/MM/YYYY'); // Hiển thị dạng DD/MM/YYYY
     };
 
-    const formatDateForBackend = (displayDate) => {
-        return moment(displayDate, 'DD/MM/YYYY').format('YYYY-MM-DD'); // Chuyển đổi sang YYYY-MM-DD cho backend
-    };
-
     const handleSave = async (field) => {
         let valueToUpdate = editValue;
-
-        if (field === 'dateOfBirth') {
-            // Chuyển đổi ngày từ định dạng hiển thị sang định dạng cho backend
-            valueToUpdate = formatDateForBackend(editValue);
+        if (field === 'email') {
+            const exists = await checkEmailExists(editValue);
+            if (exists) {
+                setEmailError('Email đã tồn tại');
+                return;
+            }
         }
-
         const updateUserData = {...user, [field]: valueToUpdate};
-
-
         const updatedUser = await updateUser(userId, updateUserData);
         setUser(updatedUser);
         setEditingField(null);
         toast.success("Cập nhật thành công!");
-
     };
 
     const handleCancel = () => {
@@ -72,9 +67,9 @@ function DetailComponent() {
                             onChange={(e) => setEditValue(e.target.value)}
                             className={`form-select ${styles.formControl}`}
                         >
-                            <option value="male">Nam</option>
-                            <option value="female">Nữ</option>
-                            <option value="other">Khác</option>
+                            <option value="Nam">Nam</option>
+                            <option value="Nữ">Nữ</option>
+                            <option value="Khác">Khác</option>
                         </select>
                         <div className="mt-2">
                             <button onClick={() => handleSave(field)} className={`btn btn-sm btn-primary ${styles.saveButton}`}>
@@ -100,6 +95,7 @@ function DetailComponent() {
         </tr>
     );
 
+
     const renderField = (label, field, value) => (
         <tr>
             <th>{label}</th>
@@ -107,13 +103,34 @@ function DetailComponent() {
                 {editingField === field ? (
                     <>
                         <input
-                            type="text"
+                            type={field === 'dateOfBirth' ? 'date' : field === 'email' ? 'email' : 'text'}
                             value={editValue}
-                            onChange={(e) => setEditValue(e.target.value)}
-                            className={`form-control ${styles.formControl}`}
+                            onChange={(e) => {
+                                setEditValue(e.target.value);
+                                if (field === 'email') {
+                                    setEmailError('');
+                                }
+                            }}
+                            className={`form-control ${styles.formControl} ${field === 'email' && emailError ? 'is-invalid' : ''}`}
                         />
+                        {field === 'email' && emailError && (
+                            <div className="invalid-feedback">{emailError}</div>
+                        )}
                         <div className="mt-2">
-                            <button onClick={() => handleSave(field)} className={`btn btn-sm btn-primary ${styles.saveButton}`}>
+                            <button
+                                onClick={async () => {
+                                    if (field === 'email') {
+                                        const object = {email: editValue};
+                                        const exists = await checkEmailExists(object);
+                                        if (exists) {
+                                            setEmailError('Email đã tồn tại');
+                                            return;
+                                        }
+                                    }
+                                    handleSave(field);
+                                }}
+                                className={`btn btn-sm btn-primary ${styles.saveButton}`}
+                            >
                                 Lưu
                             </button>
                             <button onClick={handleCancel} className="btn btn-sm btn-secondary">
@@ -124,10 +141,19 @@ function DetailComponent() {
                 ) : (
                     <>
                     <span className={value ? '' : styles.noInfo}>
-                        {field === 'dateOfBirth' ? formatDateForDisplay(value) : (value || "Chưa có thông tin")}
+                        {field === 'dateOfBirth'
+                            ? (value ? formatDateForDisplay(value) : "Chưa có thông tin")
+                            : (value || "Chưa có thông tin")}
                     </span>
-                        <button onClick={() => handleEdit(field, field === 'dateOfBirth' ? formatDateForDisplay(value) : value)}
-                                className={`btn btn-sm btn-outline-primary ${styles.editButton}`}>
+                        <button
+                            onClick={() => {
+                                handleEdit(field, field === 'dateOfBirth' ? (value ? value : '') : value);
+                                if (field === 'email') {
+                                    setEmailError('');
+                                }
+                            }}
+                            className={`btn btn-sm btn-outline-primary ${styles.editButton}`}
+                        >
                             Chỉnh sửa
                         </button>
                     </>
@@ -137,12 +163,11 @@ function DetailComponent() {
     );
 
 
-
     const getDefaultProfilePicture = (gender) => {
-        switch(gender) {
-            case 'female':
+        switch (gender) {
+            case 'Nữ':
                 return "https://antimatter.vn/wp-content/uploads/2022/04/anh-avatar-trang-co-gai-toc-tem.jpg";
-            case 'male':
+            case 'Nam':
                 return "https://static2.yan.vn/YanNews/2167221/202003/dan-mang-du-trend-thiet-ke-avatar-du-kieu-day-mau-sac-tu-anh-mac-dinh-b0de2bad.jpg";
             default:
                 return "https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg";
@@ -175,7 +200,7 @@ function DetailComponent() {
                                 {renderField("Địa chỉ", "address", user.address)}
                                 {renderField("Nghề nghiệp", "occupation", user.occupation)}
                                 {renderField("Email", "email", user.email)}
-                                {renderField("Ngày sinh", "dateOfBirth", user.dateOfBirth ? new Date(user.dateOfBirth).toLocaleDateString() : null)}
+                                {renderField("Ngày sinh", "dateOfBirth", user.dateOfBirth)}
                                 {renderField("Thời gian tạo", "createdAt", user.createdAt ? new Date(user.createdAt).toLocaleString() : null)}
                                 </tbody>
                             </table>
