@@ -68,7 +68,13 @@
 /* 6. Định dạng card bạn bè */
 .card-body {
     padding: 1.5rem;
-    border-radius: 12px;
+    border-radius: 0px;
+}
+
+
+.card-body-Home {
+    padding: 1.5rem;
+    border-radius: 5px;
 }
 
 .card-body img {
@@ -106,3 +112,21 @@
     object-fit: cover;
     border-radius: 50%;
 }
+.friendAvatarHome {
+    width: 35px;
+    height: 35px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+.btnAvatarHome {
+    height: 25px; /* Đặt chiều cao nút */
+    text-align: center; /* Căn chỉnh nội dung giữa theo chiều ngang */
+    display: inline-flex; /* Sử dụng inline-flex để chiều rộng tự động thay đổi */
+    justify-content: center; /* Căn giữa nội dung theo chiều ngang */
+    align-items: center; /* Căn giữa nội dung theo chiều dọc */
+    white-space: nowrap; /* Ngăn nội dung xuống dòng */
+    padding: 0 0; /* Thêm padding để nút có khoảng cách từ nội dung */
+}
+
+
+

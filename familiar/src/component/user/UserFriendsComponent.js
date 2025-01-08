@@ -4,10 +4,11 @@ import {findUserById} from "../../service/user/userService";
 import {suggestedFriendsListPage} from "../../service/friendship/friendshipService";
 import styles from "../user/userDetail.module.css";
 import {useSelector} from "react-redux";
-import DetailUserFriend from "./DetailUserFriend";
+import Friends from "./Friends";
 import UserPosts from "./UserPosts";
+import DetailUser from "./DetailUser";
 
-function UserDetailComponent() {
+function UserFriendsComponent() {
     const [user, setUser] = useState({});
     const {id} = useParams();
     const [friendList, setFriendList] = useState([]);
@@ -73,15 +74,6 @@ function UserDetailComponent() {
         fetchUser();
     }, [id])
 
-    function formatDate(dateString) {
-        if (!dateString) return "";
-        const date = new Date(dateString);
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-        return `${day}/${month}/${year}`;
-    }
-
     if (!user) {
         return <div>Loading...</div>;
     }
@@ -91,45 +83,7 @@ function UserDetailComponent() {
             <div className="container mt-5">
                 <div className="row">
                     {/* Thông tin người dùng */}
-                    <div className="col-12 col-md-4 order-md-1">
-                        <div className={`${styles.card} shadow-lg rounded-4 border-0 mb-4 hoverShadow`}>
-                            <div className={`${styles.cardBody} text-center`}>
-                                <img
-                                    src={user.userProfilePictureUrl}
-                                    alt="User Avatar"
-                                    className={`${styles.userAvatar} mb-4`}
-                                    style={{
-                                        width: '180px',
-                                        height: '180px',
-                                        objectFit: 'cover',
-                                        borderRadius: '50%',
-                                        border: '5px solid #007bff',
-                                    }}
-                                />
-                                <h3 className={`${styles.userName} card-title mb-2`}>{user.userFirstName} {user.userLastName}</h3>
-                                <p className={`${styles.userOccupation} text-muted mb-3`}>{user.userOccupation}</p>
-                                <hr className="my-3"/>
-                                <div className="text-start px-3">
-                                    <div className={`${styles.userInfo} mb-3`}>
-                                        <strong className="text-primary">🎂 Sinh nhật:</strong>
-                                        <span className="ms-2">{formatDate(user.userDateOfBirth)}</span>
-                                    </div>
-                                    <div className={`${styles.userInfo} mb-3`}>
-                                        <strong className="text-primary">👤 Giới tính:</strong>
-                                        <span className="ms-2">{user.userGender}</span>
-                                    </div>
-                                    <div className={`${styles.userInfo} mb-3`}>
-                                        <strong className="text-primary">📧 Email:</strong>
-                                        <span className="ms-2">{user.userEmail}</span>
-                                    </div>
-                                    <div className={`${styles.userInfo} mb-3`}>
-                                        <strong className="text-primary">🏠 Địa chỉ:</strong>
-                                        <span className="ms-2">{user.userAddress}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        <DetailUser user={user} userId={userId} />
 
                     {/* Danh sách gợi ý bạn bè */}
                     <div className="col-12 col-md-8 order-md-2">
@@ -138,12 +92,12 @@ function UserDetailComponent() {
                                 friendList.length > 0 && <div>
                                     <div className={`${styles.card} shadow-lg rounded-4 border-0`}>
                                         <div className={`${styles.cardBody}`}>
-                                            <h5 className={`${styles.suggestedFriendsTitle} mb-3 text-primary`}>Có thể bạn
-                                                biết?</h5>
+                                            <h5 className={`${styles.suggestedFriendsTitle} mb-3 text-primary`}>Gợi ý kết
+                                                bạn?</h5>
                                             <div className="row">
                                                 {friendList.map((friend, index) => (
-                                                    <DetailUserFriend friend={friend} col={3}
-                                                                      userId={userId} setFriendList={setFriendList}/>
+                                                    <Friends friend={friend} col={3}
+                                                             userId={userId} setFriendList={setFriendList}/>
                                                 ))}
                                             </div>
                                             {hasMore && (
@@ -162,7 +116,12 @@ function UserDetailComponent() {
                             }
                         </div>
                         <div>
-                            Bài post
+                            <div className="container my-4">
+                                <div className={`${styles.suggestedFriendsTitle} mb-3 text-primary`}
+                                     style={{color: "#1877f2"}}>
+                                    Bài viết
+                                </div>
+                            </div>
                             <UserPosts userId={id}/>
                         </div>
                     </div>
@@ -173,4 +132,4 @@ function UserDetailComponent() {
     )
 }
 
-export default UserDetailComponent;
+export default UserFriendsComponent;
