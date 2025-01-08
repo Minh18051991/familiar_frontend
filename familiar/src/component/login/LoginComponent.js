@@ -1,23 +1,36 @@
-
-import React, {useRef} from 'react';
-import {useDispatch, useSelector} from "react-redux";
+import React, {useEffect, useRef, useState} from 'react';
+import {useDispatch} from "react-redux";
 import {login} from "../../redux/login/AccountAction";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
 import styles from './LoginComponent.module.css';
 
 function LoginComponent() {
     const usernameRef = useRef();
     const passwordRef = useRef();
-
+    const [name, setName] = useState('');
+    const [avatar, setAvatar] = useState('');
+    const location = useLocation();
     const dispatch = useDispatch();
-
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (location.state && location.state.username && location.state.name) {
+            setName(location.state.name);
+            if (location.state.gender === 'Nam') {
+                setAvatar("https://static2.yan.vn/YanNews/2167221/202003/dan-mang-du-trend-thiet-ke-avatar-du-kieu-day-mau-sac-tu-anh-mac-dinh-b0de2bad.jpg");
+            } else {
+                setAvatar("https://antimatter.vn/wp-content/uploads/2022/04/anh-avatar-trang-co-gai-toc-tem.jpg");
+            }
+            usernameRef.current.value = location.state.username;
+            passwordRef.current.focus();
+        }
+    }, [location]);
 
     const handleLogin = async () => {
         let username = usernameRef.current.value;
         let password = passwordRef.current.value;
-        const loginInfo = {username:username, password:password};
+        const loginInfo = {username: username, password: password};
         console.log(loginInfo)
         console.log("========begin account==========");
         // let isLoginSuccess = null
@@ -25,7 +38,7 @@ function LoginComponent() {
         if (isLoginSuccess) {
             toast.success("đăng nhập thành công!", {
                 position: "top-right",
-                autoClose: 3000, // Thời gian tự đóng (3 giây)
+                autoClose: 500, // Thời gian tự đóng (3 giây)
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
@@ -33,9 +46,9 @@ function LoginComponent() {
                 progress: undefined,
                 theme: "colored",
             });
-            navigate('/list')
+            navigate('/')
 
-        }else {
+        } else {
             toast.error("Sai tên đăng nhập hoặc mật khẩu!", {
                 position: "top-right",
                 autoClose: 3000, // Th��i gian tự đóng (3 giây)
@@ -51,55 +64,6 @@ function LoginComponent() {
 
     }
     return (
-        // <div className="container mt-5">
-        //     <div className="row justify-content-center">
-        //         <div className="col-md-6">
-        //             <div className="card">
-        //                 <div className="card-body">
-        //                     <h3 className="card-title text-center mb-4">Đăng nhập</h3>
-        //                     <form>
-        //                         <div className="mb-3">
-        //                             <label htmlFor="username" className="form-label">Username:</label>
-        //                             <input
-        //                                 ref={usernameRef}
-        //                                 type="text"
-        //                                 className="form-control"
-        //                                 id="username"
-        //                                 placeholder="Nhập username"
-        //                             />
-        //                         </div>
-        //                         <div className="mb-3">
-        //                             <label htmlFor="password" className="form-label">Password:</label>
-        //                             <input
-        //                                 ref={passwordRef}
-        //                                 type="password"
-        //                                 className="form-control"
-        //                                 id="password"
-        //                                 placeholder="Nhập password"
-        //                             />
-        //                         </div>
-        //                         <div className="d-grid gap-2">
-        //                             <button
-        //                                 type="button"
-        //                                 className="btn btn-primary"
-        //                                 onClick={handleLogin}
-        //                             >
-        //                                 Đăng nhập
-        //                             </button>
-        //                         </div>
-        //                     </form>
-        //                     <div className="text-center mt-4">
-        //                         <p className="mb-2">Chưa có tài khoản?</p>
-        //                         <Link to="/register" className="btn btn-outline-primary btn-lg w-100">
-        //                             Đăng ký ngay
-        //                         </Link>
-        //                     </div>
-        //                 </div>
-        //             </div>
-        //         </div>
-        //     </div>
-        // </div>
-
         <div className={styles.loginPage}>
             <div className={styles.contentWrapper}>
                 <div className={styles.imageSection}>
@@ -109,15 +73,29 @@ function LoginComponent() {
                         alt="Login" className={styles.loginImage}/>
                 </div>
                 <div className={styles.formSection}>
-                    <h3 className={styles.formTitle}>Đăng nhập</h3>
+                    {name=='' &&
+                        (
+                            <h3 className={styles.formTitle}>Đăng nhập</h3>
+                        )
+                    }
+
+                    {
+                    name!='' && (
+                            <div className={styles.nameSection}>
+                                <img src={avatar} alt="Avatar" className={styles.avatar}/>
+                                <p>{name}</p>
+                            </div>
+                        )
+                    }
                     <form>
-                        <div className={styles.formGroup}>
+                        <div className={`${styles.formGroup} ${name !== '' ? styles.hidden : ''}`}>
                             <label htmlFor="username">Tên đăng nhập:</label>
                             <input
                                 ref={usernameRef}
                                 type="text"
                                 id="username"
                                 placeholder="Nhập username"
+                                defaultValue={name !== '' ? name : ''}
                             />
                         </div>
                         <div className={styles.formGroup}>

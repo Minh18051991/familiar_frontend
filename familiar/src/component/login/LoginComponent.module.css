@@ -1,49 +1,209 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
-.loginPage {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
+/*@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');*/
+/*.loginPage {*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    min-height: 100vh;*/
+/*}*/
 
-.contentWrapper {
-    flex: 1;
+/*.contentWrapper {*/
+/*    flex: 1;*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    padding: 20px;*/
+/*    gap: 100px;*/
+/*}*/
+
+/*.imageSection {*/
+/*    flex: 1;*/
+/*    max-width: 30%;*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    !* Để có thể định vị tuyệt đối cho tiêu đề *!*/
+/*}*/
+
+/*.loginImage {*/
+/*    max-width: 100%;*/
+/*    height: auto;*/
+/*    border-radius: 10px; !* Bo góc cho ảnh *!*/
+/*    box-shadow: 0 4px 8px rgba(0,0,0,0.1); !* Thêm bóng đổ nhẹ cho ảnh *!*/
+/*}*/
+
+/*.formSection {*/
+/*    flex: 1;*/
+/*    max-width: 400px;*/
+/*    padding: 20px;*/
+/*    background-color: #f8f9fa;*/
+/*    border-radius: 8px;*/
+/*    box-shadow: 0 0 10px rgba(0,0,0,0.1);*/
+/*}*/
+
+/*.formTitle {*/
+/*    text-align: center;*/
+/*    margin-bottom: 20px;*/
+/*}*/
+
+/*.formGroup {*/
+/*    margin-bottom: 15px;*/
+/*}*/
+
+/*.formGroup label {*/
+/*    display: block;*/
+/*    margin-bottom: 5px;*/
+/*}*/
+
+/*.formGroup input {*/
+/*    width: 100%;*/
+/*    padding: 8px;*/
+/*    border: 1px solid #ddd;*/
+/*    border-radius: 4px;*/
+/*}*/
+
+/*.loginButton {*/
+/*    width: 100%;*/
+/*    padding: 10px;*/
+/*    background-color: #007bff;*/
+/*    color: white;*/
+/*    border: none;*/
+/*    border-radius: 4px;*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*.registerSection {*/
+/*    text-align: center;*/
+/*    margin-top: 20px;*/
+/*}*/
+
+/*.registerButton {*/
+/*    display: inline-block;*/
+/*    padding: 10px 20px;*/
+/*    background-color: #007bff;*/
+/*    color: white;*/
+/*    text-decoration: none;*/
+/*    border-radius: 4px;*/
+/*    margin-top: 10px;*/
+/*}*/
+
+/*.footer {*/
+/*    background-color: #f8f9fa;*/
+/*    text-align: center;*/
+/*    padding: 10px;*/
+/*    margin-top: auto;*/
+/*}*/
+
+/*!* Thêm hiệu ứng hover cho tiêu đề nếu muốn *!*/
+/*.websiteTitle:hover {*/
+/*    transform: scale(1.05);*/
+/*    transition: transform 0.3s ease;*/
+/*}*/
+
+/*.websiteTitle {*/
+/*    font-size: 60px;*/
+/*    font-weight: 700;*/
+/*    color: #1a73e8; !* Màu xanh Google, trông hiện đại hơn *!*/
+/*    font-family: 'Poppins', 'Segoe UI', 'Roboto', sans-serif; !* Font hiện đại *!*/
+/*    letter-spacing: 1px;*/
+/*    margin-bottom: 24px;*/
+/*    text-align: center;*/
+/*    text-transform: uppercase; !* Chữ in hoa *!*/
+/*    background: linear-gradient(45deg, #1a73e8, #34a853); !* Gradient màu *!*/
+/*    -webkit-background-clip: text;*/
+/*    -webkit-text-fill-color: transparent;*/
+/*    text-shadow: 2px 2px 4px rgba(0,0,0,0.1); !* Bóng nhẹ *!*/
+/*    transition: all 0.3s ease;*/
+/*}*/
+
+/*.forgotPasswordLink {*/
+/*    color: #1a73e8;*/
+/*    text-decoration: none;*/
+/*    font-size: 16px;*/
+/*    margin-bottom: 10px;*/
+/*    display: inline-block;*/
+/*}*/
+
+/*.forgotPasswordLink:hover {*/
+/*    text-decoration: underline;*/
+/*}*/
+
+/*.registerSection {*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    align-items: center;*/
+/*    margin-top: 20px;*/
+/*}*/
+
+
+
+
+.loginPage {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
-    gap: 100px;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+}
+
+.contentWrapper {
+    display: flex;
+    width: 100%;
+    max-width: 1000px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
 .imageSection {
     flex: 1;
-    max-width: 30%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* Để có thể định vị tuyệt đối cho tiêu đề */
+    background-color: #f0f2f5;
+    padding: 20px;
+}
+
+.websiteTitle {
+    font-size: 3rem;
+    color: #1877f2;
+    margin-bottom: 20px;
+    font-family: 'Poppins', sans-serif;
 }
 
 .loginImage {
     max-width: 100%;
     height: auto;
-    border-radius: 10px; /* Bo góc cho ảnh */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Thêm bóng đổ nhẹ cho ảnh */
+    border-radius: 8px;
 }
 
 .formSection {
     flex: 1;
-    max-width: 400px;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    padding: 40px;
 }
 
 .formTitle {
-    text-align: center;
+    font-size: 1.5rem;
+    color: #1c1e21;
     margin-bottom: 20px;
+    text-align: center;
+}
+
+.nameSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
 }
 
 .formGroup {
@@ -53,85 +213,61 @@
 .formGroup label {
     display: block;
     margin-bottom: 5px;
+    font-weight: 600;
+    color: #1c1e21;
 }
 
 .formGroup input {
     width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    padding: 10px;
+    border: 1px solid #dddfe2;
+    border-radius: 6px;
+    font-size: 1rem;
 }
 
 .loginButton {
     width: 100%;
-    padding: 10px;
-    background-color: #007bff;
+    padding: 12px;
+    background-color: #1877f2;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: bold;
     cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.loginButton:hover {
+    background-color: #166fe5;
 }
 
 .registerSection {
-    text-align: center;
     margin-top: 20px;
+    text-align: center;
+}
+
+.forgotPasswordLink {
+    display: block;
+    color: #1877f2;
+    text-decoration: none;
+    margin-bottom: 10px;
 }
 
 .registerButton {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #42b72a;
     color: white;
     text-decoration: none;
-    border-radius: 4px;
-    margin-top: 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: background-color 0.3s;
 }
 
-.footer {
-    background-color: #f8f9fa;
-    text-align: center;
-    padding: 10px;
-    margin-top: auto;
+.registerButton:hover {
+    background-color: #36a420;
 }
-
-/* Thêm hiệu ứng hover cho tiêu đề nếu muốn */
-.websiteTitle:hover {
-    transform: scale(1.05);
-    transition: transform 0.3s ease;
+.hidden {
+    display: none;
 }
-
-.websiteTitle {
-    font-size: 60px;
-    font-weight: 700;
-    color: #1a73e8; /* Màu xanh Google, trông hiện đại hơn */
-    font-family: 'Poppins', 'Segoe UI', 'Roboto', sans-serif; /* Font hiện đại */
-    letter-spacing: 1px;
-    margin-bottom: 24px;
-    text-align: center;
-    text-transform: uppercase; /* Chữ in hoa */
-    background: linear-gradient(45deg, #1a73e8, #34a853); /* Gradient màu */
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.1); /* Bóng nhẹ */
-    transition: all 0.3s ease;
-}
-
-.forgotPasswordLink {
-    color: #1a73e8;
-    text-decoration: none;
-    font-size: 16px;
-    margin-bottom: 10px;
-    display: inline-block;
-}
-
-.forgotPasswordLink:hover {
-    text-decoration: underline;
-}
-
-.registerSection {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-}
-

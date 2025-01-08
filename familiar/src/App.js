@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styles from './App.module.css';
 import HeaderComponent from "./component/header/HeaderComponent";
 import {Route, Routes} from "react-router-dom";
@@ -17,6 +17,7 @@ import UserDetailComponent from "./component/user/UserDetailComponent";
 import FriendRequestList from "./component/friendship/FriendRequestList";
 
 function App() {
+
     return (
         <div className={styles.appContainer}>
             <HeaderComponent/>
