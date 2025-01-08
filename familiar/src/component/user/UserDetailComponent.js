@@ -5,7 +5,6 @@ import {suggestedFriendsListPage} from "../../service/friendship/friendshipServi
 import styles from "../user/userDetail.module.css";
 import {useSelector} from "react-redux";
 import DetailUserFriend from "./DetailUserFriend";
-import PostService from "../../services/PostService";
 import UserPosts from "./UserPosts";
 
 function UserDetailComponent() {
@@ -19,8 +18,6 @@ function UserDetailComponent() {
     const [size, setSize] = useState(4);
     const [hasMore, setHasMore] = useState(true);
     const [totalPages, setTotalPages] = useState(0);
-
-    const [listPost, setListPost] = useState([])
 
     useEffect(() => {
         const fetchFriendships = async () => {
@@ -75,16 +72,6 @@ function UserDetailComponent() {
         }
         fetchUser();
     }, [id])
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const friendId = id;
-            const list = await PostService.getPostsByUserId(friendId);
-            setListPost(list);
-        }
-        fetchData();
-    }, [id]);
-
 
     function formatDate(dateString) {
         if (!dateString) return "";
@@ -182,7 +169,6 @@ function UserDetailComponent() {
 
                 </div>
             </div>
-
         </>
     )
 }
