@@ -45,16 +45,7 @@ function HeaderComponent() {
                             src="https://png.pngtree.com/png-clipart/20240413/original/pngtree-initial-fa-letter-logo-with-creative-modern-business-typography-vector-png-image_14799238.png"
                             alt="Logo" className={styles.logo}/>
                     </Link>
-                    <div className={styles.searchBar}>
-                        <input
-                            type="text"
-                            className={styles.searchInput}
-                            placeholder="Tìm kiếm trên hệ thống..."
-                        />
-                        <button className={styles.searchButton}>
-                            <i className="fas fa-search"></i>
-                        </button>
-                    </div>
+
                     <div className={styles.navIconContainer}>
                         <Link className={`${styles.navIcon} ${isActive('/')}`} to="/" title="Trang chủ">
                             <i className="fas fa-home"></i>
