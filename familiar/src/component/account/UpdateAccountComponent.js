@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useNavigate, useParams} from "react-router-dom";
 
 import * as Yup from 'yup';
@@ -6,15 +6,20 @@ import {ErrorMessage, Field, Form, Formik} from "formik";
 import {toast} from "react-toastify";
 import {updatePassword} from "../../service/account/account";
 import styles from './UpdateAccountComponent.module.css';
+import OtpComponent from "../otp/OtpComponent";
 
 export default function UpdateAccountComponent() {
     const {username} = useParams();
     const navigate = useNavigate();
+    const [isShowModal, setIsShowModal] = useState(true);
 
     const initialValues = {
         newPassword: '',
         confirmPassword: ''
     };
+    const handleShowModal = () => {
+        setIsShowModal(prevState => !prevState);
+    }
 
     const validationSchema = Yup.object({
         newPassword: Yup.string()
@@ -41,6 +46,7 @@ export default function UpdateAccountComponent() {
 
     return (
         <div className={styles.pageContainer}>
+            <OtpComponent isShowModal={isShowModal} handleIsShowModal={handleShowModal}/>
             <div className={styles.container}>
                 <h2 className={styles.title}>Thay đổi mật khẩu</h2>
                 <Formik
@@ -65,10 +71,12 @@ export default function UpdateAccountComponent() {
                             <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
                                 {isSubmitting ? 'Đang xử lý...' : 'Thay đổi mật khẩu'}
                             </button>
-                            <button type="button" className={styles.cancelButton} onClick={() => navigate(-1)}>Hủy</button>
+                            <button type="button" className={styles.cancelButton} onClick={() => navigate(-1)}>Hủy
+                            </button>
                         </Form>
                     )}
                 </Formik>
+
             </div>
         </div>
     )

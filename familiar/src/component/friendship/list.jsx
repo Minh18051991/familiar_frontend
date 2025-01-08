@@ -69,7 +69,7 @@ function ListFriendShipComponent() {
                         ))
                     ) : (
                         <div className="alert alert-warning text-center" role="alert">
-                            Tên bạn tìm không tìm thấy trong danh sách bạn bè của bạn.
+                             Không tìm thấy trong danh sách bạn bè của bạn.
                         </div>
                     )}
                 </div>
