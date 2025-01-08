@@ -73,10 +73,49 @@ export async function createUser(user) {
 
 export async function checkEmailExists(email) {
     try {
-        const response = await axios.post('http://localhost:8080/api/user/checkEmail',email);
+        const response = await axios.post('http://localhost:8080/api/user/checkEmail', email);
         return response.data;
     } catch (error) {
         console.error("Error checking username:", error);
         return false;
+    }
+}
+export async function searchUsers(keyword, page = 0, size = 10) {
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+        console.error("No token found");
+        return { error: "Không tìm thấy token xác thực" };
+    }
+
+    try {
+        console.log("--SEARCH USERS");
+
+        const response = await axios.get(`${API_URL}/api/user/search`, {
+            headers: { Authorization: `Bearer ${token}` },
+            params: {
+                keyword: keyword,
+                page: page,
+                size: size
+            }
+        });
+
+        const usersData = response.data;
+        console.log(usersData);
+
+        return usersData;
+    } catch (error) {
+        console.error("Error searching users:", error);
+
+        if (error.response) {
+            if (error.response.status === 401) {
+                return { error: "Không có quyền truy cập. Vui lòng đăng nhập lại." };
+            }
+            return { error: error.response.data.message || "Lỗi từ server" };
+        } else if (error.request) {
+            return { error: "Không thể kết nối đến server" };
+        } else {
+            return { error: "Đã xảy ra lỗi khi tìm kiếm người dùng" };
+        }
     }
 }
