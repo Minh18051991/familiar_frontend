@@ -7,7 +7,7 @@ import {Link} from "react-router-dom";
 function FriendRequestHome() {
     const [listFriend, setListFriend] = useState([]);
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(5);
+    const [size, setSize] = useState(2);
     const [hasMore, setHasMore] = useState(true);
     const [totalPages, setTotalPages] = useState(0);
 
@@ -68,8 +68,8 @@ function FriendRequestHome() {
                                         alt="Friend Avatar"
                                         className={`${styles.friendAvatarHome}`}
                                     />
-                                    <Link to={`/users/detail/${user.userId}`} style={{ textDecoration: 'none' }}>
-                                        <p className="mx-2" style={{ color: 'black' }}>
+                                    <Link to={`/users/detail/${user.userId}`} style={{textDecoration: 'none'}}>
+                                        <p className="mx-2" style={{color: 'black'}}>
                                             {user?.userFirstName} {user?.userLastName}
                                         </p>
                                     </Link>
@@ -92,9 +92,10 @@ function FriendRequestHome() {
 
                     ))}
                     <div className="d-flex justify-content-end mt-1">
-                        <Link className="" to={'/friendships/request'}> Xem tất cả</Link>
+                        <Link className="" to={'/friendships/request'} style={{textDecoration: 'none'}}>
+                            Xem tất cả
+                        </Link>
                     </div>
-
                 </div>
 
             ) : (
