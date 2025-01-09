@@ -84,7 +84,7 @@ export default function DetailUser({ user, userId }) {
                     <div>
                         <div>Bạn đã gửi kết bạn đến {user.userFirstName} {user.userLastName}</div> <br/>
                         <button className={`${styles.actionDeleteBtn} btn px-3`} onClick={handleCancelFriendRequest}>
-                            Hủy lời mời kết bạn
+                            Hủy kết bạn
                         </button>
                     </div>
                 );

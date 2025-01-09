@@ -2,7 +2,7 @@ import React from "react";
 import {deleteFriendship} from "../../service/friendship/friendshipService";
 import {useSelector} from "react-redux";
 
-function DeleteFriendModal({isShowModal, friendship, handleCloseModal, handleIsLoading}) {
+function DeleteFriendModal({isShowModal, friendship, handleCloseModal, handleIsLoading, updateUsers}) {
 
     const userId = useSelector(state => state.user.account.userId);
 
@@ -11,6 +11,7 @@ function DeleteFriendModal({isShowModal, friendship, handleCloseModal, handleIsL
         await deleteFriendship(userId, userId2);
 
         handleIsLoading();
+        updateUsers(userId2);  // Cập nhật danh sách bạn bè
         handleCloseModal();
     }
 
