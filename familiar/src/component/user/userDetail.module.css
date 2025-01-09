@@ -46,7 +46,7 @@
     border-radius: 5px;
     cursor: pointer;
     transition: transform 0.2s, background-color 0.2s;
-    font-weight: 110;
+    font-weight: bold;
 }
 
 
@@ -88,6 +88,7 @@
 .card-body {
     padding: 1.5rem;
     border-radius: 0px;
+
 }
 
 
@@ -146,6 +147,7 @@
     white-space: nowrap; /* Ngăn nội dung xuống dòng */
     padding: 0 0; /* Thêm padding để nút có khoảng cách từ nội dung */
 }
+
 
 
 
