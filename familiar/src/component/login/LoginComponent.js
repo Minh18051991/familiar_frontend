@@ -4,6 +4,9 @@ import {login} from "../../redux/login/AccountAction";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
 import styles from './LoginComponent.module.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+
 
 function LoginComponent() {
     const usernameRef = useRef();
@@ -13,6 +16,12 @@ function LoginComponent() {
     const location = useLocation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const [showPassword, setShowPassword] = useState(false);
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
 
     useEffect(() => {
         if (location.state && location.state.username && location.state.name) {
@@ -100,12 +109,21 @@ function LoginComponent() {
                         </div>
                         <div className={styles.formGroup}>
                             <label htmlFor="password">Mật khẩu:</label>
-                            <input
-                                ref={passwordRef}
-                                type="password"
-                                id="password"
-                                placeholder="Nhập password"
-                            />
+                            <div className={styles.passwordInputWrapper}>
+                                <input
+                                    ref={passwordRef}
+                                    type={showPassword ? "text" : "password"}
+                                    id="password"
+                                    placeholder="Nhập password"
+                                />
+                                <button
+                                    type="button"
+                                    className={styles.passwordToggle}
+                                    onClick={togglePasswordVisibility}
+                                >
+                                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye}/>
+                                </button>
+                            </div>
                         </div>
                         <button
                             type="button"

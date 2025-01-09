@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "../user/userDetail.module.css";
 import {
     acceptFriendship,
-    cancelFriendship,
+    cancelFriendship, deleteFriendship,
     getFriendShipStatus,
     sendFriendship
 } from "../../service/friendship/friendshipService";
@@ -16,73 +16,81 @@ export default function DetailUser({ user, userId }) {
     useEffect(() => {
         const fetchFriendshipStatus = async () => {
             const status = await getFriendShipStatus(userId, userId2);
+            console.log("Friendship status:", status);
             setFriendshipStatus(status);
-            setIsLoading(prevState => !prevState);
-        }
+            setIsLoading(false);
+        };
         fetchFriendshipStatus();
     }, [userId, userId2]);
 
     const handleSendFriendRequest = async () => {
+        console.log("Sending friend request...");
         await sendFriendship(userId, userId2);
+        setFriendshipStatus('pending');
     };
 
     const handleAcceptFriendRequest = async () => {
+        console.log("Accepting friend request...");
         await acceptFriendship(userId, userId2);
+        setFriendshipStatus('friend');
     };
 
     const handleDeclineFriendRequest = async () => {
+        console.log("Declining friend request...");
         await cancelFriendship(userId, userId2);
+        setFriendshipStatus('notFriend');
     };
 
     const handleUnfriend = async () => {
-        await cancelFriendship(userId, userId2);
+        console.log("Unfriending...");
+        await deleteFriendship(userId, userId2);
+        setFriendshipStatus('notFriend');
     };
 
     const handleCancelFriendRequest = async () => {
+        console.log("Canceling friend request...");
         await cancelFriendship(userId, userId2);
+        setFriendshipStatus('notFriend');
     };
 
     const renderButton = () => {
-
         switch (friendshipStatus) {
             case "friend":
                 return (
-                    <button className={`${styles.actionDeleteBtn} btn px-3`} onClick={handleUnfriend}>
-                        Xoá bạn bè
-                    </button>
+                    <div>
+                        <div>Bạn và {user.userFirstName} {user.userLastName} hiện là bạn bè</div> <br/>
+                        <button className={`${styles.actionDeleteBtn} btn px-3`} onClick={handleUnfriend}>
+                            Xoá bạn bè
+                        </button>
+                    </div>
                 );
             case "waiting":
                 return (
                     <div>
-                        <button
-                            className="btn btn-primary"
-                            onClick={handleAcceptFriendRequest}
-                        >
-                            Chấp nhận
-                        </button>
-                        <button
-                            className={`${styles.actionDeleteBtn} btn px-3`}
-                            onClick={handleDeclineFriendRequest}
-                        >
-                            Xoá
-                        </button>
+                        <div>{user.userLastName} đã gửi cho bạn lời mời kết bạn</div> <br/>
+                        <div>
+                            <button className="btn btn-primary" onClick={handleAcceptFriendRequest}>
+                                Chấp nhận
+                            </button>
+                            <button className={`${styles.actionDeleteBtn} btn px-3`}
+                                    onClick={handleDeclineFriendRequest}>
+                                Xoá
+                            </button>
+                        </div>
                     </div>
                 );
             case "pending":
                 return (
-                    <button
-                        className={`${styles.actionDeleteBtn} btn px-3`}
-                        onClick={handleCancelFriendRequest}
-                    >
-                        Hủy lời mời kết bạn
-                    </button>
+                    <div>
+                        <div>Bạn đã gửi kết bạn đến {user.userFirstName} {user.userLastName}</div> <br/>
+                        <button className={`${styles.actionDeleteBtn} btn px-3`} onClick={handleCancelFriendRequest}>
+                            Hủy kết bạn
+                        </button>
+                    </div>
                 );
             case "notFriend":
                 return (
-                    <button
-                        className="btn btn-primary"
-                        onClick={handleSendFriendRequest}
-                    >
+                    <button className="btn btn-primary" onClick={handleSendFriendRequest}>
                         Kết bạn
                     </button>
                 );
@@ -142,9 +150,9 @@ export default function DetailUser({ user, userId }) {
                         </div>
                     </div>
                     {/* Render button */}
-                    {
-                        (userId !== userId2) ? <div className="mt-3">{renderButton()}</div>: ""
-                    }
+                    {userId !== userId2 && (
+                        <div className="mt-3">{renderButton()}</div>
+                    )}
                 </div>
             </div>
         </div>

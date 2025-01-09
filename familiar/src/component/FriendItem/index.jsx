@@ -3,7 +3,7 @@ import styles from "./FriendItem.module.css";
 import { useState } from "react";
 import DeleteFriendModal from "./DeleteFriendModal";
 
-export function FriendItem({userData, handleIsLoading}) {
+export function FriendItem({userData, handleIsLoading, updateUsers}) {
   const [friendship, setFriendship] = useState({});
   const [isShowModal, setIsShowModal] = useState(false);
 
@@ -41,12 +41,13 @@ export function FriendItem({userData, handleIsLoading}) {
       </div>
 
 
-      <DeleteFriendModal
-          isShowModal={isShowModal}
-          friendship={friendship}
-          handleCloseModal={handleCloseModal}
-          handleIsLoading={handleIsLoading}
-      />
+        <DeleteFriendModal
+            isShowModal={isShowModal}
+            friendship={friendship}
+            handleCloseModal={handleCloseModal}
+            handleIsLoading={handleIsLoading}
+            updateUsers={updateUsers}
+        />
     </div>
   );
 }
