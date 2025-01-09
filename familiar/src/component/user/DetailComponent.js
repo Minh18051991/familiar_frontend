@@ -6,14 +6,17 @@ import moment from 'moment';
 import styles from './DetailComponent.module.css';
 import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
 import {v4 as uuidv4} from 'uuid';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {updateAvatar} from "../../redux/login/AccountAction";
 import LoadingSpinner from "../otp/LoadingSpinner";
+import ImageModal from "../image/ImageModal";
 
 function DetailComponent() {
     const {id} = useParams();
     let userId = parseInt(id);
     const dispatch = useDispatch();
+    const info = useSelector(state => state.user);
+    const account = info ? info.account : null;
     const [user, setUser] = useState(null);
     const [editingField, setEditingField] = useState(null);
     const [editValue, setEditValue] = useState("");
@@ -21,6 +24,8 @@ function DetailComponent() {
 
     const [isUploading, setIsUploading] = useState(false);
     const fileInputRef = useRef(null);
+
+    const [showImageModal, setShowImageModal] = useState(false);
 
     const uploadImage = async (file) => {
         const storage = getStorage();
@@ -105,33 +110,42 @@ function DetailComponent() {
             <th>{label}</th>
             <td>
                 {editingField === field ? (
-                    <>
-                        <select
-                            value={editValue}
-                            onChange={(e) => setEditValue(e.target.value)}
-                            className={`form-select ${styles.formControl}`}
-                        >
-                            <option value="Nam">Nam</option>
-                            <option value="Nữ">Nữ</option>
-                            <option value="Khác">Khác</option>
-                        </select>
-                        <div className="mt-2">
-                            <button onClick={() => handleSave(field)}
-                                    className={`btn btn-sm btn-primary ${styles.saveButton}`}>
+                    <div className={styles.editContainer}>
+                        <div className={styles.inputWrapper}>
+                            <select
+                                value={editValue}
+                                onChange={(e) => setEditValue(e.target.value)}
+                                className={`form-select ${styles.formControl}`}
+                            >
+                                <option value="Nam">Nam</option>
+                                <option value="Nữ">Nữ</option>
+                                <option value="Khác">Khác</option>
+                            </select>
+                        </div>
+                        <div className={styles.buttonGroup}>
+                            <button
+                                onClick={() => handleSave(field)}
+                                className={`btn btn-sm btn-primary ${styles.saveButton}`}
+                            >
                                 Lưu
                             </button>
-                            <button onClick={handleCancel} className="btn btn-sm btn-secondary">
+                            <button
+                                onClick={handleCancel}
+                                className="btn btn-sm btn-secondary"
+                            >
                                 Hủy
                             </button>
                         </div>
-                    </>
+                    </div>
                 ) : (
                     <>
                     <span className={value ? '' : styles.noInfo}>
                         {value === 'Nam' ? 'Nam' : value === 'Nữ' ? 'Nữ' : value === 'Khác' ? 'Khác' : 'Chưa có thông tin'}
                     </span>
-                        <button onClick={() => handleEdit(field, value)}
-                                className={`btn btn-sm btn-outline-primary ${styles.editButton}`}>
+                        <button
+                            onClick={() => handleEdit(field, value)}
+                            className={`btn btn-sm btn-outline-primary ${styles.editButton}`}
+                        >
                             Chỉnh sửa
                         </button>
                     </>
@@ -146,22 +160,24 @@ function DetailComponent() {
             <th>{label}</th>
             <td>
                 {editingField === field ? (
-                    <>
-                        <input
-                            type={field === 'dateOfBirth' ? 'date' : field === 'email' ? 'email' : 'text'}
-                            value={editValue}
-                            onChange={(e) => {
-                                setEditValue(e.target.value);
-                                if (field === 'email') {
-                                    setEmailError('');
-                                }
-                            }}
-                            className={`form-control ${styles.formControl} ${field === 'email' && emailError ? 'is-invalid' : ''}`}
-                        />
-                        {field === 'email' && emailError && (
-                            <div className="invalid-feedback">{emailError}</div>
-                        )}
-                        <div className="mt-2">
+                    <div className={styles.editContainer}>
+                        <div className={styles.inputWrapper}>
+                            <input
+                                type={field === 'dateOfBirth' ? 'date' : field === 'email' ? 'email' : 'text'}
+                                value={editValue}
+                                onChange={(e) => {
+                                    setEditValue(e.target.value);
+                                    if (field === 'email') {
+                                        setEmailError('');
+                                    }
+                                }}
+                                className={`form-control ${styles.formControl} ${field === 'email' && emailError ? 'is-invalid' : ''}`}
+                            />
+                            {field === 'email' && emailError && (
+                                <div className="invalid-feedback">{emailError}</div>
+                            )}
+                        </div>
+                        <div className={styles.buttonGroup}>
                             <button
                                 onClick={async () => {
                                     if (field === 'email') {
@@ -182,14 +198,14 @@ function DetailComponent() {
                                 Hủy
                             </button>
                         </div>
-                    </>
+                    </div>
                 ) : (
                     <>
-                    <span className={value ? '' : styles.noInfo}>
-                        {field === 'dateOfBirth'
-                            ? (value ? formatDateForDisplay(value) : "Chưa có thông tin")
-                            : (value || "Chưa có thông tin")}
-                    </span>
+                <span className={value ? '' : styles.noInfo}>
+                    {field === 'dateOfBirth'
+                        ? (value ? formatDateForDisplay(value) : "Chưa có thông tin")
+                        : (value || "Chưa có thông tin")}
+                </span>
                         <button
                             onClick={() => {
                                 handleEdit(field, field === 'dateOfBirth' ? (value ? value : '') : value);
@@ -207,6 +223,17 @@ function DetailComponent() {
         </tr>
     );
 
+    const renderReadOnlyField = (label, value) => (
+        <tr>
+            <th>{label}</th>
+            <td>
+            <span className={value ? '' : styles.noInfo}>
+                {value || "Chưa có thông tin"}
+            </span>
+            </td>
+        </tr>
+    );
+
 
     const getDefaultProfilePicture = (gender) => {
         switch (gender) {
@@ -219,92 +246,105 @@ function DetailComponent() {
         }
     };
 
+    const handleImageClick = () => {
+        setShowImageModal(true);
+    };
+
     return (
         <>
-            <div className={`container ${styles.container}`}>
-                <div className="row">
-                    <div className="col-md-4">
-                        <div className={`card ${styles.profileCard}`}>
-                            <div className={styles.avatarContainer}>
-                                <img
-                                    src={user.profilePictureUrl || getDefaultProfilePicture(user.gender)}
-                                    className={`${styles.avatarImage}`}
-                                    alt="Profile Picture"
-                                />
-                            </div>
-                            <div className="card-body">
-                                <h5 className="card-title">{user.firstName} {user.lastName}</h5>
-                                <input
-                                    type="file"
-                                    ref={fileInputRef}
-                                    onChange={handleImageChange}
-                                    style={{display: 'none'}}
-                                    accept="image/*"
-                                />
-                                <button
-                                    className={`btn btn-sm btn-outline-primary mt-2 ${styles.editProfileButton}`}
-                                    onClick={() => fileInputRef.current.click()}
-                                    disabled={isUploading}
-                                >
-                                    {isUploading ? 'Đang tải...' : 'Chỉnh sửa ảnh đại diện'}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-8">
-                        <div className={`card ${styles.detailsCard}`}>
-                            <div className="card-body">
-                                <h5 className={`card-title ${styles.cardTitle}`}>Thông tin chi tiết</h5>
-                                <table className={`table ${styles.table}`}>
-                                    <tbody>
-                                    {renderGenderField("Giới tính", "gender", user.gender)}
-                                    {renderField("Địa chỉ", "address", user.address)}
-                                    {renderField("Nghề nghiệp", "occupation", user.occupation)}
-                                    {renderField("Email", "email", user.email)}
-                                    {renderField("Ngày sinh", "dateOfBirth", user.dateOfBirth)}
-                                    {renderField("Thời gian tạo", "createdAt", user.createdAt ? new Date(user.createdAt).toLocaleString() : null)}
-                                    </tbody>
-                                </table>
+            <div className={`container-fluid ${styles.container}`}>
+                <div className={`container ${styles.innerContent}`}>
+                    <div className="row">
+                        <div className="col-md-4">
+                            <div className={`card ${styles.profileCard}`}>
+                                <div className={styles.avatarContainer}>
+                                    <img
+                                        src={user.profilePictureUrl || getDefaultProfilePicture(user.gender)}
+                                        className={`${styles.avatarImage}`}
+                                        alt="Profile Picture"
+                                        onClick={handleImageClick}
+                                        style={{cursor: 'pointer'}}
+                                    />
+                                </div>
+                                {showImageModal && (
+                                    <ImageModal
+                                        imageUrl={user.profilePictureUrl || getDefaultProfilePicture(user.gender)}
+                                        onClose={() => setShowImageModal(false)}
+                                    />
+                                )}
+                                <div className="card-body">
+                                    <h5 className="card-title">{user.firstName} {user.lastName}</h5>
+                                    <input
+                                        type="file"
+                                        ref={fileInputRef}
+                                        onChange={handleImageChange}
+                                        style={{display: 'none'}}
+                                        accept="image/*"
+                                    />
+                                    <button
+                                        className={`btn btn-sm btn-outline-primary mt-2 ${styles.editProfileButton}`}
+                                        onClick={() => fileInputRef.current.click()}
+                                        disabled={isUploading}
+                                    >
+                                        {isUploading ? 'Đang tải...' : 'Chỉnh sửa ảnh đại diện'}
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                        <div className={`card ${styles.bioCard}`}>
-                            <div className="card-body">
-                                <h5 className={`card-title ${styles.cardTitle}`}>Tiểu sử</h5>
-                                {editingField === 'bio' ? (
-                                    <>
+                        <div className="col-md-8">
+                            <div className={`card ${styles.detailsCard}`}>
+                                <div className="card-body">
+                                    <h4 className={`card-title ${styles.cardTitle}`}>THÔNG TIN CHI TIẾT</h4>
+                                    <table className={`table ${styles.table}`}>
+                                        <tbody>
+                                        {renderGenderField("Giới tính", "gender", user.gender)}
+                                        {renderField("Địa chỉ", "address", user.address)}
+                                        {renderField("Nghề nghiệp", "occupation", user.occupation)}
+                                        {renderField("Email", "email", user.email)}
+                                        {renderField("Ngày sinh", "dateOfBirth", user.dateOfBirth)}
+                                        {renderReadOnlyField("Thời gian tạo", user.createdAt ? new Date(user.createdAt).toLocaleString() : null)}                                    </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div className={`card ${styles.bioCard}`}>
+                                <div className="card-body">
+                                    <h5 className={`card-title ${styles.cardTitle}`}>Tiểu sử</h5>
+                                    {editingField === 'bio' ? (
+                                        <>
                                     <textarea
                                         value={editValue}
                                         onChange={(e) => setEditValue(e.target.value)}
                                         className={`form-control ${styles.formControl}`}
                                     />
-                                        <div className="mt-2">
-                                            <button onClick={() => handleSave('bio')}
-                                                    className={`btn btn-sm btn-primary ${styles.saveButton}`}>
-                                                Lưu
+                                            <div className="mt-2">
+                                                <button onClick={() => handleSave('bio')}
+                                                        className={`btn btn-sm btn-primary ${styles.saveButton}`}>
+                                                    Lưu
+                                                </button>
+                                                <button onClick={handleCancel} className="btn btn-sm btn-secondary">
+                                                    Hủy
+                                                </button>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <p className={`card-text ${user.bio ? '' : styles.noInfo}`}>
+                                                {user.bio || "Chưa có thông tin"}
+                                            </p>
+                                            <button onClick={() => handleEdit('bio', user.bio)}
+                                                    className={`btn btn-sm btn-outline-primary ${styles.editButton}`}>
+                                                Chỉnh sửa tiểu sử
                                             </button>
-                                            <button onClick={handleCancel} className="btn btn-sm btn-secondary">
-                                                Hủy
-                                            </button>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <>
-                                        <p className={`card-text ${user.bio ? '' : styles.noInfo}`}>
-                                            {user.bio || "Chưa có thông tin"}
-                                        </p>
-                                        <button onClick={() => handleEdit('bio', user.bio)}
-                                                className={`btn btn-sm btn-outline-primary ${styles.editButton}`}>
-                                            Chỉnh sửa tiểu sử
-                                        </button>
-                                    </>
-                                )}
+                                        </>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
+                </div>
+                <LoadingSpinner show={isUploading}/>
             </div>
-            <LoadingSpinner show={isUploading}/>
         </>
     );
 }

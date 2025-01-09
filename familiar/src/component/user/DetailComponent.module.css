@@ -1,5 +1,15 @@
 .container {
-    margin-top: 2rem;
+    min-height: calc(100vh - 120px); /* Giả sử tổng chiều cao của header và footer là 120px */
+    background-color: #f2f4f7; /* Màu xám nhạt */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.innerContent {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .profileCard {
@@ -44,6 +54,7 @@
 
 .cardTitle {
     margin-bottom: 1rem;
+    color: #007bff;
 }
 
 .table th {
@@ -66,4 +77,23 @@
     height: 100%;
     object-fit: cover; /* Đảm bảo ảnh lấp đầy container mà không bị méo */
     object-position: center; /* Căn giữa ảnh trong container */
+}
+
+.editContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.inputWrapper {
+    flex-grow: 1;
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 5px;
+}
+
+.saveButton, .editButton {
+    white-space: nowrap;
 }
