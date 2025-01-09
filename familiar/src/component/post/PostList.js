@@ -25,6 +25,7 @@ const PostList = () => {
   const [commentModalOpen, setCommentModalOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [allPostsLoaded, setAllPostsLoaded] = useState(false);
 
   const currentUserId = localStorage.getItem('userId');
 
@@ -55,10 +56,11 @@ const PostList = () => {
           setPage(prevPage => prevPage + 1);
         } else {
           setHasMore(false);
+          setAllPostsLoaded(true);
         }
       } else {
         console.error('Unexpected response format:', response.data);
-        setError('Unexpected data format received from server.');
+        setError('Không còn bài viết nào để hiển thị');
         setHasMore(false);
       }
     } catch (err) {
@@ -181,7 +183,8 @@ const PostList = () => {
       ))}
 
       {isLoading && <CircularProgress />}
-      {error && <Alert severity="error">{error}</Alert>}
+      {error && !allPostsLoaded && <Alert severity="error">{error}</Alert>}
+      {!hasMore && allPostsLoaded && <Typography>Không còn bài viết nào nữa</Typography>}
       {hasMore && !isLoading && (
         <Button onClick={fetchPosts}>Load More</Button>
       )}
