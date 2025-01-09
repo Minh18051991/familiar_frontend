@@ -104,20 +104,10 @@ export async function friendRequestList(userId, page, size) {
   }
 }
 
-export async function checkFriendShip(userId1, userId2){
+export async function getFriendShipStatus(userId1, userId2){
   const token = localStorage.getItem('token');
   try {
-    const response = await axios.get(`http://localhost:8080/api/friendships/check/${userId1}/${userId2}`,{headers: {Authorization: `Bearer ${token}`}});
-    return response.data;
-  } catch (error) {
-    console.log("Loi:" + error.message);
-  }
-}
-
-export async function pendingFriendship(userId1, userId2){
-  const token = localStorage.getItem('token');
-  try {
-    const response = await axios.get(`http://localhost:8080/api/pending/${userId1}/${userId2}`,{headers: {Authorization: `Bearer ${token}`}});
+    const response = await axios.get(`http://localhost:8080/api/friendships/status/${userId1}/${userId2}`, {headers: {Authorization: `Bearer ${token}`}});
     return response.data;
   } catch (error) {
     console.log("Loi:" + error.message);
