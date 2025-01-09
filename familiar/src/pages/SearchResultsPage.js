@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, Link } from 'react-router-dom';
-import { searchUsers } from "../service/user/user";
+import {Link, useLocation} from 'react-router-dom';
 import styles from './SearchResultsPage.module.css';
+import { searchUsers } from "../service/user/user";
+import {FaBriefcase, FaMapMarkerAlt, FaUser} from "react-icons/fa";
+import {FaEnvelope} from "react-icons/fa6";
 
 const SearchResultsPage = () => {
     const [searchResults, setSearchResults] = useState([]);
@@ -22,7 +24,7 @@ const SearchResultsPage = () => {
             if (results.error) {
                 console.error(results.error);
             } else {
-                setSearchResults(results);
+                setSearchResults(results.content || []);
             }
         } catch (error) {
             console.error("Error fetching search results:", error);
@@ -42,9 +44,27 @@ const SearchResultsPage = () => {
                 <ul className={styles.resultsList}>
                     {searchResults.map((user) => (
                         <li key={user.userId} className={styles.resultItem}>
-                            <Link to={`/user/detail/${user.userId}`}>
-                                <img src={user.profilePictureUrl || "default-avatar-url"} alt={user.name} className={styles.avatar} />
-                                <span>{user.name}</span>
+                            <Link to={`/users/detail/${user.userId}`} className="text-decoration-none">
+                            <img src={user.userProfilePictureUrl || "default-avatar-url"} alt={user.userFirstName} className={styles.avatar} />
+                            <div>
+                                <div>
+                                    <h3>
+                                        {`${user.userFirstName} ${user.userLastName}`}
+                                    </h3>
+                                    <p>
+                                        <FaBriefcase className="me-2" />
+                                        {user.userOccupation}
+                                    </p>
+                                    <p>
+                                        <FaEnvelope className="me-2" />
+                                        {user.userEmail}
+                                    </p>
+                                    <p>
+                                        <FaMapMarkerAlt className="me-2" />
+                                        {user.userAddress}
+                                    </p>
+                            </div>
+                            </div>
                             </Link>
                         </li>
                     ))}
