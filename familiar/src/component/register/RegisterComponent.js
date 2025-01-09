@@ -95,9 +95,6 @@ export default function RegisterComponent() {
     }, 500);
 
 
-
-
-
     const handleOnSubmit = async (values, {resetForm}) => {
         // Tách dữ liệu user và account
         const userData = {
@@ -125,18 +122,24 @@ export default function RegisterComponent() {
 
         // Gọi API để tạo user
         const createdUser = await createUser(userData);
-        if (!createdUser){
+        if (!createdUser) {
             console.log("Tạo account không thành công")
             setInitialValues(values)
             return;
-        }else {
+        } else {
             accountData.userId = createdUser.id;
             console.log("----------")
             console.log(accountData)
             const check = await createAccount(accountData);
             if (check) {
                 resetForm();
-                navigate('/login',{state:{username: accountData.username,name: userData.firstName + " " + userData.lastName,gender: userData.gender}});
+                navigate('/login', {
+                    state: {
+                        username: accountData.username,
+                        name: userData.firstName + " " + userData.lastName,
+                        gender: userData.gender
+                    }
+                });
                 // navigate('/login',{state:{name: userData.firstName + " " + userData.lastName}});
             } else {
                 console.log("Tạo account không thành công")
@@ -149,135 +152,137 @@ export default function RegisterComponent() {
 
     return (
 
-    <div className={`container ${styles.registerContainer}`}>
-        <div className="row justify-content-center">
-            <div className="col-md-8">
-                <div className={`card ${styles.registerCard}`}>
-                    <div className="card-body">
-                        <h2 className={`card-title text-center ${styles.registerTitle}`}>Đăng ký tài khoản</h2>
-                        <p className={styles.requiredFieldNote}>Các ô có dấu * là bắt buộc</p>
-                        <Formik
-                            initialValues={initialValues}
-                            validationSchema={validationSchema}
-                            onSubmit={handleOnSubmit}
-                            validateOnChange={true}
-                            validateOnBlur={true}
-                        >
-                            {({isSubmitting, setFieldError}) => (
-                                <Form className="row g-3">
-                                    <div className={`col-md-6 ${styles.formGroup}`}>
-                                        <label htmlFor="firstName"
-                                               className={`form-label ${styles.formLabel} ${styles.requiredField}`}>Tên</label>
-                                        <Field className={`form-control ${styles.formControl}`} type="text"
-                                               name="firstName" id="firstName"/>
-                                        <ErrorMessage name="firstName" component="div" className={styles.errorMessage}/>
-                                    </div>
-                                    <div className="col-md-6">
-                                        <label htmlFor="lastName"
-                                               className={`form-label ${styles.requiredField}`}>Họ</label>
-                                        <Field className="form-control" type="text" name="lastName" id="lastName"/>
-                                        <ErrorMessage name="lastName" component="div" className="text-danger"/>
-                                    </div>
+        <div className={`container ${styles.registerContainer}`}>
+            <div className="row justify-content-center">
+                <div className="col-md-8">
+                    <div className={`card ${styles.registerCard}`}>
+                        <div className="card-body">
+                            <h2 className={`card-title text-center ${styles.registerTitle}`}>Đăng ký tài khoản</h2>
+                            <p className={styles.requiredFieldNote}>Các ô có dấu * là bắt buộc</p>
+                            <Formik
+                                initialValues={initialValues}
+                                validationSchema={validationSchema}
+                                onSubmit={handleOnSubmit}
+                                validateOnChange={true}
+                                validateOnBlur={true}
+                            >
+                                {({isSubmitting, setFieldError}) => (
+                                    <Form className="row g-3">
+                                        <div className={`col-md-6 ${styles.formGroup}`}>
+                                            <label htmlFor="firstName"
+                                                   className={`form-label ${styles.formLabel} ${styles.requiredField}`}>Tên</label>
+                                            <Field className={`form-control ${styles.formControl}`} type="text"
+                                                   name="firstName" id="firstName"/>
+                                            <ErrorMessage name="firstName" component="div"
+                                                          className={styles.errorMessage}/>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <label htmlFor="lastName"
+                                                   className={`form-label ${styles.requiredField}`}>Họ</label>
+                                            <Field className="form-control" type="text" name="lastName" id="lastName"/>
+                                            <ErrorMessage name="lastName" component="div" className="text-danger"/>
+                                        </div>
 
-                                    <div className="col-md-6">
-                                        <label htmlFor="email"
-                                               className={`form-label ${styles.requiredField}`}>Email:</label>
-                                        <Field
-                                            className="form-control"
-                                            type="text"
-                                            name="email"
-                                            id="email"
-                                            validate={(value) => {
-                                                debouncedEmailCheck(value, setFieldError);
-                                            }}
+                                        <div className="col-md-6">
+                                            <label htmlFor="email"
+                                                   className={`form-label ${styles.requiredField}`}>Email:</label>
+                                            <Field
+                                                className="form-control"
+                                                type="text"
+                                                name="email"
+                                                id="email"
+                                                validate={(value) => {
+                                                    debouncedEmailCheck(value, setFieldError);
+                                                }}
 
-                                        />
-                                        <ErrorMessage name="email" component="div" className="text-danger"/>
-                                    </div>
+                                            />
+                                            <ErrorMessage name="email" component="div" className="text-danger"/>
+                                        </div>
 
-                                    <div className="col-md-6">
-                                        <label htmlFor="dateOfBirth" className="form-label">Ngày sinh</label>
-                                        <Field className="form-control" type="date" name="dateOfBirth"
-                                               id="dateOfBirth"/>
-                                        <ErrorMessage name="dateOfBirth" component="div" className="text-danger"/>
-                                    </div>
+                                        <div className="col-md-6">
+                                            <label htmlFor="dateOfBirth" className="form-label">Ngày sinh</label>
+                                            <Field className="form-control" type="date" name="dateOfBirth"
+                                                   id="dateOfBirth"/>
+                                            <ErrorMessage name="dateOfBirth" component="div" className="text-danger"/>
+                                        </div>
 
-                                    <div className="col-md-6">
-                                        <label htmlFor="gender" className={`form-label ${styles.requiredField}`}>Giới
-                                            tính</label>
-                                        <Field as="select" className="form-select" name="gender" id="gender">
-                                            <option value="">Chọn giới tính</option>
-                                            <option value="Nam">Nam</option>
-                                            <option value="Nữ">Nữ</option>
-                                            <option value="Khác">Khác</option>
-                                        </Field>
-                                        <ErrorMessage name="gender" component="div" className="text-danger"/>
-                                    </div>
+                                        <div className="col-md-6">
+                                            <label htmlFor="gender" className={`form-label ${styles.requiredField}`}>Giới
+                                                tính</label>
+                                            <Field as="select" className="form-select" name="gender" id="gender">
+                                                <option value="">Chọn giới tính</option>
+                                                <option value="Nam">Nam</option>
+                                                <option value="Nữ">Nữ</option>
+                                                <option value="Khác">Khác</option>
+                                            </Field>
+                                            <ErrorMessage name="gender" component="div" className="text-danger"/>
+                                        </div>
 
-                                    <div className="col-md-6">
-                                        <label htmlFor="phoneNumber" className="form-label">Số điện thoại</label>
-                                        <Field className="form-control" type="tel" name="phoneNumber"
-                                               id="phoneNumber"/>
-                                        <ErrorMessage name="phoneNumber" component="div" className="text-danger"/>
-                                    </div>
+                                        <div className="col-md-6">
+                                            <label htmlFor="phoneNumber" className="form-label">Số điện thoại</label>
+                                            <Field className="form-control" type="tel" name="phoneNumber"
+                                                   id="phoneNumber"/>
+                                            <ErrorMessage name="phoneNumber" component="div" className="text-danger"/>
+                                        </div>
 
-                                    <div className="col-12">
-                                        <label htmlFor="address" className="form-label">Địa chỉ</label>
-                                        <Field className="form-control" type="text" name="address" id="address"/>
-                                        <ErrorMessage name="address" component="div" className="text-danger"/>
-                                    </div>
+                                        <div className="col-12">
+                                            <label htmlFor="address" className="form-label">Địa chỉ</label>
+                                            <Field className="form-control" type="text" name="address" id="address"/>
+                                            <ErrorMessage name="address" component="div" className="text-danger"/>
+                                        </div>
 
-                                    <div className="col-md-6">
-                                        <label htmlFor="username" className={`form-label ${styles.requiredField}`}>Tên
-                                            đăng nhập</label>
-                                        <Field
-                                            className="form-control"
-                                            type="text"
-                                            name="username"
-                                            id="username"
-                                            validate={(value) => {
-                                                debouncedUsernameCheck(value, setFieldError);
-                                            }}
+                                        <div className="col-md-6">
+                                            <label htmlFor="username" className={`form-label ${styles.requiredField}`}>Tên
+                                                đăng nhập</label>
+                                            <Field
+                                                className="form-control"
+                                                type="text"
+                                                name="username"
+                                                id="username"
+                                                validate={(value) => {
+                                                    debouncedUsernameCheck(value, setFieldError);
+                                                }}
 
-                                        />
-                                        <ErrorMessage name="username" component="div" className="text-danger"/>
-                                    </div>
+                                            />
+                                            <ErrorMessage name="username" component="div" className="text-danger"/>
+                                        </div>
 
-                                    <div className="col-md-6">
-                                        <label htmlFor="password" className={`form-label ${styles.requiredField}`}>Mật
-                                            khẩu</label>
-                                        <Field className="form-control" type="password" name="password"
-                                               id="password"/>
-                                        <ErrorMessage name="password" component="div" className="text-danger"/>
-                                    </div>
+                                        <div className="col-md-6">
+                                            <label htmlFor="password" className={`form-label ${styles.requiredField}`}>Mật
+                                                khẩu</label>
+                                            <Field className="form-control" type="password" name="password"
+                                                   id="password"/>
+                                            <ErrorMessage name="password" component="div" className="text-danger"/>
+                                        </div>
 
-                                    <div className="col-md-6">
-                                        <label htmlFor="confirmPassword"
-                                               className={`form-label ${styles.requiredField}`}>Xác nhận mật
-                                            khẩu</label>
-                                        <Field className="form-control" type="password" name="confirmPassword"
-                                               id="confirmPassword"/>
-                                        <ErrorMessage name="confirmPassword" component="div"
-                                                      className="text-danger"/>
-                                    </div>
+                                        <div className="col-md-6">
+                                            <label htmlFor="confirmPassword"
+                                                   className={`form-label ${styles.requiredField}`}>Xác nhận mật
+                                                khẩu</label>
+                                            <Field className="form-control" type="password" name="confirmPassword"
+                                                   id="confirmPassword"/>
+                                            <ErrorMessage name="confirmPassword" component="div"
+                                                          className="text-danger"/>
+                                        </div>
 
-                                    <div className="col-12">
-                                        <button type="submit" className={`btn ${styles.submitButton}`}
-                                                disabled={isSubmitting}>
-                                            {isSubmitting ? 'Đang đăng ký...' : 'Đăng ký'}
+                                        <div className="col-12">
+                                            <button type="submit" className={`btn ${styles.submitButton}`}
+                                                    disabled={isSubmitting}>
+                                                {isSubmitting ? 'Đang đăng ký...' : 'Đăng ký'}
+                                            </button>
+                                        </div>
+                                        <button type="button" className={styles.cancelButton}
+                                                onClick={() => navigate(-1)}>
+                                            Hủy
                                         </button>
-                                    </div>
-                                    <button type="button" className={styles.cancelButton} onClick={() => navigate(-1)}>
-                                        Hủy
-                                    </button>
-                                </Form>
-                            )}
-                        </Formik>
+                                    </Form>
+                                )}
+                            </Formik>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     )
 
 
