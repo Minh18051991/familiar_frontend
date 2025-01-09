@@ -5,16 +5,21 @@ import styles from "../user/userDetail.module.css";
 
 function FriendRequestList() {
     const [listFriend, setListFriend] = useState([]);
+    const [page, setPage] = useState(0);
+    const [size, setSize] = useState(4);
+    const [hasMore, setHasMore] = useState(true);
+    const [totalPages, setTotalPages] = useState(0);
 
     const userId = useSelector(state => state.user.account.userId);
 
     useEffect(() => {
         const fetchData = async () => {
-            const list = await friendRequestList(userId);
-            setListFriend(list);
+            const {data, totalPages} = await friendRequestList(userId, page, size);
+            setListFriend(prevList => [...prevList, ...data]);
+            setTotalPages(totalPages)
         }
         fetchData()
-    }, [userId]);
+    }, [userId, page, size]);
 
     const handleConfirm = (friendId) => {
         const fetchData = async () => {
@@ -32,6 +37,21 @@ function FriendRequestList() {
             setListFriend(list)
         }
         fetchData();
+    }
+
+    useEffect(() => {
+        // Kiểm tra nếu page đạt totalPages - 1 thì cập nhật lại hasMore
+        if (page >= totalPages - 1) {
+            setHasMore(false);
+        } else {
+            setHasMore(true);
+        }
+    }, [page, totalPages]);
+
+    const handleMore = () => {
+        if (page < totalPages - 1) {
+            setPage(prevPage => prevPage + 1);
+        }
     }
     return (
         <>
@@ -62,7 +82,18 @@ function FriendRequestList() {
                                     </div>
                                 </div>
                             </div>
+
                         ))}
+                        {hasMore && (
+                            <div className="text-center mt-3">
+                                <button
+                                    className="btn btn-light"
+                                    onClick={handleMore}
+                                >
+                                    Xem thêm
+                                </button>
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <div className="text-center mt-5">

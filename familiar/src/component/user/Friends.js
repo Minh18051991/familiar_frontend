@@ -3,7 +3,7 @@ import styles from "./userDetail.module.css";
 import {cancelFriendship, sendFriendship} from "../../service/friendship/friendshipService";
 
 
-export default function DetailUserFriend({friend, col, userId, setFriendList}) {
+export default function Friends({friend, col, userId, setFriendList}) {
     const handleAddFriend = async (userId2) => {
         try {
             const updatedFriendStatus = !friend.isFriend;

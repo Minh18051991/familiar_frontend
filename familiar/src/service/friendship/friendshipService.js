@@ -87,12 +87,29 @@ export async function suggestedFriendsListPage(userId1, userId2, page, size) {
   }
 }
 
-export async function friendRequestList(userId) {
+export async function friendRequestList(userId, page, size) {
   const token = localStorage.getItem('token');
   try {
-    const response = await axios.get(`http://localhost:8080/api/friendships/request/${userId}`, {headers: {Authorization: `Bearer ${token}`}});
-    return response.data;
+    const response = await axios.get(`http://localhost:8080/api/friendships/request/${userId}?_page=${page}&_limit=${size}`, {headers: {Authorization: `Bearer ${token}`}});
+    const data = response.data.content
+    const totalPages = response.data.totalPages;
+    console.log("======data======")
+    console.log(data)
+    return {
+      data: data,
+      totalPages: totalPages
+    };
   }catch (error) {
+    console.log("Loi:" + error.message);
+  }
+}
+
+export async function getFriendShipStatus(userId1, userId2){
+  const token = localStorage.getItem('token');
+  try {
+    const response = await axios.get(`http://localhost:8080/api/friendships/status/${userId1}/${userId2}`, {headers: {Authorization: `Bearer ${token}`}});
+    return response.data;
+  } catch (error) {
     console.log("Loi:" + error.message);
   }
 }
