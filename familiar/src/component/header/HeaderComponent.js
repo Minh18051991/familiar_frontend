@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { logout } from "../../redux/login/AccountAction";
-import { useDispatch, useSelector } from "react-redux";
+import React, {useState} from 'react';
+import {Link, useNavigate, useLocation} from 'react-router-dom';
+import {logout} from "../../redux/login/AccountAction";
+import {useDispatch, useSelector} from "react-redux";
 import styles from './HeaderComponent.module.css';
-import { sendOtp } from "../../service/otp/otp";
-import SearchComponent from "../search/SearchComponent";
+import {sendOtp} from "../../service/otp/otp";
 import LoadingSpinner from "../otp/LoadingSpinner";
+import SearchComponent from "../search/SearchComponent";
+
 
 function HeaderComponent() {
     const info = useSelector(state => state.user);
@@ -15,6 +16,7 @@ function HeaderComponent() {
     const location = useLocation();
     const [isLoading, setIsLoading] = useState(false);
 
+
     const handleLogout = () => {
         dispatch(logout());
         navigate('/login');
@@ -23,14 +25,17 @@ function HeaderComponent() {
     const isActive = (path) => location.pathname === path ? styles.active : '';
 
     const handleChangePassword = async () => {
-        if (account && account.username) {
-            const object = { username: account.username };
-            setIsLoading(true);
-            await sendOtp(object);
-            setIsLoading(false);
-            navigate(`/account/change-password/${account.username}`);
+            if (account && account.username) {
+                const object = {username: account.username};
+                setIsLoading((prev) => !prev);
+                await sendOtp(object);
+                setIsLoading((prev) => !prev);
+                navigate(`/account/change-password/${account.username}`);
+
+            }
         }
-    };
+    ;
+
 
     return (
         <>
@@ -42,13 +47,18 @@ function HeaderComponent() {
                             alt="Logo" className={styles.logo}/>
                     </Link>
                     <div className={styles.searchBar}>
-                        <SearchComponent />
+                        <div className={styles.searchBar}>
+                            <SearchComponent/>
+                        </div>
                     </div>
                     <div className={styles.navIconContainer}>
-                        <Link className={`${styles.navIcon} ${isActive('/')}`} to="/" title="Trang chủ">
+                    <Link className={`${styles.navIcon} ${isActive('/')}`} to="/" title="Trang chủ">
                             <i className="fas fa-home"></i>
                         </Link>
-                        <Link className={`${styles.navIcon} ${isActive('/friends')}`} to="/friendships-list" title="Bạn bè">
+
+
+                        <Link className={`${styles.navIcon} ${isActive('/friends')}`} to="/friendships-list"
+                              title="Bạn bè">
                             <i className="fas fa-user-friends"></i>
                         </Link>
                         <Link className={`${styles.navIcon} ${isActive('/messages')}`} to="/messages" title="Tin nhắn">
@@ -60,6 +70,7 @@ function HeaderComponent() {
                             <Link className={styles.navLink} to="/login">Đăng nhập</Link>
                         )}
                         {account && (
+
                             <div className="nav-item dropdown">
                                 <a className={`nav-link dropdown-toggle d-flex align-items-center ${styles.avatarLink}`}
                                    id="navbarDropdown"
@@ -76,12 +87,24 @@ function HeaderComponent() {
                                 </a>
                                 <ul className={`dropdown-menu dropdown-menu-end ${styles.dropdownMenu}`}
                                     aria-labelledby="navbarDropdown">
-                                    <li><Link className="dropdown-item" to={`/user/detail/${account.userId}`}>Xem thông tin cá nhân</Link></li>
-                                    <li><button className="dropdown-item" onClick={handleChangePassword}>Đổi mật khẩu</button></li>
-                                    <li><hr className="dropdown-divider"/></li>
-                                    <li><button onClick={handleLogout} className="dropdown-item">Đăng xuất</button></li>
+                                    <li><Link className="dropdown-item" to={`/user/detail/${account.userId}`}>Xem
+                                        thông tin cá nhân</Link></li>
+                                    {/*<li><Link className="dropdown-item" to={`/account/change-password/${account.username}`}>Đổi mật*/}
+                                    {/*    khẩu</Link></li>*/}
+                                    <li>
+                                        <button className="dropdown-item" onClick={handleChangePassword}>Đổi mật khẩu
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <hr className="dropdown-divider"/>
+                                    </li>
+                                    <li>
+                                        <button onClick={handleLogout} className="dropdown-item">Đăng xuất
+                                        </button>
+                                    </li>
                                 </ul>
                             </div>
+
                         )}
                     </div>
                 </div>
