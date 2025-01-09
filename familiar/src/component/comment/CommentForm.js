@@ -17,7 +17,7 @@ const CommentForm = ({ onSubmit, initialContent = '', buttonText = 'Add Comment'
         fullWidth
         multiline
         rows={2}
-        placeholder="Write a comment..."
+        placeholder="Viết bình luận "
         value={content}
         onChange={(e) => setContent(e.target.value)}
       />

@@ -13,8 +13,9 @@ import FooterComponent from "./component/footer/FooterComponent";
 import UpdateAccountComponent from "./component/account/UpdateAccountComponent";
 import DashboardComponent from "./component/dashboard/DashboardComponent";
 import ListFriendShipComponent from "./component/friendship/list";
-import UserDetailComponent from "./component/user/UserDetailComponent";
+import UserFriendsComponent from "./component/user/UserFriendsComponent";
 import FriendRequestList from "./component/friendship/FriendRequestList";
+import SearchResultsPage from "./pages/SearchResultsPage";
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
             <ToastContainer autoClose={500}/>
             <main className={styles.mainContent}>
                 <Routes>
+                    <Route path="/search" element={<SearchResultsPage />} />
                     <Route path={'/register'} element={<RegisterComponent/>}/>
                     <Route path={'/login'} element={<LoginComponent/>}/>
                     <Route path="/" element={<PrivateRoute/>}>
@@ -37,7 +39,7 @@ function App() {
                         ></Route>
                         <Route
                             path="/users/detail/:id"
-                            element={<UserDetailComponent/>}
+                            element={<UserFriendsComponent/>}
                         ></Route>
                         <Route
                             path="/friendships/request"

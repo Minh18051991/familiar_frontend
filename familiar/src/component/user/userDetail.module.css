@@ -31,6 +31,25 @@
     transform: scale(1.05);
 }
 
+/* nút huỷ kết bạn, xoá bạn */
+
+.actionDeleteBtn {
+    background-color: #d3d5da;
+    font-weight: bold;
+}
+
+.actionDeleteBtn:hover {
+    background-color: #96c6f6;
+    color: #0b0b0b;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+    font-weight: 110;
+}
+
+
 /* 4. Cải tiến tiêu đề và thông tin người dùng */
 .userName {
     font-size: 1.8rem;
@@ -68,7 +87,13 @@
 /* 6. Định dạng card bạn bè */
 .card-body {
     padding: 1.5rem;
-    border-radius: 12px;
+    border-radius: 0px;
+}
+
+
+.card-body-Home {
+    padding: 1.5rem;
+    border-radius: 5px;
 }
 
 .card-body img {
@@ -106,3 +131,23 @@
     object-fit: cover;
     border-radius: 50%;
 }
+.friendAvatarHome {
+    width: 35px;
+    height: 35px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+.btnAvatarHome {
+    height: 25px; /* Đặt chiều cao nút */
+    text-align: center; /* Căn chỉnh nội dung giữa theo chiều ngang */
+    display: inline-flex; /* Sử dụng inline-flex để chiều rộng tự động thay đổi */
+    justify-content: center; /* Căn giữa nội dung theo chiều ngang */
+    align-items: center; /* Căn giữa nội dung theo chiều dọc */
+    white-space: nowrap; /* Ngăn nội dung xuống dòng */
+    padding: 0 0; /* Thêm padding để nút có khoảng cách từ nội dung */
+}
+
+
+
+
+

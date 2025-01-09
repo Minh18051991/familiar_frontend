@@ -20,7 +20,7 @@ function ListFriendShipComponent() {
             .catch((err) => {
                 console.log(err);
             });
-    }, [isLoading]);
+    }, [userId]);
 
     const handleIsLoading = () => {
         setIsLoading(prevState => !prevState);
@@ -39,11 +39,8 @@ function ListFriendShipComponent() {
     return (
         <>
             <div className={styles.wrapper}>
-                <div className="d-flex justify-content-between align-items-center mb-4">
-                    <h3 className={`${styles.customTitle} title mb-0`}>Danh sách bạn bè</h3>
-                    <Link to={`/friendships/request`} className="btn btn-primary">
-                        Lời mời kết bạn
-                    </Link>
+                <div className="d-flex justify-content-center align-items-center mb-4">
+                    <h3 className={`${styles.customTitle} title mb-0 text-center`}>Danh sách bạn bè</h3>
                 </div>
 
                 <form className={styles.searchContainer}>

@@ -187,6 +187,7 @@
 .searchBar {
     flex-grow: 1;
     margin-right: 10px;
+    max-width: 350px;
 
 }
 
