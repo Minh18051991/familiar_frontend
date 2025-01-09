@@ -3,7 +3,7 @@ import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {logout} from "../../redux/login/AccountAction";
 import {useDispatch, useSelector} from "react-redux";
 import styles from './HeaderComponent.module.css';
-import { sendOtp } from "../../service/otp/otp";
+import {sendOtp} from "../../service/otp/otp";
 import SearchComponent from "../search/SearchComponent";
 import LoadingSpinner from "../otp/LoadingSpinner";
 
@@ -48,10 +48,10 @@ function HeaderComponent() {
                         </div>
                     </div>
                     <div className={styles.navIconContainer}>
-                    <Link className={`${styles.navIcon} ${isActive('/')}`} to="/" title="Trang chủ">
+                        <Link className={`${styles.navIcon} ${isActive('/')}`} to="/" title="Trang chủ">
                             <i className="fas fa-home"></i>
                         </Link>
-                        <Link className={`${styles.navIcon} ${isActive('/friends')}`} to="/friendships-list"
+                        <Link className={`${styles.navIcon} ${isActive('/friendships-list')}`} to="/friendships-list"
                               title="Bạn bè">
                             <i className="fas fa-user-friends"></i>
                         </Link>

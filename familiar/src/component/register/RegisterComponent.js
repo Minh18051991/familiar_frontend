@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as Yup from "yup";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {checkUsernameExists, createAccount} from "../../service/account/account";
@@ -8,7 +8,17 @@ import moment from 'moment'; // Đảm bảo bạn đã import moment
 import debounce from 'lodash/debounce';
 import styles from "./RegisterComponent.module.css";
 
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+
 export default function RegisterComponent() {
+
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+    const togglePasswordVisibility = () => setShowPassword(!showPassword);
+    const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
 
     const [initialValues, setInitialValues] = React.useState({
         firstName: '',
@@ -250,8 +260,21 @@ export default function RegisterComponent() {
                                         <div className="col-md-6">
                                             <label htmlFor="password" className={`form-label ${styles.requiredField}`}>Mật
                                                 khẩu</label>
-                                            <Field className="form-control" type="password" name="password"
-                                                   id="password"/>
+                                            <div className={styles.passwordInputWrapper}>
+                                                <Field
+                                                    className="form-control"
+                                                    type={showPassword ? "text" : "password"}
+                                                    name="password"
+                                                    id="password"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    className={styles.passwordToggle}
+                                                    onClick={togglePasswordVisibility}
+                                                >
+                                                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye}/>
+                                                </button>
+                                            </div>
                                             <ErrorMessage name="password" component="div" className="text-danger"/>
                                         </div>
 
@@ -259,8 +282,21 @@ export default function RegisterComponent() {
                                             <label htmlFor="confirmPassword"
                                                    className={`form-label ${styles.requiredField}`}>Xác nhận mật
                                                 khẩu</label>
-                                            <Field className="form-control" type="password" name="confirmPassword"
-                                                   id="confirmPassword"/>
+                                            <div className={styles.passwordInputWrapper}>
+                                                <Field
+                                                    className="form-control"
+                                                    type={showConfirmPassword ? "text" : "password"}
+                                                    name="confirmPassword"
+                                                    id="confirmPassword"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    className={styles.passwordToggle}
+                                                    onClick={toggleConfirmPasswordVisibility}
+                                                >
+                                                    <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye}/>
+                                                </button>
+                                            </div>
                                             <ErrorMessage name="confirmPassword" component="div"
                                                           className="text-danger"/>
                                         </div>
