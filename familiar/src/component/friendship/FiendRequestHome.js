@@ -55,7 +55,7 @@ function FriendRequestHome() {
     }
     return (
         <>
-            <h5 className={`${styles.suggestedFriendsTitle} mb-3 text-primary text-center`}>Lời mời kết bạn</h5>
+            <h5 className={`${styles.suggestedFriendsTitle} mb-3 text-primary text-center`} style={{marginTop: "10px"}}>Lời mời kết bạn</h5>
             {listFriend && listFriend.length > 0 ? (
                 <div>
 
@@ -68,7 +68,11 @@ function FriendRequestHome() {
                                         alt="Friend Avatar"
                                         className={`${styles.friendAvatarHome}`}
                                     />
-                                    <p className="mx-2">{user?.userFirstName} {user?.userLastName}</p>
+                                    <Link to={`/users/detail/${user.userId}`} style={{ textDecoration: 'none' }}>
+                                        <p className="mx-2" style={{ color: 'black' }}>
+                                            {user?.userFirstName} {user?.userLastName}
+                                        </p>
+                                    </Link>
                                 </div>
                                 <div className="d-flex justify-content-center m-0">
                                     <button

@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./userDetail.module.css";
 import {cancelFriendship, sendFriendship} from "../../service/friendship/friendshipService";
+import {Link} from "react-router-dom";
 
 
 export default function Friends({friend, col, userId, setFriendList}) {
@@ -34,7 +35,11 @@ export default function Friends({friend, col, userId, setFriendList}) {
                         alt="Friend Avatar"
                         className={`${styles.friendAvatar} mb-3`}
                     />
-                    <p className="card-title mb-2">{friend?.userFirstName} {friend?.userLastName}</p>
+                    <Link to={`/users/detail/${friend.userId}`} style={{ textDecoration: 'none' }}>
+                        <p className="mx-2" style={{ color: 'black' }}>
+                            {friend?.userFirstName} {friend?.userLastName}
+                        </p>
+                    </Link>
                     <div className="d-flex justify-content-center mt-3">
                         <button
                             onClick={() => handleAddFriend(friend.userId)}

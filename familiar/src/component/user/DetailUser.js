@@ -16,9 +16,9 @@ export default function DetailUser({ user, userId }) {
     useEffect(() => {
         const fetchFriendshipStatus = async () => {
             const status = await getFriendShipStatus(userId, userId2);
-            console.log("Friendship status:", status); // Log trạng thái để kiểm tra
+            console.log("Friendship status:", status);
             setFriendshipStatus(status);
-            setIsLoading(false); // Đảm bảo trạng thái loading được cập nhật
+            setIsLoading(false);
         };
         fetchFriendshipStatus();
     }, [userId, userId2]);
@@ -26,31 +26,31 @@ export default function DetailUser({ user, userId }) {
     const handleSendFriendRequest = async () => {
         console.log("Sending friend request...");
         await sendFriendship(userId, userId2);
-        setFriendshipStatus('pending'); // Cập nhật trạng thái ngay lập tức
+        setFriendshipStatus('pending');
     };
 
     const handleAcceptFriendRequest = async () => {
         console.log("Accepting friend request...");
         await acceptFriendship(userId, userId2);
-        setFriendshipStatus('friend'); // Cập nhật trạng thái khi chấp nhận lời mời
+        setFriendshipStatus('friend');
     };
 
     const handleDeclineFriendRequest = async () => {
         console.log("Declining friend request...");
         await cancelFriendship(userId, userId2);
-        setFriendshipStatus('notFriend'); // Cập nhật trạng thái khi từ chối lời mời
+        setFriendshipStatus('notFriend');
     };
 
     const handleUnfriend = async () => {
         console.log("Unfriending...");
         await deleteFriendship(userId, userId2);
-        setFriendshipStatus('notFriend'); // Cập nhật trạng thái khi hủy kết bạn
+        setFriendshipStatus('notFriend');
     };
 
     const handleCancelFriendRequest = async () => {
         console.log("Canceling friend request...");
         await cancelFriendship(userId, userId2);
-        setFriendshipStatus('notFriend'); // Cập nhật trạng thái khi hủy yêu cầu kết bạn
+        setFriendshipStatus('notFriend');
     };
 
     const renderButton = () => {
