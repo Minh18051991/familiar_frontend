@@ -9,9 +9,11 @@ import CreatePost from './CreatePost';
 import moment from 'moment';
 import PostService from "../../services/PostService";
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import CommentIcon from '@mui/icons-material/Comment';
 import CommentModal from '../comment/CommentModal';
 import { Link } from'react-router-dom';
+import { toast } from 'react-toastify';
 
 const PostList = () => {
   const [posts, setPosts] = useState([]);
@@ -28,7 +30,6 @@ const PostList = () => {
   const [allPostsLoaded, setAllPostsLoaded] = useState(false);
 
   const currentUserId = localStorage.getItem('userId');
-
 
   const fetchPosts = useCallback(async () => {
     if (!hasMore || isLoading) return;
@@ -118,6 +119,33 @@ const PostList = () => {
   const handleChangePost = () => {
     setChangePost(prev => !prev);
   }
+const handleDeletePost = async (postId) => {
+  if (window.confirm('Bạn có chắc chắn muốn xóa bài viết này không?')) {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Không tìm thấy token xác thực');
+      }
+      const response = await PostService.deletePost(postId, token);
+      
+      if (response && response.status === 200) {
+        toast.success('Bài viết đã được xóa thành công');
+      } else {
+        toast.error('Không thể xóa bài viết. Vui lòng thử lại.');
+      }
+    } catch (err) {
+      console.error('Lỗi khi xóa bài viết:', err);
+      toast.error('Xóa thành công');
+    } finally {
+      // Đặt lại các state để tải lại dữ liệu, bất kể thành công hay thất bại
+      setPage(0);
+      setHasMore(true);
+      setAllPostsLoaded(false);
+      setPosts([]); // Xóa tất cả bài viết hiện tại
+      setChangePost(prev => !prev); // Trigger re-fetch
+    }
+  }
+};
 
   return (
     <Box sx={{ maxWidth: 800, margin: 'auto', p: 2 }}>
@@ -142,13 +170,21 @@ const PostList = () => {
               </Box>
               </Link>
               {currentUserId && currentUserId === post.userId.toString() && (
-                <IconButton
-                  onClick={() => handleEditClick(post)}
-                  size="small"
-                  sx={{ marginLeft: 'auto' }}
-                >
-                  <EditIcon />
-                </IconButton>
+                <>
+                  <IconButton
+                    onClick={() => handleEditClick(post)}
+                    size="small"
+                    sx={{ marginLeft: 'auto' }}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => handleDeletePost(post.id)}
+                    size="small"
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </>
               )}
             </Box>
             <Typography variant="body1" className={styles.postText}>

@@ -127,3 +127,33 @@
 .submitButton {
     width: 100%;
 }
+.emojiPickerContainer {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 1000;
+}
+
+.actionBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 15px;
+    position: relative;
+    margin-top: 10px;
+}
+
+.emojiButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.emojiButton:hover {
+    background-color: #f0f2f5;
+    border-radius: 50%;
+}
