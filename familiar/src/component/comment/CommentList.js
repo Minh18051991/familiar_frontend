@@ -87,13 +87,12 @@ const CommentList = ({ postId }) => {
     return null;
   };
 
-  const renderComments = (commentsToRender) => {
-    if(!commentsToRender || commentsToRender.length === 0)
+  const renderComments = (commentsToRender, depth = 0) => {
+    if(!commentsToRender || commentsToRender.length === 0 || depth >5)
     {
-      return
-      <Typography>Không có bình luận nào</Typography>;
+      return<Typography> Không có bình luận nào </Typography>;
     }
-    return comments.map(comment => (
+    return commentsToRender.map(comment => (
       <Box key={comment.id} ml={comment.level * 4}>
         <Comment
           comment={comment}
@@ -102,7 +101,7 @@ const CommentList = ({ postId }) => {
           onDelete={handleDelete}
           currentUserId={currentUserId}
         />
-        {comment.replies && comment.replies.length > 0 && renderComments(comment.replies)}
+        {comment.replies && comment.replies.length > 0 && renderComments(comment.replies, depth + 1)}
       </Box>
     ));
   };

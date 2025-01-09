@@ -82,7 +82,7 @@ const CreatePost = ({ onPostCreated }) => {
             <CompactCreatePost />
             <Modal show={showModal} onHide={() => setShowModal(false)} size="lg">
                 <Modal.Header closeButton>
-                    <Modal.Title>Create a Post</Modal.Title>
+                    <Modal.Title>Tạo bài viết</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleSubmit}>
@@ -100,7 +100,7 @@ const CreatePost = ({ onPostCreated }) => {
                             <div className={styles.fileUpload}>
                                 <label htmlFor="file-upload" className={styles.fileUploadLabel}>
                                     <BsCamera size={20} />
-                                    <span>Photo/Video</span>
+                                    <span>Ảnh và Video</span>
                                 </label>
                                 <Form.Control
                                     id="file-upload"
@@ -139,14 +139,14 @@ const CreatePost = ({ onPostCreated }) => {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowModal(false)}>
-                        Close
+                        Đóng
                     </Button>
                     <Button
                         variant="primary"
                         onClick={handleSubmit}
                         disabled={isLoading}
                     >
-                        {isLoading ? 'Posting...' : 'Post'}
+                        {isLoading ? 'Đang đăng bài...' : 'Đăng bài'}
                     </Button>
                 </Modal.Footer>
             </Modal>
