@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useSelector} from "react-redux";
 import {acceptFriendship, cancelFriendship, friendRequestList} from "../../service/friendship/friendshipService";
 import styles from "../user/userDetail.module.css";
+import {Link} from "react-router-dom";
 
 function FriendRequestList() {
     const [listFriend, setListFriend] = useState([]);
@@ -40,7 +41,7 @@ function FriendRequestList() {
     }
 
     useEffect(() => {
-        // Kiểm tra nếu page đạt totalPages - 1 thì cập nhật lại hasMore
+
         if (page >= totalPages - 1) {
             setHasMore(false);
         } else {
@@ -55,7 +56,8 @@ function FriendRequestList() {
     }
     return (
         <>
-            <h5 className={`${styles.suggestedFriendsTitle} mb-3 text-primary text-center`}>Lời mời kết bạn</h5>
+            <h5 className={`${styles.suggestedFriendsTitle} mb-3 text-primary text-center`}
+            style={{marginTop: "15px"}}>Lời mời kết bạn</h5>
             <div className="container">
                 {listFriend && listFriend.length > 0 ? (
                     <div className="row">
@@ -68,7 +70,12 @@ function FriendRequestList() {
                                             alt="Friend Avatar"
                                             className={`${styles.friendAvatar} mb-3`}
                                         />
-                                        <p className="card-title mb-2">{user?.userFirstName} {user?.userLastName}</p>
+
+                                        <Link to={`/users/detail/${user.userId}`} style={{textDecoration: 'none'}}>
+                                            <p className="mx-2" style={{color: 'black'}}>
+                                                {user?.userFirstName} {user?.userLastName}
+                                            </p>
+                                        </Link>
                                         <div className="d-flex justify-content-center mt-3">
                                             <button className="btn btn-primary btn-sm me-2 px-4"
                                                     onClick={() => handleConfirm(user.userId)}>
