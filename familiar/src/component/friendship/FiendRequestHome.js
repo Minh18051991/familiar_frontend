@@ -7,7 +7,7 @@ import {Link} from "react-router-dom";
 function FriendRequestHome() {
     const [listFriend, setListFriend] = useState([]);
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(5);
+    const [size, setSize] = useState(2);
     const [hasMore, setHasMore] = useState(true);
     const [totalPages, setTotalPages] = useState(0);
 
@@ -55,7 +55,7 @@ function FriendRequestHome() {
     }
     return (
         <>
-            <h5 className={`${styles.suggestedFriendsTitle} mb-3 text-primary text-center`}>Lời mời kết bạn</h5>
+            <h5 className={`${styles.suggestedFriendsTitle} mb-3 text-primary text-center`} style={{marginTop: "10px"}}>Lời mời kết bạn</h5>
             {listFriend && listFriend.length > 0 ? (
                 <div>
 
@@ -68,7 +68,11 @@ function FriendRequestHome() {
                                         alt="Friend Avatar"
                                         className={`${styles.friendAvatarHome}`}
                                     />
-                                    <p className="mx-2">{user?.userFirstName} {user?.userLastName}</p>
+                                    <Link to={`/users/detail/${user.userId}`} style={{textDecoration: 'none'}}>
+                                        <p className="mx-2" style={{color: 'black'}}>
+                                            {user?.userFirstName} {user?.userLastName}
+                                        </p>
+                                    </Link>
                                 </div>
                                 <div className="d-flex justify-content-center m-0">
                                     <button
@@ -88,9 +92,10 @@ function FriendRequestHome() {
 
                     ))}
                     <div className="d-flex justify-content-end mt-1">
-                        <Link className="" to={'/friendships/request'}> Xem tất cả</Link>
+                        <Link className="" to={'/friendships/request'} style={{textDecoration: 'none'}}>
+                            Xem tất cả
+                        </Link>
                     </div>
-
                 </div>
 
             ) : (

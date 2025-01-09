@@ -20,7 +20,7 @@ function ListFriendShipComponent() {
             .catch((err) => {
                 console.log(err);
             });
-    }, [isLoading]);
+    }, [userId]);
 
     const handleIsLoading = () => {
         setIsLoading(prevState => !prevState);

@@ -6,7 +6,7 @@ import styles from "../user/userDetail.module.css";
 function FriendRequestList() {
     const [listFriend, setListFriend] = useState([]);
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(4);
+    const [size, setSize] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [totalPages, setTotalPages] = useState(0);
 
