@@ -5,13 +5,16 @@ import {
   DialogContent,
   DialogActions,
   TextField,
-  Button
+  Button, IconButton
 } from '@mui/material';
 import PostService from "../../services/PostService";
+import EmojiPicker from 'emoji-picker-react';
+import InsertEmotionIcon from '@mui/icons-material/InsertEmoticon';
 
 const EditPost = ({ post, open, onClose, onUpdate,handleChange }) => {
   const [editedContent, setEditedContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   useEffect(() => {
     if (post) {
@@ -36,7 +39,10 @@ const EditPost = ({ post, open, onClose, onUpdate,handleChange }) => {
       console.error('Error updating post:', err);
     }
   };
-
+const  handleEmojiClick = (event, emojiObject) => {
+  setEditedContent(prev => prev + emojiObject.emoji);
+  setShowEmojiPicker(false);
+}
 
 
   return (
@@ -56,6 +62,14 @@ const EditPost = ({ post, open, onClose, onUpdate,handleChange }) => {
             value={editedContent}
             onChange={(e) => setEditedContent(e.target.value)}
           />
+          <IconButton onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
+            <InsertEmotionIcon />
+          </IconButton>
+          {showEmojiPicker && (
+              <EmojiPicker onEmojiClick={handleEmojiClick}
+                           sx={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)' }}/>
+
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose}>Hủy</Button>
