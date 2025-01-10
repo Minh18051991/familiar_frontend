@@ -7,7 +7,6 @@ import {
 } from "../../service/friendship/friendshipService";
 import styles from "../user/userDetail.module.css";
 import customStyles from "./ListFriendShip.module.css";
-
 import { Link } from "react-router-dom";
 
 function FriendRequestList() {
@@ -31,6 +30,7 @@ function FriendRequestList() {
 
   const handleConfirm = async (friendId) => {
     await acceptFriendship(friendId, userId);
+    // Cập nhật lại danh sách sau khi chấp nhận lời mời
     setListFriend((prevList) =>
         prevList.filter((friend) => friend.userId !== friendId)
     );
@@ -38,14 +38,15 @@ function FriendRequestList() {
 
   const handleDelete = async (friendId) => {
     await cancelFriendship(friendId, userId);
+    // Cập nhật lại danh sách sau khi xoá bạn
     setListFriend((prevList) =>
         prevList.filter((friend) => friend.userId !== friendId)
     );
   };
 
-  const handleMore = () => {
+  const handleMore = async () => {
     if (hasMore) {
-      setPage((prevPage) => prevPage + 1);
+      setPage((prevPage) => prevPage + 1); // Chuyển sang trang tiếp theo
     }
   };
 
@@ -72,10 +73,7 @@ function FriendRequestList() {
                               alt="Friend Avatar"
                               className={`${styles.friendAvatar} mb-3`}
                           />
-                          <Link
-                              to={`/users/detail/${user.userId}`}
-                              style={{ textDecoration: "none" }}
-                          >
+                          <Link to={`/users/detail/${user.userId}`} style={{ textDecoration: "none" }}>
                             <p className="mx-2" style={{ color: "black", fontWeight: 500 }}>
                               {user?.userFirstName} {user?.userLastName}
                             </p>
