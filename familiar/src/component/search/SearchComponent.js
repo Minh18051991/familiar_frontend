@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Card, Form, InputGroup, Button } from 'react-bootstrap';
+import React, {useEffect, useRef, useState} from 'react';
+import {Button, Card, Form, InputGroup} from 'react-bootstrap';
 import {FaBriefcase, FaMapMarkedAlt, FaSearch} from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
-import { searchUsers } from '../../service/user/user';
+import {Link, useNavigate} from 'react-router-dom';
+import {searchUsers} from '../../service/user/user';
 import styles from './SearchComponent.module.css';
 import {FaEnvelope} from "react-icons/fa6";
 
-const SearchComponent = ({ initialResults, showAllResults }) => {
+const SearchComponent = ({initialResults, showAllResults}) => {
     const [searchValue, setSearchValue] = useState('');
     const [searchResults, setSearchResults] = useState(initialResults || []);
     const [isLoading, setIsLoading] = useState(false);
@@ -70,12 +70,21 @@ const SearchComponent = ({ initialResults, showAllResults }) => {
         navigate(`/search?q=${encodeURIComponent(searchValue)}`);
     };
 
+    const handleUserClick = (userId) => {
+        setShowResults(false);
+        navigate(`/users/detail/${userId}`);
+    };
+
+
     const renderSearchResults = () => {
         const resultsToShow = showAllResults ? searchResults : searchResults.slice(0, 5);
         return (
             <div className={styles.searchResults}>
                 {resultsToShow.map((user) => (
-                    <Card key={user.userId} className={`mb-2 ${styles.resultCard}`}>
+                    <Card key={user.userId}
+                          className={`mb-2 ${styles.resultCard}`}
+                          onClick={() => handleUserClick(user.userId)}
+                    >
                         <Card.Body>
                             <Link to={`/users/detail/${user.userId}`} className="text-decoration-none">
                                 <div className="d-flex align-items-center">
@@ -86,9 +95,12 @@ const SearchComponent = ({ initialResults, showAllResults }) => {
                                     />
                                     <div>
                                         <div className="fw-bold">{`${user.userFirstName} ${user.userLastName}`}</div>
-                                        <div className="text-muted small"><FaBriefcase className="me-1"/> {user.userOccupation}</div>
-                                        <div className="text-muted small"><FaEnvelope className="me-1"/>{user.userEmail}</div>
-                                        <div className="text-muted small"><FaMapMarkedAlt className="me-1"/>{user.userAddress}</div>
+                                        <div className="text-muted small"><FaBriefcase
+                                            className="me-1"/> {user.userOccupation}</div>
+                                        <div className="text-muted small"><FaEnvelope className="me-1"/>{user.userEmail}
+                                        </div>
+                                        <div className="text-muted small"><FaMapMarkedAlt
+                                            className="me-1"/>{user.userAddress}</div>
                                     </div>
                                 </div>
                             </Link>
@@ -120,7 +132,7 @@ const SearchComponent = ({ initialResults, showAllResults }) => {
                         className={styles.searchInput}
                     />
                     <InputGroup.Text className={styles.searchIcon}>
-                        <FaSearch />
+                        <FaSearch/>
                     </InputGroup.Text>
                 </InputGroup>
             )}

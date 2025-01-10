@@ -3,6 +3,7 @@ import PostService from '../../services/PostService';
 import { findUserById } from '../../service/user/userService';
 import { Form, Button, Modal } from 'react-bootstrap';
 import { BsCamera, BsTrash, BsEmojiSmile } from 'react-icons/bs';
+import EmojiPicker from 'emoji-picker-react';
 import styles from './CreatePost.module.css';
 
 const CreatePost = ({ onPostCreated }) => {
@@ -16,6 +17,7 @@ const CreatePost = ({ onPostCreated }) => {
         userFirstName: '',
         userLastName: ''
     });
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -70,6 +72,11 @@ const CreatePost = ({ onPostCreated }) => {
         setFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
     };
 
+    const onEmojiClick = (emojiObject) => {
+        setContent(prevContent => prevContent + emojiObject.emoji);
+        setShowEmojiPicker(false);
+    };
+
     const CompactCreatePost = () => (
         <div className={styles.compactCreatePost} onClick={() => setShowModal(true)}>
             <img src={userData.userProfilePictureUrl} alt="Profile" className={styles.profilePicture} />
@@ -111,10 +118,19 @@ const CreatePost = ({ onPostCreated }) => {
                                     className={styles.hiddenInput}
                                 />
                             </div>
-                            <Button variant="link" className={styles.emojiButton}>
+                            <Button 
+                                variant="link" 
+                                className={styles.emojiButton}
+                                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                            >
                                 <BsEmojiSmile size={20} />
                             </Button>
                         </div>
+                        {showEmojiPicker && (
+                            <div className={styles.emojiPickerContainer}>
+                                <EmojiPicker onEmojiClick={onEmojiClick} />
+                            </div>
+                        )}
                         {files.length > 0 && (
                             <div className={styles.previewContainer}>
                                 {files.map((file, index) => (

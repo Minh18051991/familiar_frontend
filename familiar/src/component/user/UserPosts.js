@@ -13,6 +13,16 @@ const UserPosts = ({ userId }) => {
   const [openImage, setOpenImage] = useState(null);
   const [commentModalOpen, setCommentModalOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
+  const [initialLoadDone, setInitialLoadDone] = useState(false);
+
+  const resetState = useCallback(() => {
+    setPostsMap({});
+    setPage(0);
+    setHasMore(true);
+    setOpenImage(null);
+    setSelectedPost(null);
+    setInitialLoadDone(false);
+  },[]);
 
   const fetchPosts = useCallback(async () => {
     if (loading || !hasMore) return;
@@ -42,12 +52,19 @@ const UserPosts = ({ userId }) => {
       setError('Failed to load posts. Please try again.');
     } finally {
       setLoading(false);
+      setInitialLoadDone(true);
     }
   }, [userId, page, loading, hasMore, postsMap]);
 
   useEffect(() => {
+    resetState()
     fetchPosts();
-  }, [userId, fetchPosts]);
+  }, [userId,resetState]);
+  useEffect(() => {
+    if (!initialLoadDone && !loading) {
+      fetchPosts();
+    }
+  }, [initialLoadDone, loading, fetchPosts]);
 
   const handleCommentClick = (post) => {
     setSelectedPost(post);
@@ -75,17 +92,23 @@ const UserPosts = ({ userId }) => {
 
   return (
     <Box>
-      {sortedPosts.map((post) => (
-        <Post
-          key={post.id}
-          post={post}
-          currentUserId={userId}
-          onCommentClick={handleCommentClick}
-          onImageClick={handleImageClick}
-        />
-      ))}
+      {initialLoadDone && sortedPosts.length === 0 ? (
+        <Typography variant="body1" align="center" sx={{ my: 2 }}>
+          Người dùng này chưa có bài viết nào.
+        </Typography>
+      ) : (
+        sortedPosts.map((post) => (
+          <Post
+            key={post.id}
+            post={post}
+            currentUserId={userId}
+            onCommentClick={handleCommentClick}
+            onImageClick={handleImageClick}
+          />
+        ))
+      )}
       {loading && <CircularProgress />}
-      {hasMore && !loading && (
+      {hasMore && !loading && sortedPosts.length > 0 && (
         <Button onClick={fetchPosts} fullWidth>Load More</Button>
       )}
 
