@@ -47,4 +47,5 @@
 
 .mainContent {
   flex: 1; /* Cho phép nội dung chính mở rộng để đẩy footer xuống */
+  background-color: #f2f4f7;
 }

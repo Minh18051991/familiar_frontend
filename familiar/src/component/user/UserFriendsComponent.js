@@ -15,7 +15,7 @@ function UserFriendsComponent() {
     const userId = useSelector((state) => state.user.account.userId);
 
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(2);
+    const [size, setSize] = useState(4);
     const [hasMore, setHasMore] = useState(true);
     const [totalPages, setTotalPages] = useState(0);
 

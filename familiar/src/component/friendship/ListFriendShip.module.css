@@ -18,7 +18,7 @@
 }
 
 .cardBody {
-  width: 1100px;
+  max-width: 1100px;
   margin: auto;
   display: flex;
   flex-wrap: wrap;
@@ -40,7 +40,7 @@
 }
 .searchInput {
   padding: 8px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border: none;
   outline: none;
   border-radius: 20px;
@@ -64,13 +64,46 @@
 
 /*tiêu đề*/
 .customTitle {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Font tương tự Facebook */
-  font-size: 35px;  /* Kích thước chữ lớn */
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Font tương tự Facebook */
+  font-size: 35px; /* Kích thước chữ lớn */
   font-weight: 600; /* Độ đậm chữ vừa phải */
-  color: #1877f2;   /* Màu xanh giống màu Facebook */
+  color: #1877f2; /* Màu xanh giống màu Facebook */
   text-align: center; /* Căn giữa */
   margin-bottom: 20px; /* Khoảng cách dưới */
   margin-top: 20px; /* Khoảng cách trên để chữ xuống một chút */
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Hiệu ứng bóng chữ */
   letter-spacing: 1px;
+}
+
+.requestItem {
+  border-radius: 16px;
+  width: 240px;
+  margin: 8px;
+  background: white;
+}
+
+.topContent {
+  height: 180px;
+}
+.listFriendContainer {
+  max-width: 1100px;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 24px 0;
+}
+
+@media (min-width: 1024px) {
+}
+
+@media (min-width: 740px) and (max-width: 1023px) {
+  .cardBody {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 740px) {
+  .cardBody {
+    justify-content: center;
+  }
 }
