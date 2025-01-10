@@ -15,8 +15,6 @@ export default function DetailUser({ user, userId }) {
 
     useEffect(() => {
         const fetchFriendshipStatus = async () => {
-            console.log("======================'''''''''''''''''")
-            console.log(userId2)
             const status = await getFriendShipStatus(userId, userId2);
             console.log("Friendship status:", status);
             setFriendshipStatus(status);
@@ -63,7 +61,7 @@ export default function DetailUser({ user, userId }) {
 
     const renderButton = () => {
         if (isLoading) {
-            return <span>Đang tải...</span>; // Hiển thị thông báo đang tải
+            return <span>Đang tải...</span>;
         }
 
         switch (friendshipStatus) {
@@ -114,7 +112,7 @@ export default function DetailUser({ user, userId }) {
                     </button>
                 );
             default:
-                return <span>Đang tải...</span>; // Hiển thị khi chưa có trạng thái xác định
+                return <span>Đang tải...</span>;
         }
     };
 
