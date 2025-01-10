@@ -30,7 +30,6 @@ function FriendRequestList() {
 
   const handleConfirm = async (friendId) => {
     await acceptFriendship(friendId, userId);
-    // Cập nhật lại danh sách sau khi chấp nhận lời mời
     setListFriend((prevList) =>
         prevList.filter((friend) => friend.userId !== friendId)
     );
@@ -38,7 +37,6 @@ function FriendRequestList() {
 
   const handleDelete = async (friendId) => {
     await cancelFriendship(friendId, userId);
-    // Cập nhật lại danh sách sau khi xoá bạn
     setListFriend((prevList) =>
         prevList.filter((friend) => friend.userId !== friendId)
     );
@@ -46,7 +44,7 @@ function FriendRequestList() {
 
   const handleMore = async () => {
     if (hasMore) {
-      setPage((prevPage) => prevPage + 1); // Chuyển sang trang tiếp theo
+      setPage((prevPage) => prevPage + 1);
     }
   };
 
