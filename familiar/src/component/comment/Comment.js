@@ -5,6 +5,7 @@ import EmojiPicker from 'emoji-picker-react';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import SendIcon from '@mui/icons-material/Send';
 import CancelIcon from '@mui/icons-material/Cancel';
+import {Link} from "react-router-dom";
 
 const Comment = ({ comment, onReply, onEdit, onDelete, currentUserId }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -36,7 +37,22 @@ const Comment = ({ comment, onReply, onEdit, onDelete, currentUserId }) => {
 
   return (
     <Box sx={{ display: 'flex', mb: 2 }}>
-      <Avatar src={comment.userProfilePictureUrl} alt={`${comment.userFirstName} ${comment.userLastName}`} sx={{ mr: 2 }} />
+      <Link to={`/users/detail/${comment.userId}`}>
+        <Avatar
+            src={comment.userProfilePictureUrl}
+            alt={`${comment.userFirstName} ${comment.userLastName}`}
+            sx={{
+              mr: 2,
+              width: 40,
+              height: 40,
+              cursor: 'pointer',
+              '&:hover': {
+                opacity: 0.8,
+                transition: 'opacity 0.2s'
+              }
+            }}
+        />
+      </Link>
       <Box sx={{ flexGrow: 1 }}>
         <Paper elevation={0} sx={{
           p: 2,

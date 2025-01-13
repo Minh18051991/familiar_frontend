@@ -1,0 +1,56 @@
+.dashboardRow {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.dashboardRow > div {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+@media (min-width: 768px) {
+    .dashboardRow > div:first-child {
+        flex: 0 0 20%;
+        max-width: 20%;
+    }
+
+    .dashboardRow > div:nth-child(2) {
+        flex: 0 0 60%;
+        max-width: 60%;
+    }
+
+    .friendListContainer {
+        flex: 0 0 20%;
+        max-width: 20%;
+        height: 50vh;
+        position: fixed;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 1000;
+    }
+
+    .friendListCard {
+        height: 100%;
+        border-radius: 0;
+        border-left: 1px solid rgba(0,0,0,.125);
+        border-right: none;
+        border-top: none;
+        border-bottom: none;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .cardLabel {
+        padding: 10px;
+        background-color: #f8f9fa;
+        border-bottom: 1px solid rgba(0,0,0,.125);
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .cardContent {
+        flex-grow: 1;
+        overflow-y: auto;
+    }
+}
