@@ -7,11 +7,17 @@ import {toast} from "react-toastify";
 import {updatePassword} from "../../service/account/account";
 import styles from './UpdateAccountComponent.module.css';
 import OtpComponent from "../otp/OtpComponent";
+import {useDispatch, useSelector} from "react-redux";
+import {getUserById} from "../../service/user/user";
+import {logout} from "../../redux/login/AccountAction";
 
 export default function UpdateAccountComponent() {
     const {username} = useParams();
     const navigate = useNavigate();
     const [isShowModal, setIsShowModal] = useState(true);
+    const info = useSelector(state => state.user);
+    const accountRedux = info ? info.account : null;
+    const  dispatch = useDispatch();
 
     const initialValues = {
         newPassword: '',
@@ -30,19 +36,29 @@ export default function UpdateAccountComponent() {
             .required('Xác nhận mật khẩu là bắt buộc')
     });
 
-    const handleSubmit = async (values, { setSubmitting }) => {
-        const account = {password:values.newPassword, username};
-        // Gọi API để lấy thông tin người dùng
+    const handleSubmit = async (values, {setSubmitting}) => {
+        const account = {password: values.newPassword, username};
 
-        await updatePassword( account); // Gọi API để cập nhật thông tin người dùng
-        toast.success("Cập nhật thành công!");  // Hiển thị thông báo cập nhật thành công
-
+        await updatePassword(account);
+        toast.success("Cập nhật thành công!");
         setSubmitting(false);
-        navigate("/login")
 
+        if (accountRedux) {
+            const userData = await getUserById(accountRedux.userId);
+            localStorage.setItem('loginInfo', JSON.stringify({
+                username: username,
+                name: userData.firstName + " " + userData.lastName,
+                avatar: accountRedux.profilePictureUrl
+            }));
+        }
+
+
+        // Đăng xuất
+        dispatch(logout());
+
+        // Chuyển hướng đến trang login
+        navigate("/login");
     };
-
-
 
     return (
         <div className={styles.pageContainer}>
@@ -57,13 +73,17 @@ export default function UpdateAccountComponent() {
                     {({isSubmitting}) => (
                         <Form>
                             <div className={styles.formGroup}>
-                                <label htmlFor="newPassword" className={`form-label ${styles.formLabel} ${styles.requiredField}`}>Mật khẩu mới</label>
+                                <label htmlFor="newPassword"
+                                       className={`form-label ${styles.formLabel} ${styles.requiredField}`}>Mật khẩu
+                                    mới</label>
                                 <Field type="password" name="newPassword" className={styles.input}/>
                                 <ErrorMessage name="newPassword" component="div" className={styles.errorMessage}/>
                             </div>
 
                             <div className={styles.formGroup}>
-                                <label htmlFor="confirmPassword" className={`form-label ${styles.formLabel} ${styles.requiredField}`}>Xác nhận mật khẩu mới</label>
+                                <label htmlFor="confirmPassword"
+                                       className={`form-label ${styles.formLabel} ${styles.requiredField}`}>Xác nhận mật
+                                    khẩu mới</label>
                                 <Field type="password" name="confirmPassword" className={styles.input}/>
                                 <ErrorMessage name="confirmPassword" component="div" className={styles.errorMessage}/>
                             </div>
