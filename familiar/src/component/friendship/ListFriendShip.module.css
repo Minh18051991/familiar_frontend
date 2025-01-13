@@ -107,3 +107,18 @@
     justify-content: center;
   }
 }
+
+.mutualFriends {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  margin: 12px 0;
+}
+
+.mutualFriendAvatar {
+  width: 25px;
+  height: 25px;
+  object-fit: cover;  /* Đảm bảo ảnh không bị méo */
+}
+

@@ -33,12 +33,15 @@
 /* nút huỷ kết bạn, xoá bạn */
 
 .actionDeleteBtn {
-  background-color: #d3d5da;
-  font-weight: bold;
+  background-color: #ebf5ff;
+  font-weight: 500;
+  border: 0.5px solid black;
+  border-radius: 5px;
+  margin-left: 10px;
 }
 
 .actionDeleteBtn:hover {
-  background-color: #96c6f6;
+  background-color: #6c757d;
   color: #0b0b0b;
   border: none;
   padding: 10px 15px;
@@ -123,7 +126,7 @@
   background-color: #ffffff;
   margin-top: 10px;
   margin-left: 8px;
-  height: 85px;
+  height: 115px;
 }
 
 .cardBody {
