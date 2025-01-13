@@ -3,13 +3,16 @@ import styles from "../user/userDetail.module.css";
 import {
     acceptFriendship,
     cancelFriendship, deleteFriendship,
-    getFriendShipStatus,
+    getFriendShipStatus, mutualFriendList,
     sendFriendship
 } from "../../service/friendship/friendshipService";
+import MutualFriends from "../friendship/MutualFriends";
+import customStyles from "../friendship/ListFriendShip.module.css";
 
 export default function DetailUser({ user, userId }) {
     const [friendshipStatus, setFriendshipStatus] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [mutualFriends, setMutualFriends] = useState([]);
 
     const userId2 = user.userId;
 
@@ -53,7 +56,17 @@ export default function DetailUser({ user, userId }) {
         setFriendshipStatus('notFriend');
     };
 
+    const handleResendFriendRequest = async () => {
+        console.log("Resending friend request...");
+        await sendFriendship(userId, userId2);
+        setFriendshipStatus('pending');
+    };
+
     const renderButton = () => {
+        if (isLoading) {
+            return <span>Đang tải...</span>;
+        }
+
         switch (friendshipStatus) {
             case "friend":
                 return (
@@ -72,8 +85,7 @@ export default function DetailUser({ user, userId }) {
                             <button className="btn btn-primary" onClick={handleAcceptFriendRequest}>
                                 Chấp nhận
                             </button>
-                            <button className={`${styles.actionDeleteBtn} btn px-3`}
-                                    onClick={handleDeclineFriendRequest}>
+                            <button className={`${styles.actionDeleteBtn} btn px-3`} onClick={handleDeclineFriendRequest}>
                                 Xoá
                             </button>
                         </div>
@@ -82,9 +94,17 @@ export default function DetailUser({ user, userId }) {
             case "pending":
                 return (
                     <div>
-                        <div>Bạn đã gửi kết bạn đến {user.userFirstName} {user.userLastName}</div> <br/>
+                        <div>Bạn đã gửi lời mời kết bạn đến {user.userFirstName} {user.userLastName}</div> <br/>
                         <button className={`${styles.actionDeleteBtn} btn px-3`} onClick={handleCancelFriendRequest}>
                             Hủy kết bạn
+                        </button>
+                    </div>
+                );
+            case "deleted":
+                return (
+                    <div>
+                        <button className="btn btn-primary" onClick={handleResendFriendRequest}>
+                            Kết bạn
                         </button>
                     </div>
                 );
@@ -107,6 +127,19 @@ export default function DetailUser({ user, userId }) {
         const year = date.getFullYear();
         return `${day}/${month}/${year}`;
     }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const { data } = await mutualFriendList(userId, userId2, 0, 5);
+                setMutualFriends(data || []);
+            } catch (error) {
+                console.error("Error fetching mutual friends:", error);
+                setMutualFriends([]);
+            }
+        };
+        fetchData();
+    }, [userId, userId2]);
 
     return (
         <div className="col-12 col-md-4 order-md-1">
@@ -149,6 +182,13 @@ export default function DetailUser({ user, userId }) {
                             <span className="ms-2">{user.userAddress}</span>
                         </div>
                     </div>
+
+                    {
+                        userId !== user.userId ? <div className={customStyles.mutualFriends}>
+                            <MutualFriends mutualFriends={mutualFriends}/>
+                        </div> : ""
+                    }
+
                     {/* Render button */}
                     {userId !== userId2 && (
                         <div className="mt-3">{renderButton()}</div>

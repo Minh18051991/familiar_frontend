@@ -1,0 +1,165 @@
+.friendListCard {
+    max-width: 500px;
+    overflow-y:auto;
+    margin: 0 auto;
+}
+
+.scrollableCardBody {
+    max-height: 450px;
+    overflow-y: auto;
+}
+
+
+.friendList {
+    display: flex;
+    flex-direction: column;
+}
+
+.friendGrid {
+    display: grid;
+    gap: 10px;
+}
+
+.friendItem {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.friendItem:hover {
+    background-color: #f8f9fa;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
+
+.friendName {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.noFriends {
+    color: #6c757d;
+    font-style: italic;
+}
+
+.chatWindowsContainer {
+    position: fixed;
+   bottom: -175px;
+    right: 250px;
+    display: flex;
+    flex-direction: row-reverse;
+    z-index: 1000;
+}
+
+.chatWindowWrapper {
+    margin-left: 10px;
+}
+
+.chatWindow {
+    position: fixed;
+    width: 300px;
+    height: 400px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    cursor: move;
+    z-index: 1000;
+}
+.friendListCard {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.scrollableCardBody {
+    max-height: 450px;
+    overflow-y: auto;
+}
+
+.friendGrid {
+    display: flex;
+    flex-direction: column;
+}
+
+.friendItem {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.friendItem:hover {
+    background-color: #f0f2f5;
+}
+
+.friendName {
+    font-weight: 500;
+    color: #050505;
+}
+
+.latestMessage {
+    font-size: 0.8rem;
+    color: #65676B;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
+
+.noFriends {
+    color: #65676B;
+    font-style: italic;
+}
+
+
+.chatWindowWrapper {
+    margin-left: 10px;
+}
+
+.chatWindowHeader {
+    cursor: move;
+    background-color: #f8f9fa;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+}
+.friendInfo {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.friendName {
+    font-weight: bold;
+}
+
+.latestMessage {
+    font-size: 0.8em;
+    color: #666;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+}
+
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .friendListCard {
+        max-width: 100%;
+    }
+
+    .chatWindow {
+        width: 250px;
+        height: 350px;
+    }
+}

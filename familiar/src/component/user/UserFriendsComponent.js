@@ -19,11 +19,13 @@ function UserFriendsComponent() {
     const [hasMore, setHasMore] = useState(true);
     const [totalPages, setTotalPages] = useState(0);
 
+    // Khi id thay đổi, reset danh sách bạn bè và trang
     useEffect(() => {
         setFriendList([]);
         setPage(0);
     }, [id]);
 
+    // Lấy danh sách bạn bè gợi ý
     useEffect(() => {
         const fetchFriendships = async () => {
             const friendId = id;
@@ -57,20 +59,25 @@ function UserFriendsComponent() {
         fetchFriendships();
     }, [userId, id, page, size]);
 
+    // Kiểm tra trạng thái trang cuối
     useEffect(() => {
-        if (page >= totalPages - 1) {
-            setHasMore(false);
-        } else {
-            setHasMore(true);
-        }
+        setHasMore(page < totalPages - 1);
     }, [page, totalPages]);
 
+    // Xử lý chuyển sang trang tiếp theo
     const handleMore = () => {
-        if (page < totalPages - 1) {
+        if (hasMore) {
             setPage((prevPage) => prevPage + 1);
         }
     };
 
+    // Xử lý quay lại trang đầu
+    const handleGoToFirstPage = () => {
+        setPage(0);
+        setFriendList([]);
+    };
+
+    // Lấy thông tin người dùng
     useEffect(() => {
         const fetchUser = async () => {
             const user = await findUserById(id);
@@ -109,14 +116,23 @@ function UserFriendsComponent() {
                                             />
                                         ))}
                                     </div>
-                                    {hasMore && (
+                                    {totalPages > 1 && (
                                         <div className="text-center mt-3">
-                                            <button
-                                                className="btn btn-light"
-                                                onClick={handleMore}
-                                            >
-                                                Xem thêm
-                                            </button>
+                                            {hasMore ? (
+                                                <button
+                                                    className="btn btn-light"
+                                                    onClick={handleMore}
+                                                >
+                                                    Xem thêm
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    className="btn btn-light"
+                                                    onClick={handleGoToFirstPage}
+                                                >
+                                                    Trang đầu
+                                                </button>
+                                            )}
                                         </div>
                                     )}
                                 </div>
