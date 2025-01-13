@@ -25,7 +25,6 @@ export default function Friends({ friend, col, userId, setFriendList }) {
         }
     };
 
-
     function formatUserName(fullName) {
         const nameParts = fullName.trim().split(' ');
 
@@ -43,6 +42,7 @@ export default function Friends({ friend, col, userId, setFriendList }) {
 
         return formattedName;
     }
+
 
     return (
         <div className={`col-12 col-sm-6 col-md-${col} mb-3`} key={friend.userId}>  {/* key ở đây */}

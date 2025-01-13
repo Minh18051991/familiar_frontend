@@ -17,30 +17,22 @@ function FriendRequestHome() {
         const fetchData = async () => {
             const {data, totalPages} = await friendRequestList(userId, page, size);
             setListFriend(data);
-        }
-        fetchData()
+            setTotalPages(totalPages);
+        };
+        fetchData();
     }, [userId, page, size]);
 
-    const handleConfirm = (friendId) => {
-        const fetchData = async () => {
-            await acceptFriendship(friendId, userId);
-            const list = await friendRequestList(userId);
-            setListFriend(list);
-        }
-        fetchData();
-    }
+    const handleConfirm = async (friendId) => {
+        await acceptFriendship(friendId, userId);
+        setListFriend((prevList) => prevList.filter((friend) => friend.userId !== friendId));
+    };
 
-    const handleDelete = (friendId) => {
-        const fetchData = async () => {
-            await cancelFriendship(friendId, userId);
-            const list = await friendRequestList(userId);
-            setListFriend(list)
-        }
-        fetchData();
-    }
+    const handleDelete = async (friendId) => {
+        await cancelFriendship(friendId, userId);
+        setListFriend((prevList) => prevList.filter((friend) => friend.userId !== friendId));
+    };
 
     useEffect(() => {
-        // Kiểm tra nếu page đạt totalPages - 1 thì cập nhật lại hasMore
         if (page >= totalPages - 1) {
             setHasMore(false);
         } else {
@@ -48,19 +40,13 @@ function FriendRequestHome() {
         }
     }, [page, totalPages]);
 
-    const handleMore = () => {
-        if (page < totalPages - 1) {
-            setPage(prevPage => prevPage + 1);
-        }
-    }
     return (
         <>
             <h5 className={`${styles.suggestedFriendsTitle} mb-3 text-primary text-center`} style={{marginTop: "10px"}}>Lời mời kết bạn</h5>
             {listFriend && listFriend.length > 0 ? (
                 <div>
-
                     {listFriend.map((user) => (
-                        <div className={`${styles.card} shadow-sm border-light hoverShadow`}>
+                        <div key={user.userId} className={`${styles.cardFriendRequestHome} shadow-sm border-light hoverShadow`}>
                             <div className={`${styles.cardBodyHome} text-center pb-2 pt-0`}>
                                 <div className="d-flex m-0">
                                     <img
@@ -69,7 +55,7 @@ function FriendRequestHome() {
                                         className={`${styles.friendAvatarHome}`}
                                     />
                                     <Link to={`/users/detail/${user.userId}`} style={{textDecoration: 'none'}}>
-                                        <p className="mx-2" style={{color: 'black'}}>
+                                        <p className="mx-2" style={{color: 'black', fontWeight: 400}}>
                                             {user?.userFirstName} {user?.userLastName}
                                         </p>
                                     </Link>
@@ -86,10 +72,8 @@ function FriendRequestHome() {
                                         Xóa
                                     </button>
                                 </div>
-
                             </div>
                         </div>
-
                     ))}
                     <div className="d-flex justify-content-end mt-1">
                         <Link className="" to={'/friendships/request'} style={{textDecoration: 'none'}}>
@@ -97,7 +81,6 @@ function FriendRequestHome() {
                         </Link>
                     </div>
                 </div>
-
             ) : (
                 <div className="text-center mt-5">
                     <h5>Không có lời mời kết bạn nào.</h5>
@@ -105,7 +88,6 @@ function FriendRequestHome() {
                 </div>
             )}
         </>
-
     );
 }
 
