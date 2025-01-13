@@ -53,7 +53,17 @@ export default function DetailUser({ user, userId }) {
         setFriendshipStatus('notFriend');
     };
 
+    const handleResendFriendRequest = async () => {
+        console.log("Resending friend request...");
+        await sendFriendship(userId, userId2);
+        setFriendshipStatus('pending');
+    };
+
     const renderButton = () => {
+        if (isLoading) {
+            return <span>Đang tải...</span>;
+        }
+
         switch (friendshipStatus) {
             case "friend":
                 return (
@@ -72,9 +82,8 @@ export default function DetailUser({ user, userId }) {
                             <button className="btn btn-primary" onClick={handleAcceptFriendRequest}>
                                 Chấp nhận
                             </button>
-                            <button className={`${styles.actionDeleteBtn} btn px-3`}
-                                    onClick={handleDeclineFriendRequest}>
-                                Xoá
+                            <button className={`${styles.actionDeleteBtn} btn px-3`} onClick={handleDeclineFriendRequest}>
+                                Hủy
                             </button>
                         </div>
                     </div>
@@ -82,9 +91,17 @@ export default function DetailUser({ user, userId }) {
             case "pending":
                 return (
                     <div>
-                        <div>Bạn đã gửi kết bạn đến {user.userFirstName} {user.userLastName}</div> <br/>
+                        <div>Bạn đã gửi lời mời kết bạn đến {user.userFirstName} {user.userLastName}</div> <br/>
                         <button className={`${styles.actionDeleteBtn} btn px-3`} onClick={handleCancelFriendRequest}>
                             Hủy kết bạn
+                        </button>
+                    </div>
+                );
+            case "deleted":
+                return (
+                    <div>
+                        <button className="btn btn-primary" onClick={handleResendFriendRequest}>
+                            Kết bạn
                         </button>
                     </div>
                 );

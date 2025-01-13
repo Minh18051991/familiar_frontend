@@ -1,155 +1,153 @@
-
-
 /* 1. Tinh chỉnh ảnh người dùng và bạn bè */
-.userAvatar, .friendAvatar {
-    border-radius: 50%;
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+.userAvatar,
+.friendAvatar {
+  border-radius: 50%;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-.userAvatar:hover, .friendAvatar:hover {
-    transform: scale(1.1);
-    box-shadow: 0px 4px 15px rgba(0, 123, 255, 0.3);
+.userAvatar:hover,
+.friendAvatar:hover {
+  transform: scale(1.1);
+  box-shadow: 0px 4px 15px rgba(0, 123, 255, 0.3);
 }
 
 /* 2. Hiệu ứng Hover cho Card */
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.1);
 }
 
 .hoverShadow:hover {
-    box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.15);
 }
 
 /* 3. Nút Kết bạn và Xem chi tiết */
 .actionBtn {
-    transition: background-color 0.3s ease, transform 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .actionBtn:hover {
-    background-color: #0069d9;
-    transform: scale(1.05);
+  background-color: #0069d9;
+  transform: scale(1.05);
 }
 
 /* nút huỷ kết bạn, xoá bạn */
 
 .actionDeleteBtn {
-    background-color: #d3d5da;
-    font-weight: bold;
+  background-color: #d3d5da;
+  font-weight: bold;
 }
 
 .actionDeleteBtn:hover {
-    background-color: #96c6f6;
-    color: #0b0b0b;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: transform 0.2s, background-color 0.2s;
-    font-weight: bold;
+  background-color: #96c6f6;
+  color: #0b0b0b;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+  font-weight: bold;
 }
-
 
 /* 4. Cải tiến tiêu đề và thông tin người dùng */
 .userName {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: #343a40;
-    text-transform: capitalize;
-    letter-spacing: 1px;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #343a40;
+  text-transform: capitalize;
+  letter-spacing: 1px;
 }
 
 .userOccupation {
-    font-size: 1.1rem;
-    color: #007bff;
-    font-weight: 500;
-    margin-top: 10px;
+  font-size: 1.1rem;
+  color: #007bff;
+  font-weight: 500;
+  margin-top: 10px;
 }
 
 .userInfo {
-    font-size: 1.1rem;
-    color: #6c757d;
+  font-size: 1.1rem;
+  color: #6c757d;
 }
 
 .userInfo span {
-    font-weight: 600;
-    color: #495057;
+  font-weight: 600;
+  color: #495057;
 }
 
 /* 5. Tăng cường tiêu đề "Có thể bạn biết" */
 .suggestedFriendsTitle {
-    font-size: 1.4rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    color: #007bff;
+  font-size: 1.4rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  color: #007bff;
 }
 
 /* 6. Định dạng card bạn bè */
 .card-body {
-    padding: 1.5rem;
-    border-radius: 0px;
-
+  padding: 1.5rem;
+  border-radius: 0px;
 }
 
-
 .card-body-Home {
-    padding: 1.5rem;
-    border-radius: 5px;
+  padding: 1.5rem;
+  border-radius: 5px;
 }
 
 .card-body img {
-    border-radius: 50%;
+  border-radius: 50%;
 }
 
 .card-body .card-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #343a40;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #343a40;
 }
 
 .card-body p {
-    font-size: 1rem;
-    color: #6c757d;
+  font-size: 1rem;
+  color: #6c757d;
 }
 
 /* 7. Cải tiến khoảng cách giữa các card bạn bè */
 .row {
-    gap: 20px;
+  gap: 20px;
 }
 
 /* 8. Màu nền và bo góc cho các thẻ */
 .card {
-    border-radius: 15px;
+  border-radius: 15px;
+}
+
+.cardFriendRequestHome {
+  border-radius: 15px;
+  background-color: #ffffff;
+  margin-top: 10px;
+  margin-left: 8px;
+  height: 85px;
 }
 
 .cardBody {
-    padding: 20px;
+  padding: 20px;
 }
 
 .friendAvatar {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
 }
 .friendAvatarHome {
-    width: 35px;
-    height: 35px;
-    object-fit: cover;
-    border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  object-fit: cover;
+  border-radius: 50%;
 }
 .btnAvatarHome {
-    height: 25px; /* Đặt chiều cao nút */
-    text-align: center; /* Căn chỉnh nội dung giữa theo chiều ngang */
-    display: inline-flex; /* Sử dụng inline-flex để chiều rộng tự động thay đổi */
-    justify-content: center; /* Căn giữa nội dung theo chiều ngang */
-    align-items: center; /* Căn giữa nội dung theo chiều dọc */
-    white-space: nowrap; /* Ngăn nội dung xuống dòng */
-    padding: 0 0; /* Thêm padding để nút có khoảng cách từ nội dung */
+  height: 25px; /* Đặt chiều cao nút */
+  text-align: center; /* Căn chỉnh nội dung giữa theo chiều ngang */
+  display: inline-flex; /* Sử dụng inline-flex để chiều rộng tự động thay đổi */
+  justify-content: center; /* Căn giữa nội dung theo chiều ngang */
+  align-items: center; /* Căn giữa nội dung theo chiều dọc */
+  white-space: nowrap; /* Ngăn nội dung xuống dòng */
+  padding: 0 0; /* Thêm padding để nút có khoảng cách từ nội dung */
 }
-
-
-
-
-
-

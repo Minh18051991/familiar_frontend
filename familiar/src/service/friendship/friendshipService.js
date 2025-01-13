@@ -61,16 +61,6 @@ export async function cancelFriendship(userId1, userId2) {
   }
 }
 
-export async function suggestedFriendsList(userId1, userId2) {
-  const token = localStorage.getItem('token');
-  try {
-    const response = await axios.get(`http://localhost:8080/api/friendships/suggestions/${userId1}/${userId2}`,{headers: {Authorization: `Bearer ${token}`}});
-    return response.data;
-  } catch (error) {
-    console.log("Loi:" + error.message);
-  }
-}
-
 export async function suggestedFriendsListPage(userId1, userId2, page, size) {
   const token = localStorage.getItem('token');
   try {
