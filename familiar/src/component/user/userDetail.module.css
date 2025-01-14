@@ -33,7 +33,7 @@
 /* nút huỷ kết bạn, xoá bạn */
 
 .actionDeleteBtn {
-  background-color: #ebf5ff;
+  background-color:#f3f9ff;
   font-weight: 500;
   border: 0.5px solid black;
   border-radius: 5px;
@@ -41,14 +41,13 @@
 }
 
 .actionDeleteBtn:hover {
-  background-color: #6c757d;
+  background-color: #ebf5ff ;
   color: #0b0b0b;
-  border: none;
+  border: 0.5px solid black;
   padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
-  transition: transform 0.2s, background-color 0.2s;
-  font-weight: bold;
+  font-weight: 500;
 }
 
 /* 4. Cải tiến tiêu đề và thông tin người dùng */

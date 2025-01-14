@@ -40,7 +40,7 @@ function ListFriendShipComponent() {
         <>
             <div className={styles.wrapper}>
                 <div className="d-flex justify-content-center align-items-center mb-4">
-                    <h3 className={`${styles.customTitle} title mb-0 text-center`}>Danh sách bạn bè</h3>
+                    <h3 className={`${styles.customTitle} title mb-0 text-center`}>DANH SÁCH BẠN BÈ</h3>
                 </div>
 
                 <form className={styles.searchContainer}>

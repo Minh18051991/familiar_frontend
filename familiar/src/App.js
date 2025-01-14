@@ -17,6 +17,7 @@ import UserFriendsComponent from "./component/user/UserFriendsComponent";
 import FriendRequestList from "./component/friendship/FriendRequestList";
 import SearchResultsPage from "./pages/SearchResultsPage";
 import ForgerPasswordModal from "./component/forgetPassword/ForgerPasswordModal";
+import MutualFriendList from "./component/friendship/MutualFriendList";
 
 function App() {
 
@@ -49,6 +50,7 @@ function App() {
                             path="/friendships/request"
                             element={<FriendRequestList/>}
                         ></Route>
+                        <Route path={'/friends/mutual-list/:id'} element={<MutualFriendList/>}/>
                     </Route>
                 </Routes>
             </main>

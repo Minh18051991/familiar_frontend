@@ -56,7 +56,7 @@ export function FriendItem({userData, handleIsLoading, updateUsers}) {
         </p>
 
         <div className={customStyles.mutualFriends}>
-          <MutualFriends mutualFriends={mutualFriends}/>
+          <MutualFriends mutualFriends={mutualFriends} friendId={userData.userId}/>
         </div>
 
         <button onClick={() => (handleShowModal(userData))} className={styles.actionBtn}>
