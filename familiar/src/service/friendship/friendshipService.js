@@ -2,6 +2,7 @@ import axios from "axios";
 
 export async function getFriendShips(userId) {
   const token = localStorage.getItem('token');
+  console.log("token: ", token)
   const response = await axios.get(
     `http://localhost:8080/api/friendships/list/${userId}`,{headers: {Authorization: `Bearer ${token}`}}
   );
