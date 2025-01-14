@@ -1,0 +1,95 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.title {
+    font-size: 2.5em;
+    margin: 0 0 20px 0;
+}
+
+.banner {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.intro {
+    font-size: 1.1em;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.section {
+    margin-bottom: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.subtitle {
+    background-color: #f5f5f5;
+    padding: 15px;
+    margin: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+.subtitle:hover {
+    background-color: #e0e0e0;
+}
+
+.icon {
+    margin-right: 10px;
+}
+
+.text {
+    padding: 15px;
+    line-height: 1.6;
+}
+
+.text ul {
+    padding-left: 20px;
+}
+
+.text h3 {
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.conclusion {
+    font-style: italic;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.contactInfo {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 30px;
+    text-align: center;
+}
+
+.contactInfo h3 {
+    margin-top: 0;
+}
+
+.backToTop:hover {
+    background-color: #1a5fcc;
+}

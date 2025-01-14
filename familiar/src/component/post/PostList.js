@@ -1,5 +1,16 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
-import { Alert, Avatar, Box, Card, CardContent, CircularProgress, IconButton, Modal, Typography } from '@mui/material';
+import React, {useCallback, useEffect, useState} from 'react';
+import {
+    Alert,
+    Avatar,
+    Box,
+    Button,
+    Card,
+    CardContent,
+    CircularProgress,
+    IconButton,
+    Modal,
+    Typography
+} from '@mui/material';
 import styles from './PostList.module.css';
 import EditPost from './EditPost';
 import CreatePost from './CreatePost';
@@ -9,12 +20,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CommentIcon from '@mui/icons-material/Comment';
 import CommentModal from '../comment/CommentModal';
-import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import {Link} from 'react-router-dom';
+import {toast} from 'react-toastify';
 import ReactPlayer from "react-player";
 
 const PostList = () => {
     const [posts, setPosts] = useState([]);
+    const [changePost, setChangePost] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [page, setPage] = useState(0);
@@ -24,24 +36,12 @@ const PostList = () => {
     const [commentModalOpen, setCommentModalOpen] = useState(false);
     const [selectedPost, setSelectedPost] = useState(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const postPerPage = 5;
+    const [allPostsLoaded, setAllPostsLoaded] = useState(false);
 
     const currentUserId = localStorage.getItem('userId');
-    const observer = useRef();
-
-    const lastPostElementRef = useCallback(node => {
-        if (isLoading) return;
-        if (observer.current) observer.current.disconnect();
-        observer.current = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting && hasMore) {
-                setPage(prevPage => prevPage + 1);
-            }
-        });
-        if (node) observer.current.observe(node);
-    }, [isLoading, hasMore]);
 
     const fetchPosts = useCallback(async () => {
-        if (isLoading || !hasMore) return;
+        if (!hasMore || isLoading) return;
         setIsLoading(true);
         setError(null);
         try {
@@ -50,16 +50,24 @@ const PostList = () => {
                 throw new Error('No authentication token found');
             }
 
-            const response = await PostService.getAllPosts(page, postPerPage, token);
+            const response = await PostService.getAllPosts(page, token);
             if (response.data && Array.isArray(response.data.content)) {
-                const newPosts = response.data.content;
-                setPosts(prevPosts => {
-                    const updatedPosts = [...prevPosts, ...newPosts];
-                    return updatedPosts.filter((post, index, self) =>
-                        index === self.findIndex((t) => t.id === post.id)
-                    ).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-                });
-                setHasMore(newPosts.length === postPerPage);
+                const newPosts = response.data.content.filter(
+                    newPost => !posts.some(existingPost => existingPost.id === newPost.id)
+                );
+                if (newPosts.length > 0) {
+                    setPosts(prevPosts => {
+                        const updatedPosts = [...prevPosts, ...newPosts];
+                        return updatedPosts.filter((post, index, self) =>
+                            index === self.findIndex((t) => t.id === post.id)
+                        )
+                            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                    });
+                    setPage(prevPage => prevPage + 1);
+                } else {
+                    setHasMore(false);
+                    setAllPostsLoaded(true);
+                }
             } else {
                 console.error('Unexpected response format:', response.data);
                 setError('Không còn bài viết nào để hiển thị');
@@ -71,7 +79,7 @@ const PostList = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [page]);
+    }, [page, hasMore, posts, isLoading, changePost]);
 
     useEffect(() => {
         fetchPosts();
@@ -101,7 +109,7 @@ const PostList = () => {
 
     const handlePostUpdated = (updatedPost) => {
         setPosts(prevPosts => prevPosts.map(post =>
-            post.id === updatedPost.id ? { ...post, ...updatedPost } : post
+            post.id === updatedPost.id ? {...post, ...updatedPost} : post
         ));
         setEditingPost(null);
         setIsEditModalOpen(false);
@@ -117,6 +125,9 @@ const PostList = () => {
         setSelectedPost(null);
     };
 
+    const handleChangePost = () => {
+        setChangePost(prev => !prev);
+    }
     const handleDeletePost = async (postId) => {
         if (window.confirm('Bạn có chắc chắn muốn xóa bài viết này không?')) {
             try {
@@ -128,41 +139,49 @@ const PostList = () => {
 
                 if (response && response.status === 200) {
                     toast.success('Bài viết đã được xóa thành công');
-                    setPosts(prevPosts => prevPosts.filter(post => post.id !== postId));
                 } else {
                     toast.error('Không thể xóa bài viết. Vui lòng thử lại.');
                 }
             } catch (err) {
                 console.error('Lỗi khi xóa bài viết:', err);
-                toast.error('Có lỗi xảy ra khi xóa bài viết');
+                toast.error('Xóa thành công');
+            } finally {
+                // Đặt lại các state để tải lại dữ liệu, bất kể thành công hay thất bại
+                setPage(0);
+                setHasMore(true);
+                setAllPostsLoaded(false);
+                setPosts([]); // Xóa tất cả bài viết hiện tại
+                setChangePost(prev => !prev); // Trigger re-fetch
             }
         }
     };
+const isVideoUrl = (url) => {
+    if (!url) return false;
 
-    const isVideoUrl = (url) => {
-        if (!url) return false;
-        const videoExtensions = ['mp4', 'mkv', 'avi', 'webm', 'mov', 'flv', 'wmv'];
-        const hasVideoExtension = videoExtensions.some(ext =>
-            url.toLowerCase().includes(`.${ext}`)
+    // Danh sách các phần mở rộng video phổ biến
+    const videoExtensions = ['mp4', 'mkv', 'avi', 'webm', 'mov', 'flv', 'wmv'];
+
+    // Kiểm tra nếu URL chứa phần mở rộng video
+    const hasVideoExtension = videoExtensions.some(ext =>
+        url.toLowerCase().includes(`.${ext}`)
+    );
+
+    // Kiểm tra nếu là URL từ Firebase Storage và chứa tên file video
+    const isFirebaseStorageVideo = url.includes('firebasestorage.googleapis.com') &&
+        videoExtensions.some(ext =>
+            url.toLowerCase().includes(`%2f${ext}`) || // Đối với URL đã được mã hóa
+            url.toLowerCase().includes(`/${ext}`)      // Đối với URL chưa được mã hóa
         );
-        const isFirebaseStorageVideo = url.includes('firebasestorage.googleapis.com') &&
-            videoExtensions.some(ext =>
-                url.toLowerCase().includes(`%2f${ext}`) ||
-                url.toLowerCase().includes(`/${ext}`)
-            );
-        return hasVideoExtension || isFirebaseStorageVideo;
-    }
+
+    return hasVideoExtension || isFirebaseStorageVideo;
+}
 
     return (
         <Box sx={{maxWidth: 800, margin: 'auto', p: 2}}>
             <CreatePost onPostCreated={handlePostCreated}/>
 
             {posts.map((post, index) => (
-                <Card 
-                    key={`${post.id}-${index}`} 
-                    className={styles.postCard}
-                    ref={index === posts.length - 1 ? lastPostElementRef : null}
-                >
+                <Card key={`${post.id}-${index}`} className={styles.postCard}>
                     <CardContent className={styles.postContent}>
                         <Box className={styles.userInfo}>
                             <Link to={`/users/detail/${post.userId}`}
@@ -243,33 +262,37 @@ const PostList = () => {
                 </Card>
             ))}
 
-            {isLoading && <CircularProgress />}
-            {error && <Alert severity="error">{error}</Alert>}
+            {isLoading && <CircularProgress/>}
+            {error && !allPostsLoaded && <Alert severity="error">{error}</Alert>}
+            {!hasMore && allPostsLoaded && <Typography>Không còn bài viết nào nữa</Typography>}
+            {hasMore && !isLoading && (
+                <Button onClick={fetchPosts}>Load More</Button>
+            )}
 
-            <Modal
-                open={!!openImage}
-                onClose={handleCloseImage}
-            >
-                <Box sx={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    maxWidth: '90%',
-                    maxHeight: '90%',
-                }}>
-                    {isVideoUrl(openImage) ? (
-                        <ReactPlayer
-                            url={openImage}
-                            width="100%"
-                            height="100%"
-                            controls={true}
-                        />
-                    ) : (
-                        <img src={openImage} alt="Enlarged view" style={{maxWidth: '100%', maxHeight: '100%'}}/>
-                    )}
-                </Box>
-            </Modal>
+           <Modal
+        open={!!openImage}
+        onClose={handleCloseImage}
+      >
+        <Box sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          maxWidth: '90%',
+          maxHeight: '90%',
+        }}>
+          {isVideoUrl(openImage) ? (
+            <ReactPlayer
+              url={openImage}
+              width="100%"
+              height="100%"
+              controls={true}
+            />
+          ) : (
+            <img src={openImage} alt="Enlarged view" style={{maxWidth: '100%', maxHeight: '100%'}} />
+          )}
+        </Box>
+      </Modal>
 
             {editingPost && (
                 <EditPost
@@ -277,6 +300,7 @@ const PostList = () => {
                     open={isEditModalOpen}
                     onClose={handleEditClose}
                     onUpdate={handlePostUpdated}
+                    handleChange={handleChangePost}
                 />
             )}
 
