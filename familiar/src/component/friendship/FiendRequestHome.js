@@ -47,7 +47,7 @@ function FriendRequestHome() {
                     {listFriend.map((user) => (
                         <UserItemHome user={user} setListFriend={setListFriend}/>
                     ))}
-                    <div className="" style={{marginLeft: "130px", marginTop: "7px"}}>
+                    <div className="" style={{marginLeft: "125px", marginTop: "7px"}}>
                         <Link className="" to={'/friendships/request'} style={{textDecoration: 'none'}}>
                             Xem tất cả({totalElements})
                         </Link>
