@@ -29,20 +29,28 @@ export function login(loginInfo) {
     }
 }
 
+export function updateAvatar(newAvatarUrl) {
+    return(dispatch) => {
+        dispatch({
+            type: 'UPDATE_AVATAR',
+            payload: newAvatarUrl
+        })
+
+    }
+}
+
 export function logout() {
     return (dispatch) => {
         // Xóa token từ localStorage
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
+        localStorage.removeItem('resetPasswordToken');
+        localStorage.removeItem('usernameAccount');
+        localStorage.removeItem('usernname');
+
         purgeStore()
 
         dispatch({type: 'LOGOUT'});
     };
 }
 
-export function updateAvatar(newAvatarUrl) {
-    return {
-        type: 'UPDATE_AVATAR',
-        payload: newAvatarUrl
-    }
-}

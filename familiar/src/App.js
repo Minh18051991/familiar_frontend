@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import styles from './App.module.css';
 import HeaderComponent from "./component/header/HeaderComponent";
 import {Route, Routes} from "react-router-dom";
@@ -9,13 +9,18 @@ import RegisterComponent from "./component/register/RegisterComponent";
 import {ToastContainer} from "react-toastify";
 import DetailComponent from "./component/user/DetailComponent";
 import PrivateRoute from "./component/login/PrivateRoute";
-import FooterComponent from "./component/footer/FooterComponent";
 import UpdateAccountComponent from "./component/account/UpdateAccountComponent";
 import DashboardComponent from "./component/dashboard/DashboardComponent";
 import ListFriendShipComponent from "./component/friendship/list";
 import UserFriendsComponent from "./component/user/UserFriendsComponent";
 import FriendRequestList from "./component/friendship/FriendRequestList";
 import SearchResultsPage from "./pages/SearchResultsPage";
+import ForgerPasswordModal from "./component/forgetPassword/ForgerPasswordModal";
+import TermsOfService from "./component/termsOfService/TermsOfService";
+import PrivacyPolicy from "./component/privacyPolicy/PrivacyPolicy";
+import AboutUs from "./component/aboutUs/AboutUs";
+import MutualFriendList from "./component/friendship/MutualFriendList";
+
 
 function App() {
 
@@ -26,12 +31,18 @@ function App() {
             <main className={styles.mainContent}>
                 <Routes>
                     <Route path="/search" element={<SearchResultsPage />} />
+                    <Route path="/about" element={<AboutUs />} />
+                    <Route path="/terms" element={<TermsOfService />} />
+                    <Route path="/privacy" element={<PrivacyPolicy />} />
                     <Route path={'/register'} element={<RegisterComponent/>}/>
                     <Route path={'/login'} element={<LoginComponent/>}/>
+                    <Route path={'/forget-password'} element={<ForgerPasswordModal/>}/>
+                    <Route path={'/account/change-password/:username'} element={<UpdateAccountComponent/>}/>
+
                     <Route path="/" element={<PrivateRoute/>}>
                         <Route index element={<DashboardComponent/>}/>
                         <Route path={'/user/detail/:id'} element={<DetailComponent/>}/>
-                        <Route path={'/account/change-password/:username'} element={<UpdateAccountComponent/>}/>
+
                         {/* Thêm các route khác cần bảo vệ ở đây */}
                         <Route
                             path="/friendships-list"
@@ -45,10 +56,16 @@ function App() {
                             path="/friendships/request"
                             element={<FriendRequestList/>}
                         ></Route>
+
+                        <Route
+                            path={`/friends/mutual-list/:id`}
+                            element={<MutualFriendList/>}
+                        ></Route>
+
                     </Route>
                 </Routes>
             </main>
-            <FooterComponent/>
+            {/*<FooterComponent/>*/}
         </div>
     );
 }

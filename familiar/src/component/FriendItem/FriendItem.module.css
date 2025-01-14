@@ -36,7 +36,7 @@
 
 .userName:hover {
   color: #000;
-  text-decoration: underline;
+  text-decoration: none;
 }
 .actionBtn {
   height: 36px;

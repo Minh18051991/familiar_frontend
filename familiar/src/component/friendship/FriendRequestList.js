@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {
-  acceptFriendship,
-  cancelFriendship,
   friendRequestList,
 } from "../../service/friendship/friendshipService";
 import styles from "../user/userDetail.module.css";
 import customStyles from "./ListFriendShip.module.css";
-import { Link } from "react-router-dom";
+import UserItem from "./UserItem";
 
 function FriendRequestList() {
   const [listFriend, setListFriend] = useState([]);
@@ -28,20 +26,6 @@ function FriendRequestList() {
     fetchData();
   }, [userId, page, size]);
 
-  const handleConfirm = async (friendId) => {
-    await acceptFriendship(friendId, userId);
-    setListFriend((prevList) =>
-        prevList.filter((friend) => friend.userId !== friendId)
-    );
-  };
-
-  const handleDelete = async (friendId) => {
-    await cancelFriendship(friendId, userId);
-    setListFriend((prevList) =>
-        prevList.filter((friend) => friend.userId !== friendId)
-    );
-  };
-
   const handleMore = async () => {
     if (hasMore) {
       setPage((prevPage) => prevPage + 1);
@@ -58,41 +42,9 @@ function FriendRequestList() {
         </h5>
         <div className="container">
           {listFriend && listFriend.length > 0 ? (
-              <div className={customStyles.listFriendContainer}>
+              <div className={`${customStyles.listFriendContainer} d-flex justify-content-center`}>
                 {listFriend.map((user) => (
-                    <div
-                        key={user.userId}
-                        className={`${customStyles.requestItem} shadow-sm border-light hoverShadow`}
-                    >
-                      <div className={`${styles.cardBody} text-center`}>
-                        <div className={customStyles.topContent}>
-                          <img
-                              src={user?.userProfilePictureUrl}
-                              alt="Friend Avatar"
-                              className={`${styles.friendAvatar} mb-3`}
-                          />
-                          <Link to={`/users/detail/${user.userId}`} style={{ textDecoration: "none" }}>
-                            <p className="mx-2" style={{ color: "black", fontWeight: 500 }}>
-                              {user?.userFirstName} {user?.userLastName}
-                            </p>
-                          </Link>
-                        </div>
-                        <div className="d-flex justify-content-center mt-3">
-                          <button
-                              className="btn btn-primary btn-sm me-2 px-4"
-                              onClick={() => handleConfirm(user.userId)}
-                          >
-                            Chấp nhận
-                          </button>
-                          <button
-                              className="btn btn-outline-secondary btn-sm px-4"
-                              onClick={() => handleDelete(user.userId)}
-                          >
-                            Xóa
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+                    <UserItem user={user} setListFriend={setListFriend}/>
                 ))}
               </div>
           ) : (

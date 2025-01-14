@@ -41,12 +41,18 @@ export async function checkUsernameExists(username) {
 
 
 export async function updatePassword(account) {
-    const token = localStorage.getItem('token');
-    console.log("------account-------", account)
     try {
+        let token = '';
+        if (localStorage.getItem('token')) {
+            token = localStorage.getItem('token');
+
+        }else {
+            token = localStorage.getItem('resetPasswordToken');
+        }
         await axios.post('http://localhost:8080/api/account/change-password', account,{headers: { Authorization: `Bearer ${token}` }  });
         return true; // Trả về dữ liệu từ phản hồi
     } catch (error) {
         return false
     }
 }
+

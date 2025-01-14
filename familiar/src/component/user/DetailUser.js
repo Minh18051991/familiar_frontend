@@ -3,13 +3,16 @@ import styles from "../user/userDetail.module.css";
 import {
     acceptFriendship,
     cancelFriendship, deleteFriendship,
-    getFriendShipStatus,
+    getFriendShipStatus, mutualFriendList,
     sendFriendship
 } from "../../service/friendship/friendshipService";
+import MutualFriends from "../friendship/MutualFriends";
+import customStyles from "../friendship/ListFriendShip.module.css";
 
 export default function DetailUser({ user, userId }) {
     const [friendshipStatus, setFriendshipStatus] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [mutualFriends, setMutualFriends] = useState([]);
 
     const userId2 = user.userId;
 
@@ -83,7 +86,7 @@ export default function DetailUser({ user, userId }) {
                                 Chấp nhận
                             </button>
                             <button className={`${styles.actionDeleteBtn} btn px-3`} onClick={handleDeclineFriendRequest}>
-                                Hủy
+                                Xoá
                             </button>
                         </div>
                     </div>
@@ -124,6 +127,19 @@ export default function DetailUser({ user, userId }) {
         const year = date.getFullYear();
         return `${day}/${month}/${year}`;
     }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const { data } = await mutualFriendList(userId, userId2, 0, 5);
+                setMutualFriends(data || []);
+            } catch (error) {
+                console.error("Error fetching mutual friends:", error);
+                setMutualFriends([]);
+            }
+        };
+        fetchData();
+    }, [userId, userId2]);
 
     return (
         <div className="col-12 col-md-4 order-md-1">
@@ -166,6 +182,13 @@ export default function DetailUser({ user, userId }) {
                             <span className="ms-2">{user.userAddress}</span>
                         </div>
                     </div>
+
+                    {
+                        userId !== user.userId ? <div className={customStyles.mutualFriends}>
+                            <MutualFriends mutualFriends={mutualFriends} friendId={user.userId}/>
+                        </div> : ""
+                    }
+
                     {/* Render button */}
                     {userId !== userId2 && (
                         <div className="mt-3">{renderButton()}</div>
