@@ -74,7 +74,7 @@ const Comment = ({ comment, onReply, onEdit, onDelete, currentUserId }) => {
               <IconButton onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
                 <InsertEmoticonIcon />
               </IconButton>
-              <Button onClick={handleEdit} variant="contained" size="small" sx={{ mr: 1 }}>Save</Button>
+              <Button onClick={handleEdit} variant="contained" size="small" sx={{ mr: 1 }}>lưu</Button>
               <Button onClick={() => setIsEditing(false)} variant="outlined" size="small">Cancel</Button>
             </Box>
           ) : (
