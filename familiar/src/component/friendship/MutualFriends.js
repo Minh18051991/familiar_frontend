@@ -2,7 +2,11 @@ import React from "react";
 
 export default function MutualFriends({mutualFriends}) {
     if (!Array.isArray(mutualFriends) || mutualFriends.length === 0) {
-        return null; // Không hiển thị gì nếu không có bạn chung
+        return <div>
+            <div className="d-flex" style={{fontSize: "12px", color: "#6C757D"}}>
+               Chưa có bạn chung
+            </div>
+        </div>;
     }
 
     return (
