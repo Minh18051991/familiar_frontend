@@ -11,6 +11,7 @@ import styles from "./RegisterComponent.module.css";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import FooterComponent from "../footer/FooterComponent";
 
 export default function RegisterComponent() {
 
@@ -161,164 +162,176 @@ export default function RegisterComponent() {
     }
 
     return (
+        <>
+            <div className={`container ${styles.registerContainer}`}>
+                <div className="row justify-content-center">
+                    <div className="col-md-8">
+                        <div className={`card ${styles.registerCard}`}>
+                            <div className="card-body">
+                                <h2 className={`card-title text-center ${styles.registerTitle}`}>ĐĂNG KÝ TÀI KHOẢN</h2>
+                                <p className={styles.requiredFieldNote}>Các ô có dấu * là bắt buộc</p>
+                                <Formik
+                                    initialValues={initialValues}
+                                    validationSchema={validationSchema}
+                                    onSubmit={handleOnSubmit}
+                                    validateOnChange={true}
+                                    validateOnBlur={true}
+                                >
+                                    {({isSubmitting, setFieldError}) => (
+                                        <Form className="row g-3">
+                                            <div className={`col-md-6 ${styles.formGroup}`}>
+                                                <label htmlFor="firstName"
+                                                       className={`form-label ${styles.formLabel} ${styles.requiredField}`}>Tên</label>
+                                                <Field className={`form-control ${styles.formControl}`} type="text"
+                                                       name="firstName" id="firstName"/>
+                                                <ErrorMessage name="firstName" component="div"
+                                                              className={styles.errorMessage}/>
+                                            </div>
+                                            <div className="col-md-6">
+                                                <label htmlFor="lastName"
+                                                       className={`form-label ${styles.requiredField}`}>Họ</label>
+                                                <Field className="form-control" type="text" name="lastName"
+                                                       id="lastName"/>
+                                                <ErrorMessage name="lastName" component="div" className="text-danger"/>
+                                            </div>
 
-        <div className={`container ${styles.registerContainer}`}>
-            <div className="row justify-content-center">
-                <div className="col-md-8">
-                    <div className={`card ${styles.registerCard}`}>
-                        <div className="card-body">
-                            <h2 className={`card-title text-center ${styles.registerTitle}`}>ĐĂNG KÝ TÀI KHOẢN</h2>
-                            <p className={styles.requiredFieldNote}>Các ô có dấu * là bắt buộc</p>
-                            <Formik
-                                initialValues={initialValues}
-                                validationSchema={validationSchema}
-                                onSubmit={handleOnSubmit}
-                                validateOnChange={true}
-                                validateOnBlur={true}
-                            >
-                                {({isSubmitting, setFieldError}) => (
-                                    <Form className="row g-3">
-                                        <div className={`col-md-6 ${styles.formGroup}`}>
-                                            <label htmlFor="firstName"
-                                                   className={`form-label ${styles.formLabel} ${styles.requiredField}`}>Tên</label>
-                                            <Field className={`form-control ${styles.formControl}`} type="text"
-                                                   name="firstName" id="firstName"/>
-                                            <ErrorMessage name="firstName" component="div"
-                                                          className={styles.errorMessage}/>
-                                        </div>
-                                        <div className="col-md-6">
-                                            <label htmlFor="lastName"
-                                                   className={`form-label ${styles.requiredField}`}>Họ</label>
-                                            <Field className="form-control" type="text" name="lastName" id="lastName"/>
-                                            <ErrorMessage name="lastName" component="div" className="text-danger"/>
-                                        </div>
-
-                                        <div className="col-md-6">
-                                            <label htmlFor="email"
-                                                   className={`form-label ${styles.requiredField}`}>Email:</label>
-                                            <Field
-                                                className="form-control"
-                                                type="text"
-                                                name="email"
-                                                id="email"
-                                                validate={(value) => {
-                                                    debouncedEmailCheck(value, setFieldError);
-                                                }}
-
-                                            />
-                                            <ErrorMessage name="email" component="div" className="text-danger"/>
-                                        </div>
-
-                                        <div className="col-md-6">
-                                            <label htmlFor="dateOfBirth" className="form-label">Ngày sinh</label>
-                                            <Field className="form-control" type="date" name="dateOfBirth"
-                                                   id="dateOfBirth"/>
-                                            <ErrorMessage name="dateOfBirth" component="div" className="text-danger"/>
-                                        </div>
-
-                                        <div className="col-md-6">
-                                            <label htmlFor="gender" className={`form-label ${styles.requiredField}`}>Giới
-                                                tính</label>
-                                            <Field as="select" className="form-select" name="gender" id="gender">
-                                                <option value="">Chọn giới tính</option>
-                                                <option value="Nam">Nam</option>
-                                                <option value="Nữ">Nữ</option>
-                                                <option value="Khác">Khác</option>
-                                            </Field>
-                                            <ErrorMessage name="gender" component="div" className="text-danger"/>
-                                        </div>
-
-                                        <div className="col-md-6">
-                                            <label htmlFor="phoneNumber" className="form-label">Số điện thoại</label>
-                                            <Field className="form-control" type="tel" name="phoneNumber"
-                                                   id="phoneNumber"/>
-                                            <ErrorMessage name="phoneNumber" component="div" className="text-danger"/>
-                                        </div>
-
-                                        <div className="col-12">
-                                            <label htmlFor="address" className="form-label">Địa chỉ</label>
-                                            <Field className="form-control" type="text" name="address" id="address"/>
-                                            <ErrorMessage name="address" component="div" className="text-danger"/>
-                                        </div>
-
-                                        <div className="col-md-6">
-                                            <label htmlFor="username" className={`form-label ${styles.requiredField}`}>Tên
-                                                đăng nhập</label>
-                                            <Field
-                                                className="form-control"
-                                                type="text"
-                                                name="username"
-                                                id="username"
-                                                validate={(value) => {
-                                                    debouncedUsernameCheck(value, setFieldError);
-                                                }}
-
-                                            />
-                                            <ErrorMessage name="username" component="div" className="text-danger"/>
-                                        </div>
-
-                                        <div className="col-md-6">
-                                            <label htmlFor="password" className={`form-label ${styles.requiredField}`}>Mật
-                                                khẩu</label>
-                                            <div className={styles.passwordInputWrapper}>
+                                            <div className="col-md-6">
+                                                <label htmlFor="email"
+                                                       className={`form-label ${styles.requiredField}`}>Email:</label>
                                                 <Field
                                                     className="form-control"
-                                                    type={showPassword ? "text" : "password"}
-                                                    name="password"
-                                                    id="password"
-                                                />
-                                                <button
-                                                    type="button"
-                                                    className={styles.passwordToggle}
-                                                    onClick={togglePasswordVisibility}
-                                                >
-                                                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye}/>
-                                                </button>
-                                            </div>
-                                            <ErrorMessage name="password" component="div" className="text-danger"/>
-                                        </div>
+                                                    type="text"
+                                                    name="email"
+                                                    id="email"
+                                                    validate={(value) => {
+                                                        debouncedEmailCheck(value, setFieldError);
+                                                    }}
 
-                                        <div className="col-md-6">
-                                            <label htmlFor="confirmPassword"
-                                                   className={`form-label ${styles.requiredField}`}>Xác nhận mật
-                                                khẩu</label>
-                                            <div className={styles.passwordInputWrapper}>
+                                                />
+                                                <ErrorMessage name="email" component="div" className="text-danger"/>
+                                            </div>
+
+                                            <div className="col-md-6">
+                                                <label htmlFor="dateOfBirth" className="form-label">Ngày sinh</label>
+                                                <Field className="form-control" type="date" name="dateOfBirth"
+                                                       id="dateOfBirth"/>
+                                                <ErrorMessage name="dateOfBirth" component="div"
+                                                              className="text-danger"/>
+                                            </div>
+
+                                            <div className="col-md-6">
+                                                <label htmlFor="gender"
+                                                       className={`form-label ${styles.requiredField}`}>Giới
+                                                    tính</label>
+                                                <Field as="select" className="form-select" name="gender" id="gender">
+                                                    <option value="">Chọn giới tính</option>
+                                                    <option value="Nam">Nam</option>
+                                                    <option value="Nữ">Nữ</option>
+                                                    <option value="Khác">Khác</option>
+                                                </Field>
+                                                <ErrorMessage name="gender" component="div" className="text-danger"/>
+                                            </div>
+
+                                            <div className="col-md-6">
+                                                <label htmlFor="phoneNumber" className="form-label">Số điện
+                                                    thoại</label>
+                                                <Field className="form-control" type="tel" name="phoneNumber"
+                                                       id="phoneNumber"/>
+                                                <ErrorMessage name="phoneNumber" component="div"
+                                                              className="text-danger"/>
+                                            </div>
+
+                                            <div className="col-12">
+                                                <label htmlFor="address" className="form-label">Địa chỉ</label>
+                                                <Field className="form-control" type="text" name="address"
+                                                       id="address"/>
+                                                <ErrorMessage name="address" component="div" className="text-danger"/>
+                                            </div>
+
+                                            <div className="col-md-6">
+                                                <label htmlFor="username"
+                                                       className={`form-label ${styles.requiredField}`}>Tên
+                                                    đăng nhập</label>
                                                 <Field
                                                     className="form-control"
-                                                    type={showConfirmPassword ? "text" : "password"}
-                                                    name="confirmPassword"
-                                                    id="confirmPassword"
+                                                    type="text"
+                                                    name="username"
+                                                    id="username"
+                                                    validate={(value) => {
+                                                        debouncedUsernameCheck(value, setFieldError);
+                                                    }}
+
                                                 />
-                                                <button
-                                                    type="button"
-                                                    className={styles.passwordToggle}
-                                                    onClick={toggleConfirmPasswordVisibility}
-                                                >
-                                                    <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye}/>
+                                                <ErrorMessage name="username" component="div" className="text-danger"/>
+                                            </div>
+
+                                            <div className="col-md-6">
+                                                <label htmlFor="password"
+                                                       className={`form-label ${styles.requiredField}`}>Mật
+                                                    khẩu</label>
+                                                <div className={styles.passwordInputWrapper}>
+                                                    <Field
+                                                        className="form-control"
+                                                        type={showPassword ? "text" : "password"}
+                                                        name="password"
+                                                        id="password"
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        className={styles.passwordToggle}
+                                                        onClick={togglePasswordVisibility}
+                                                    >
+                                                        <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye}/>
+                                                    </button>
+                                                </div>
+                                                <ErrorMessage name="password" component="div" className="text-danger"/>
+                                            </div>
+
+                                            <div className="col-md-6">
+                                                <label htmlFor="confirmPassword"
+                                                       className={`form-label ${styles.requiredField}`}>Xác nhận mật
+                                                    khẩu</label>
+                                                <div className={styles.passwordInputWrapper}>
+                                                    <Field
+                                                        className="form-control"
+                                                        type={showConfirmPassword ? "text" : "password"}
+                                                        name="confirmPassword"
+                                                        id="confirmPassword"
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        className={styles.passwordToggle}
+                                                        onClick={toggleConfirmPasswordVisibility}
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            icon={showConfirmPassword ? faEyeSlash : faEye}/>
+                                                    </button>
+                                                </div>
+                                                <ErrorMessage name="confirmPassword" component="div"
+                                                              className="text-danger"/>
+                                            </div>
+
+                                            <div className="col-12">
+                                                <button type="submit" className={`btn ${styles.submitButton}`}
+                                                        disabled={isSubmitting}>
+                                                    {isSubmitting ? 'Đang đăng ký...' : 'Đăng ký'}
                                                 </button>
                                             </div>
-                                            <ErrorMessage name="confirmPassword" component="div"
-                                                          className="text-danger"/>
-                                        </div>
-
-                                        <div className="col-12">
-                                            <button type="submit" className={`btn ${styles.submitButton}`}
-                                                    disabled={isSubmitting}>
-                                                {isSubmitting ? 'Đang đăng ký...' : 'Đăng ký'}
+                                            <button type="button" className={styles.cancelButton}
+                                                    onClick={() => navigate(-1)}>
+                                                Hủy
                                             </button>
-                                        </div>
-                                        <button type="button" className={styles.cancelButton}
-                                                onClick={() => navigate(-1)}>
-                                            Hủy
-                                        </button>
-                                    </Form>
-                                )}
-                            </Formik>
+                                        </Form>
+                                    )}
+                                </Formik>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <FooterComponent/>
+        </>
+
     )
 
 

@@ -17,6 +17,9 @@ import UserFriendsComponent from "./component/user/UserFriendsComponent";
 import FriendRequestList from "./component/friendship/FriendRequestList";
 import SearchResultsPage from "./pages/SearchResultsPage";
 import ForgerPasswordModal from "./component/forgetPassword/ForgerPasswordModal";
+import PrivacyPolicy from "./component/privacyPolicy/PrivacyPolicy";
+import TermsOfService from "./component/termsOfService/TermsOfService";
+import AboutUs from "./component/aboutUs/AboutUs";
 
 function App() {
 
@@ -27,6 +30,9 @@ function App() {
             <main className={styles.mainContent}>
                 <Routes>
                     <Route path="/search" element={<SearchResultsPage />} />
+                    <Route path="/about" element={<AboutUs />} />
+                    <Route path="/terms" element={<TermsOfService />} />
+                    <Route path="/privacy" element={<PrivacyPolicy />} />
                     <Route path={'/register'} element={<RegisterComponent/>}/>
                     <Route path={'/login'} element={<LoginComponent/>}/>
                     <Route path={'/forget-password'} element={<ForgerPasswordModal/>}/>
@@ -52,7 +58,7 @@ function App() {
                     </Route>
                 </Routes>
             </main>
-            <FooterComponent/>
+            {/*<FooterComponent/>*/}
         </div>
     );
 }
