@@ -55,7 +55,7 @@ export default function UserItem({ user, setListFriend }) {
                 </div>
                 {/* Hiển thị danh sách bạn chung */}
                 <div className={customStyles.mutualFriends}>
-                    <MutualFriends mutualFriends={mutualFriends}/>
+                    <MutualFriends mutualFriends={mutualFriends} friendId={user.userId}/>
                 </div>
                 {/* Các nút chấp nhận và hủy kết bạn */}
                 <div className= "d-flex justify-content-center mt-3">

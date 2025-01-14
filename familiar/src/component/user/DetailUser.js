@@ -185,7 +185,7 @@ export default function DetailUser({ user, userId }) {
 
                     {
                         userId !== user.userId ? <div className={customStyles.mutualFriends}>
-                            <MutualFriends mutualFriends={mutualFriends}/>
+                            <MutualFriends mutualFriends={mutualFriends} friendId={user.userId}/>
                         </div> : ""
                     }
 

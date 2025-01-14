@@ -1,6 +1,7 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
-export default function MutualFriends({mutualFriends}) {
+export default function MutualFriends({mutualFriends, friendId}) {
     if (!Array.isArray(mutualFriends) || mutualFriends.length === 0) {
         return <div>
             <div className="d-flex" style={{fontSize: "12px", color: "#6C757D"}}>
@@ -10,26 +11,28 @@ export default function MutualFriends({mutualFriends}) {
     }
 
     return (
-        <div style={{display: "flex", alignItems: "center"}}>
-            <div className="d-flex">
-                {mutualFriends.slice(0, 2).map((friend) => (
-                    <img
-                        key={friend.userId}
-                        src={friend.userProfilePictureUrl}
-                        alt={friend.userFirstName}
-                        className="rounded-circle me-1"
-                        style={{width: "20px", height: "20px"}}
-                    />
-                ))}
-                {mutualFriends.length > 2 && (
+        <Link to={`/friends/mutual-list/${friendId}`} style={{textDecoration: 'none'}}>
+            <div style={{display: "flex", alignItems: "center"}}>
+                <div className="d-flex">
+                    {mutualFriends.slice(0, 2).map((friend) => (
+                        <img
+                            key={friend.userId}
+                            src={friend.userProfilePictureUrl}
+                            alt={friend.userFirstName}
+                            className="rounded-circle me-1"
+                            style={{width: "20px", height: "20px"}}
+                        />
+                    ))}
+                    {/*{mutualFriends.length > 2 && (
                     <span className="text-muted small ms-1">
                 +{mutualFriends.length - 2}
             </span>
-                )}
+                )}*/}
+                </div>
+                <div className="text-muted small me-2" style={{marginBottom: 0}}>
+                    {mutualFriends.length} bạn chung
+                </div>
             </div>
-            <div className="text-muted small me-2" style={{marginBottom: 0}}>
-                {mutualFriends.length} bạn chung
-            </div>
-        </div>
+        </Link>
     );
 }

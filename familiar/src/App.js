@@ -17,9 +17,6 @@ import UserFriendsComponent from "./component/user/UserFriendsComponent";
 import FriendRequestList from "./component/friendship/FriendRequestList";
 import SearchResultsPage from "./pages/SearchResultsPage";
 import ForgerPasswordModal from "./component/forgetPassword/ForgerPasswordModal";
-import PrivacyPolicy from "./component/privacyPolicy/PrivacyPolicy";
-import TermsOfService from "./component/termsOfService/TermsOfService";
-import AboutUs from "./component/aboutUs/AboutUs";
 
 function App() {
 

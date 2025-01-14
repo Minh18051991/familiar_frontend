@@ -76,9 +76,9 @@ export default function Friends({ friend, col, userId, setFriendList }) {
                         </p>
                     </Link>
 
-                    <div className={customStyles.mutualFriends}>
-                        <MutualFriends mutualFriends={mutualFriends}/>
-                    </div>
+                        <div className={customStyles.mutualFriends}>
+                            <MutualFriends mutualFriends={mutualFriends} friendId={friend.userId}/>
+                        </div>
 
                     <div className="d-flex justify-content-center mt-3">
                         <button

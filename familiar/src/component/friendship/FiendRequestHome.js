@@ -41,7 +41,7 @@ function FriendRequestHome() {
 
     return (
         <>
-            <h5 className={`${styles.suggestedFriendsTitle} mb-3 text-primary text-center`} style={{marginTop: "10px"}}>Lời mời kết bạn</h5>
+            <h5 className={`${styles.suggestedFriendsTitle} mb-3 text-primary`} style={{marginTop: "10px", marginLeft: "24px"}}>Lời mời kết bạn</h5>
             {listFriend && listFriend.length > 0 ? (
                 <div>
                     {listFriend.map((user) => (
