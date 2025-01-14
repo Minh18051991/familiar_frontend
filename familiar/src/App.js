@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import styles from './App.module.css';
 import HeaderComponent from "./component/header/HeaderComponent";
 import {Route, Routes} from "react-router-dom";
@@ -9,7 +9,6 @@ import RegisterComponent from "./component/register/RegisterComponent";
 import {ToastContainer} from "react-toastify";
 import DetailComponent from "./component/user/DetailComponent";
 import PrivateRoute from "./component/login/PrivateRoute";
-import FooterComponent from "./component/footer/FooterComponent";
 import UpdateAccountComponent from "./component/account/UpdateAccountComponent";
 import DashboardComponent from "./component/dashboard/DashboardComponent";
 import ListFriendShipComponent from "./component/friendship/list";
@@ -17,10 +16,11 @@ import UserFriendsComponent from "./component/user/UserFriendsComponent";
 import FriendRequestList from "./component/friendship/FriendRequestList";
 import SearchResultsPage from "./pages/SearchResultsPage";
 import ForgerPasswordModal from "./component/forgetPassword/ForgerPasswordModal";
-import MutualFriendList from "./component/friendship/MutualFriendList";
-import AboutUs from "./component/aboutUs/AboutUs";
 import TermsOfService from "./component/termsOfService/TermsOfService";
 import PrivacyPolicy from "./component/privacyPolicy/PrivacyPolicy";
+import AboutUs from "./component/aboutUs/AboutUs";
+import MutualFriendList from "./component/friendship/MutualFriendList";
+
 
 function App() {
 

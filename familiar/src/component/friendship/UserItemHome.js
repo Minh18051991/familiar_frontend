@@ -34,6 +34,24 @@ export default function UserItemHome({user, setListFriend}) {
         fetchData();
     }, [userId, user.userId]);
 
+    function formatUserName(fullName) {
+        const nameParts = fullName.trim().split(' ');
+
+        let formattedName = '';
+        let remainingLength = 14;
+
+        for (let i = nameParts.length - 1; i >= 0; i--) {
+            const part = nameParts[i];
+            if (formattedName.length + part.length + (formattedName ? 1 : 0) <= remainingLength) {
+                formattedName = part + (formattedName ? ' ' + formattedName : '');
+            } else {
+                break;
+            }
+        }
+
+        return formattedName;
+    }
+
 
     return (
         <>
@@ -47,7 +65,7 @@ export default function UserItemHome({user, setListFriend}) {
                         />
                         <Link to={`/users/detail/${user.userId}`} style={{textDecoration: 'none'}}>
                             <p className="mx-2" style={{color: 'black', fontWeight: 400}}>
-                                {user?.userFirstName} {user?.userLastName}
+                                {formatUserName(user?.userFirstName + " " + user?.userLastName)}
                             </p>
                         </Link>
                     </div>
