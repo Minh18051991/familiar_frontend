@@ -80,6 +80,8 @@ export async function checkEmailExists(email) {
         return false;
     }
 }
+
+
 export async function searchUsers(keyword, page = 0, size = 10) {
     const token = localStorage.getItem('token');
     

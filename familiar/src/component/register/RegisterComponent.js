@@ -167,7 +167,7 @@ export default function RegisterComponent() {
                 <div className="col-md-8">
                     <div className={`card ${styles.registerCard}`}>
                         <div className="card-body">
-                            <h2 className={`card-title text-center ${styles.registerTitle}`}>Đăng ký tài khoản</h2>
+                            <h2 className={`card-title text-center ${styles.registerTitle}`}>ĐĂNG KÝ TÀI KHOẢN</h2>
                             <p className={styles.requiredFieldNote}>Các ô có dấu * là bắt buộc</p>
                             <Formik
                                 initialValues={initialValues}

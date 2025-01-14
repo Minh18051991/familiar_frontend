@@ -16,6 +16,7 @@ import ListFriendShipComponent from "./component/friendship/list";
 import UserFriendsComponent from "./component/user/UserFriendsComponent";
 import FriendRequestList from "./component/friendship/FriendRequestList";
 import SearchResultsPage from "./pages/SearchResultsPage";
+import ForgerPasswordModal from "./component/forgetPassword/ForgerPasswordModal";
 
 function App() {
 
@@ -28,10 +29,13 @@ function App() {
                     <Route path="/search" element={<SearchResultsPage />} />
                     <Route path={'/register'} element={<RegisterComponent/>}/>
                     <Route path={'/login'} element={<LoginComponent/>}/>
+                    <Route path={'/forget-password'} element={<ForgerPasswordModal/>}/>
+                    <Route path={'/account/change-password/:username'} element={<UpdateAccountComponent/>}/>
+
                     <Route path="/" element={<PrivateRoute/>}>
                         <Route index element={<DashboardComponent/>}/>
                         <Route path={'/user/detail/:id'} element={<DetailComponent/>}/>
-                        <Route path={'/account/change-password/:username'} element={<UpdateAccountComponent/>}/>
+
                         {/* Thêm các route khác cần bảo vệ ở đây */}
                         <Route
                             path="/friendships-list"

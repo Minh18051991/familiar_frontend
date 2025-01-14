@@ -4,8 +4,8 @@ import {login} from "../../redux/login/AccountAction";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
 import styles from './LoginComponent.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faEye, faEyeSlash} from '@fortawesome/free-solid-svg-icons';
 
 
 function LoginComponent() {
@@ -24,13 +24,28 @@ function LoginComponent() {
     };
 
     useEffect(() => {
-        if (location.state && location.state.username && location.state.name) {
+        // Kiểm tra thông tin từ localStorage
+        const loginInfo = localStorage.getItem('loginInfo');
+        if (loginInfo) {
+            const {username, name, avatar} = JSON.parse(loginInfo);
+            setName(name);
+            setAvatar(avatar);
+            usernameRef.current.value = username;
+            passwordRef.current.focus();
+
+            // Xóa thông tin từ localStorage sau khi đã sử dụng
+            localStorage.removeItem('loginInfo');
+        } else if (location.state && location.state.username && location.state.name) {
+            // Xử lý thông tin từ location.state như trước đây
             setName(location.state.name);
-            if (location.state.gender === 'Nam') {
+            if (location.state.avatar) {
+                setAvatar(location.state.avatar);
+            } else if (location.state.gender === 'Nam') {
                 setAvatar("https://static2.yan.vn/YanNews/2167221/202003/dan-mang-du-trend-thiet-ke-avatar-du-kieu-day-mau-sac-tu-anh-mac-dinh-b0de2bad.jpg");
             } else {
                 setAvatar("https://antimatter.vn/wp-content/uploads/2022/04/anh-avatar-trang-co-gai-toc-tem.jpg");
             }
+
             usernameRef.current.value = location.state.username;
             passwordRef.current.focus();
         }
@@ -82,14 +97,14 @@ function LoginComponent() {
                         alt="Login" className={styles.loginImage}/>
                 </div>
                 <div className={styles.formSection}>
-                    {name=='' &&
+                    {name == '' &&
                         (
                             <h3 className={styles.formTitle}>Đăng nhập</h3>
                         )
                     }
 
                     {
-                    name!='' && (
+                        name != '' && (
                             <div className={styles.nameSection}>
                                 <img src={avatar} alt="Avatar" className={styles.avatar}/>
                                 <p>{name}</p>
@@ -134,7 +149,7 @@ function LoginComponent() {
                         </button>
                     </form>
                     <div className={styles.registerSection}>
-                        <Link to="/forgot-password" className={styles.forgotPasswordLink}>
+                        <Link to="/forget-password" className={styles.forgotPasswordLink}>
                             Quên mật khẩu?
                         </Link>
                         <Link to="/register" className={styles.registerButton}>

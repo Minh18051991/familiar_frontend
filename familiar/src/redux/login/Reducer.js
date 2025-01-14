@@ -11,19 +11,20 @@ function accountReducer(state = initState, action) {
                 ...state,
                 account: action.payload
             }
-        case "LOGOUT":
-            return {
-                ...state,
-                account: null
-            }
         case 'UPDATE_AVATAR':
             return {
                 ...state,
                 account: state.account ? {
                     ...state.account,
                     profilePictureUrl: action.payload
-                } : null
+                } : state.account
             };
+        case "LOGOUT":
+            return {
+                ...state,
+                account: null
+            }
+
 
         default:
             return state;

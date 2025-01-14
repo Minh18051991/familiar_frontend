@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import styles from './OtpComponent.module.css';
 import {useSelector} from "react-redux";
 import {verifyOtp} from "../../service/otp/otp";
 import {useNavigate} from "react-router-dom"; // Tạo file CSS module này nếu chưa có
 
-function OtpComponent({ isShowModal, handleIsShowModal }) {
+function OtpComponent({isShowModal, handleIsShowModal}) {
     const [otp, setOtp] = useState('');
     const [error, setError] = useState('');
     const info = useSelector(state => state.user);
@@ -12,14 +12,19 @@ function OtpComponent({ isShowModal, handleIsShowModal }) {
 
     const navigate = useNavigate();
 
-
     const handleOtpChange = (e) => {
         setOtp(e.target.value);
     };
 
     const handleSubmit = async (e) => {
+        let usernameAccount;
         e.preventDefault();
-        const object = {username: account.username, otp: otp};
+        if (account) {
+            usernameAccount = account.username;
+        }else {
+            usernameAccount = localStorage.getItem('usernameAccount');
+        }
+        const object = {username: usernameAccount, otp: otp};
 
         // Thực hiện gọi API verifyOtp để kiểm tra mã OTP
         const check = await verifyOtp(object);

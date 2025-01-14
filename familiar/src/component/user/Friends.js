@@ -31,7 +31,7 @@ export default function Friends({ friend, col, userId, setFriendList }) {
 
     function formatUserName(fullName) {
         const nameParts = fullName.trim().split(' ');
-        
+
         let formattedName = '';
         let remainingLength = 14;
 
