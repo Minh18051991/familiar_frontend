@@ -121,3 +121,16 @@ export async function searchUsers(keyword, page = 0, size = 10) {
         }
     }
 }
+
+export async function getAllUsers() {
+    const token = localStorage.getItem('token');
+
+    try {
+        const response = await axios.get(`${API_URL}/api/user/all`, {})
+    }catch (error) {
+        console.error("Error fetching all users:", error);
+        throw error;
+    }
+
+
+}
