@@ -51,9 +51,11 @@ export function FriendItem({userData, handleIsLoading, updateUsers}) {
       </div>
 
       <div className={styles.content}>
-        <p className={styles.userName}>
-          {userData?.userFirstName} {userData?.userLastName}
-        </p>
+        <Link to={`/users/detail/${userData.userId}`} className="text-decoration-none">
+          <p className={styles.userName}>
+            {userData?.userFirstName} {userData?.userLastName}
+          </p>
+        </Link>
 
         <div className={customStyles.mutualFriends}>
           <MutualFriends mutualFriends={mutualFriends} friendId={userData.userId}/>
