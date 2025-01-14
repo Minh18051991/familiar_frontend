@@ -6,6 +6,7 @@ import {toast} from "react-toastify";
 import styles from './LoginComponent.module.css';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEye, faEyeSlash} from '@fortawesome/free-solid-svg-icons';
+import FooterComponent from "../footer/FooterComponent";
 
 
 function LoginComponent() {
@@ -88,77 +89,81 @@ function LoginComponent() {
 
     }
     return (
-        <div className={styles.loginPage}>
-            <div className={styles.contentWrapper}>
-                <div className={styles.imageSection}>
-                    <h1 className={styles.websiteTitle}>Familiar</h1>
-                    <img
-                        src="https://media.istockphoto.com/id/1124728680/vi/anh/ng%C6%B0%E1%BB%9Di-%C4%91%C3%A0n-%C3%B4ng-v%C3%A0-ng%C6%B0%E1%BB%9Di-ph%E1%BB%A5-n%E1%BB%AF-ng%E1%BB%93i-b%C3%AAn-b%E1%BB%9D-bi%E1%BB%83n-h%C3%B4n-nhau-l%C3%BAc-ho%C3%A0ng-h%C3%B4n-t%E1%BA%A1i-meloneras-%C4%91i-d%E1%BA%A1o-tr%C3%AAn.jpg?s=612x612&w=0&k=20&c=_qJBMTmGOfZ-W0N82Y59j_jvMPuZu6w22uL-1VaEjOM="
-                        alt="Login" className={styles.loginImage}/>
-                </div>
-                <div className={styles.formSection}>
-                    {name == '' &&
-                        (
-                            <h3 className={styles.formTitle}>Đăng nhập</h3>
-                        )
-                    }
+        <>
+            <div className={styles.loginPage}>
+                <div className={styles.contentWrapper}>
+                    <div className={styles.imageSection}>
+                        <h1 className={styles.websiteTitle}>Familiar</h1>
+                        <img
+                            src="https://media.istockphoto.com/id/1124728680/vi/anh/ng%C6%B0%E1%BB%9Di-%C4%91%C3%A0n-%C3%B4ng-v%C3%A0-ng%C6%B0%E1%BB%9Di-ph%E1%BB%A5-n%E1%BB%AF-ng%E1%BB%93i-b%C3%AAn-b%E1%BB%9D-bi%E1%BB%83n-h%C3%B4n-nhau-l%C3%BAc-ho%C3%A0ng-h%C3%B4n-t%E1%BA%A1i-meloneras-%C4%91i-d%E1%BA%A1o-tr%C3%AAn.jpg?s=612x612&w=0&k=20&c=_qJBMTmGOfZ-W0N82Y59j_jvMPuZu6w22uL-1VaEjOM="
+                            alt="Login" className={styles.loginImage}/>
+                    </div>
+                    <div className={styles.formSection}>
+                        {name == '' &&
+                            (
+                                <h3 className={styles.formTitle}>Đăng nhập</h3>
+                            )
+                        }
 
-                    {
-                        name != '' && (
-                            <div className={styles.nameSection}>
-                                <img src={avatar} alt="Avatar" className={styles.avatar}/>
-                                <p>{name}</p>
-                            </div>
-                        )
-                    }
-                    <form>
-                        <div className={`${styles.formGroup} ${name !== '' ? styles.hidden : ''}`}>
-                            <label htmlFor="username">Tên đăng nhập:</label>
-                            <input
-                                ref={usernameRef}
-                                type="text"
-                                id="username"
-                                placeholder="Nhập username"
-                                defaultValue={name !== '' ? name : ''}
-                            />
-                        </div>
-                        <div className={styles.formGroup}>
-                            <label htmlFor="password">Mật khẩu:</label>
-                            <div className={styles.passwordInputWrapper}>
+                        {
+                            name != '' && (
+                                <div className={styles.nameSection}>
+                                    <img src={avatar} alt="Avatar" className={styles.avatar}/>
+                                    <p>{name}</p>
+                                </div>
+                            )
+                        }
+                        <form>
+                            <div className={`${styles.formGroup} ${name !== '' ? styles.hidden : ''}`}>
+                                <label htmlFor="username">Tên đăng nhập:</label>
                                 <input
-                                    ref={passwordRef}
-                                    type={showPassword ? "text" : "password"}
-                                    id="password"
-                                    placeholder="Nhập password"
+                                    ref={usernameRef}
+                                    type="text"
+                                    id="username"
+                                    placeholder="Nhập username"
+                                    defaultValue={name !== '' ? name : ''}
                                 />
-                                <button
-                                    type="button"
-                                    className={styles.passwordToggle}
-                                    onClick={togglePasswordVisibility}
-                                >
-                                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye}/>
-                                </button>
                             </div>
+                            <div className={styles.formGroup}>
+                                <label htmlFor="password">Mật khẩu:</label>
+                                <div className={styles.passwordInputWrapper}>
+                                    <input
+                                        ref={passwordRef}
+                                        type={showPassword ? "text" : "password"}
+                                        id="password"
+                                        placeholder="Nhập password"
+                                    />
+                                    <button
+                                        type="button"
+                                        className={styles.passwordToggle}
+                                        onClick={togglePasswordVisibility}
+                                    >
+                                        <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye}/>
+                                    </button>
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                className={styles.loginButton}
+                                onClick={handleLogin}
+                            >
+                                Đăng nhập
+                            </button>
+                        </form>
+                        <div className={styles.registerSection}>
+                            <Link to="/forget-password" className={styles.forgotPasswordLink}>
+                                Quên mật khẩu?
+                            </Link>
+                            <Link to="/register" className={styles.registerButton}>
+                                Đăng ký ngay
+                            </Link>
                         </div>
-                        <button
-                            type="button"
-                            className={styles.loginButton}
-                            onClick={handleLogin}
-                        >
-                            Đăng nhập
-                        </button>
-                    </form>
-                    <div className={styles.registerSection}>
-                        <Link to="/forget-password" className={styles.forgotPasswordLink}>
-                            Quên mật khẩu?
-                        </Link>
-                        <Link to="/register" className={styles.registerButton}>
-                            Đăng ký ngay
-                        </Link>
                     </div>
                 </div>
             </div>
-        </div>
+            <FooterComponent/>
+        </>
+
     )
 }
 

@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import {initiatePasswordReset, sendOtpToEmail} from '../../service/otp/otp';
 import {useNavigate} from "react-router-dom";
 import styles from './ForgetPasswordModal.module.css';
+import FooterComponent from "../footer/FooterComponent";
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().email('Email không hợp lệ').required('Email là bắt buộc'),
@@ -33,25 +34,30 @@ export default function ForgetPasswordModal() {
     };
 
     return (
-        <div className={styles.container}>
-            <Formik
-                initialValues={{email: ''}}
-                validationSchema={validationSchema}
-                onSubmit={handleSubmit}
-            >
-                {({isSubmitting}) => (
-                    <Form className={styles.form}>
-                        <h1 className={styles.title}>Nhập email nhận OTP</h1>
-                        <Field type="email" name="email" placeholder="Nhập email của bạn" className={styles.input}/>
-                        <ErrorMessage name="email" component="div" className={styles.error}/>
-                        {error && <div className={styles.error}>{error}</div>}
-                        <button type="submit" disabled={isSubmitting} className={styles.button}>
-                            {isSubmitting ? 'Đang gửi...' : 'Xác nhận'}
-                        </button>
-                        <button type="button" onClick={() => navigate(-1)} className={styles.closeButton}>Đóng</button>
-                    </Form>
-                )}
-            </Formik>
-        </div>
+        <>
+            <div className={styles.container}>
+                <Formik
+                    initialValues={{email: ''}}
+                    validationSchema={validationSchema}
+                    onSubmit={handleSubmit}
+                >
+                    {({isSubmitting}) => (
+                        <Form className={styles.form}>
+                            <h1 className={styles.title}>Nhập email nhận OTP</h1>
+                            <Field type="email" name="email" placeholder="Nhập email của bạn" className={styles.input}/>
+                            <ErrorMessage name="email" component="div" className={styles.error}/>
+                            {error && <div className={styles.error}>{error}</div>}
+                            <button type="submit" disabled={isSubmitting} className={styles.button}>
+                                {isSubmitting ? 'Đang gửi...' : 'Xác nhận'}
+                            </button>
+                            <button type="button" onClick={() => navigate(-1)} className={styles.closeButton}>Đóng
+                            </button>
+                        </Form>
+                    )}
+                </Formik>
+            </div>
+            <FooterComponent/>
+        </>
+
     );
 }
