@@ -134,7 +134,6 @@ export default function DetailUser({ user, userId }) {
                 const { data } = await mutualFriendList(userId, userId2, 0, 5);
                 setMutualFriends(data || []);
             } catch (error) {
-                console.error("Error fetching mutual friends:", error);
                 setMutualFriends([]);
             }
         };

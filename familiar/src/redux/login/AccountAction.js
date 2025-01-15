@@ -20,6 +20,7 @@ export function login(loginInfo) {
                 }
             });
             console.log("Login thành công", account.userId);
+            console.log("role", account.role)
             return true;
         } else {
             console.log("Tài khoản không tồn tại");
