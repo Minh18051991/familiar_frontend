@@ -20,6 +20,7 @@ import TermsOfService from "./component/termsOfService/TermsOfService";
 import PrivacyPolicy from "./component/privacyPolicy/PrivacyPolicy";
 import AboutUs from "./component/aboutUs/AboutUs";
 import MutualFriendList from "./component/friendship/MutualFriendList";
+import ListUserComponent from "./component/user/ListUserComponent";
 
 
 function App() {
@@ -42,8 +43,6 @@ function App() {
                     <Route path="/" element={<PrivateRoute/>}>
                         <Route index element={<DashboardComponent/>}/>
                         <Route path={'/user/detail/:id'} element={<DetailComponent/>}/>
-
-                        {/* Thêm các route khác cần bảo vệ ở đây */}
                         <Route
                             path="/friendships-list"
                             element={<ListFriendShipComponent/>}
@@ -56,12 +55,14 @@ function App() {
                             path="/friendships/request"
                             element={<FriendRequestList/>}
                         ></Route>
-
                         <Route
                             path={`/friends/mutual-list/:id`}
                             element={<MutualFriendList/>}
                         ></Route>
-
+                        <Route
+                            path={`/admin/users`}
+                            element={<ListUserComponent/>}
+                        ></Route>
                     </Route>
                 </Routes>
             </main>

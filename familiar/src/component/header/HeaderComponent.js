@@ -55,9 +55,15 @@ function HeaderComponent() {
                               title="Bạn bè">
                             <i className="fas fa-user-friends"></i>
                         </Link>
-                        <Link className={`${styles.navIcon} ${isActive('/messages')}`} to="/messages" title="Tin nhắn">
-                            <i className="fas fa-comment-alt"></i>
-                        </Link>
+                        {account && account.role && account.role.includes('ROLE_ADMIN') ? (
+                            <Link className={`${styles.navIcon} ${isActive('/admin/users')}`} to="/admin/users" title="Danh sách người dùng">
+                                <i className="fas fa-users"></i>
+                            </Link>
+                        ) : (
+                            <Link className={`${styles.navIcon} ${isActive('/messages')}`} to="/messages" title="Tin nhắn">
+                                <i className="fas fa-comment-alt"></i>
+                            </Link>
+                        )}
                     </div>
                     <div className={styles.rightSection}>
                         {!account && (

@@ -122,15 +122,42 @@ export async function searchUsers(keyword, page = 0, size = 10) {
     }
 }
 
-export async function getAllUsers() {
+export async function getAllUsers(page = 0, size = 20,name='') {
     const token = localStorage.getItem('token');
 
-    try {
-        const response = await axios.get(`${API_URL}/api/user/all`, {})
-    }catch (error) {
-        console.error("Error fetching all users:", error);
-        throw error;
+    if (!token) {
+        console.error("No token found");
+        return { error: "Không tìm thấy token xác thực" };
     }
 
+    try {
+        const response = await axios.get(`${API_URL}/api/user/list`, {
+            headers: { Authorization: `Bearer ${token}` },
+            params: { page, size ,name}
+        });
 
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        if (error.response) {
+            if (error.response.status === 401) {
+                return { error: "Không có quyền truy cập. Vui lòng đăng nhập lại." };
+            }
+            return { error: error.response.data.message || "Lỗi từ server" };
+        } else if (error.request) {
+            return { error: "Không thể kết nối đến server" };
+        } else {
+            return { error: "Đã xảy ra lỗi khi lấy danh sách người dùng" };
+        }
+    }
+}
+
+export async function deleteUser(userId) {
+    try {
+        const token = localStorage.getItem('token');
+        await axios.put(`${API_URL}/api/user/delete/${userId}`, null,{headers: { Authorization: `Bearer ${token}` }})
+    } catch (error) {
+        console.error("Error deleting user:", error);
+        throw error;
+    }
 }
