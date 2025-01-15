@@ -1,0 +1,76 @@
+.commentListContainer {
+  margin-top: 20px;
+}
+
+.commentInputContainer {
+  margin-top: 20px;
+}
+
+.commentInput {
+  margin-bottom: 10px;
+}
+
+.commentButton {
+  margin-top: 10px;
+}
+
+.replyButton {
+  font-size: 0.75rem;
+  text-transform: none;
+  padding: 2px 8px;
+  min-width: auto;
+  margin-left: 8px;
+  margin-top: 4px;
+}
+
+.nestedComments {
+  margin-left: 32px;
+  border-left: 1px solid #e0e0e0;
+  padding-left: 16px;
+}
+
+.noComments {
+  color: #757575;
+  font-style: italic;
+}
+.commentBubble {
+  background-color: #f0f2f5;
+  border-radius: 18px;
+  padding: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.nestedComments {
+  margin-left: 24px;
+  border-left: 2px solid #e0e0e0;
+  padding-left: 16px;
+}
+
+.replyButton {
+  font-size: 0.75rem;
+  text-transform: none;
+  padding: 2px 8px;
+  min-width: auto;
+  margin-top: 4px;
+  color: #65676B;
+}
+
+.replyButton:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.emojiPickerContainer {
+  position: absolute;
+  bottom: 15%;
+  right: 75%;
+  z-index: 1000;
+  transform: scale(0.5);
+  transform-origin: bottom right;
+}
+.commentActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}

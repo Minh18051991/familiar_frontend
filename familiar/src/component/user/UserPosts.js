@@ -108,9 +108,6 @@ const UserPosts = ({ userId }) => {
         ))
       )}
       {loading && <CircularProgress />}
-      {hasMore && !loading && sortedPosts.length > 0 && (
-        <Button onClick={fetchPosts} fullWidth>Xem thêm</Button>
-      )}
 
       <Modal
         open={!!openImage}

@@ -19,6 +19,35 @@ const CommentService = {
             throw error;
         }
     },
+   getCommentCountByPostId: async (postId) => {
+    try {
+        const comments = await CommentService.getCommentsByPostId(postId);
+        console.log('Comments received:', comments); // Log để kiểm tra dữ liệu
+
+        const countComments = (commentsArray) => {
+            if (!Array.isArray(commentsArray)) {
+                console.warn('Expected an array, but received:', commentsArray);
+                return 0;
+            }
+            return commentsArray.reduce((count, comment) => {
+                let currentCount = 1;
+                if (comment.replies && Array.isArray(comment.replies)) {
+                    currentCount += countComments(comment.replies);
+                }
+                return count + currentCount;
+            }, 0);
+        };
+
+        const count = countComments(comments);
+        console.log(`Total comment count for post ${postId}:`, count);
+        return count;
+    } catch (error) {
+        console.error('Error counting comments:', error);
+        return 0; // Trả về 0 thay vì throw error
+    }
+},
+
+
 
     addComment: async (commentDTO) => {
         try {
