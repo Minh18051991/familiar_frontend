@@ -35,21 +35,7 @@ const CommentModal = ({ open, handleClose, post, currentUserId }) => {
     }
   };
 
-  const handleAddComment = async () => {
-    try {
-      const commentDTO = {
-        postId: post.id,
-        userId: currentUserId,
-        content: newComment,
-        parentCommentId: null
-      };
-      await CommentService.createComment(post.id, newComment, currentUserId);
-      setNewComment('');
-      fetchComments();
-    } catch (error) {
-      console.error('Error adding comment:', error);
-    }
-  };
+
 
   const handleEnlargeMedia = (url) => {
     setEnlargedMedia(url);

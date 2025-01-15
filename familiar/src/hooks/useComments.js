@@ -22,7 +22,7 @@ const useComments = (postId) => {
     try {
       const parentComment = parentCommentId ? findCommentById(comments, parentCommentId) : null;
       const level = parentComment ? parentComment.level + 1 : 0;
-      
+
       const commentDTO = {
         postId,
         userId: currentUserId,

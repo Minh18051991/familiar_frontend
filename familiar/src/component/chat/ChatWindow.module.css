@@ -303,7 +303,16 @@
     z-index: 1000;
 
 }
+.userLink {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+}
 
+.userLink:hover {
+    text-decoration: underline;
+}
 
 .enlargedImage {
     max-width: 80%;

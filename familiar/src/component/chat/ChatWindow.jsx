@@ -1,7 +1,13 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { getMessagesBetweenUsers, createMessageWithAttachments, connectWebSocket, sendMessageRealTime, uploadFiles } from '../../services/MessageService';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {
+    connectWebSocket,
+    createMessageWithAttachments,
+    getMessagesBetweenUsers,
+    sendMessageRealTime,
+    uploadFiles
+} from '../../services/MessageService';
 import styles from './ChatWindow.module.css';
-import {Form, Button, Image} from 'react-bootstrap';
+import {Button, Form, Image} from 'react-bootstrap';
 import moment from 'moment';
 import EmojiPicker from 'emoji-picker-react';
 import {IconButton} from "@mui/material";
@@ -9,10 +15,10 @@ import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CancelIcon from '@mui/icons-material/Cancel';
 import ReactPlayer from 'react-player';
+import {Link} from 'react-router-dom';
 
 
-
-const ChatWindow = ({ currentUser, otherUser, onClose,onLatestMessage }) => {
+const ChatWindow = ({currentUser, otherUser, onClose, onLatestMessage}) => {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const [page, setPage] = useState(0);
@@ -114,55 +120,55 @@ const ChatWindow = ({ currentUser, otherUser, onClose,onLatestMessage }) => {
         };
     }, [currentUser.userId, onMessageReceived]);
 
- const handleSendMessage = async (e) => {
-    e.preventDefault();
-    if ((newMessage.trim() || selectedFiles.length > 0) && !isSending) {
-        setIsSending(true);
-        const messageData = {
-            senderUserId: currentUser.userId,
-            receiverUserId: otherUser.userId,
-            content: newMessage,
-            createdAt: new Date().toISOString(),
-            attachmentUrls: []
-        };
+    const handleSendMessage = async (e) => {
+        e.preventDefault();
+        if ((newMessage.trim() || selectedFiles.length > 0) && !isSending) {
+            setIsSending(true);
+            const messageData = {
+                senderUserId: currentUser.userId,
+                receiverUserId: otherUser.userId,
+                content: newMessage,
+                createdAt: new Date().toISOString(),
+                attachmentUrls: []
+            };
 
-        try {
-            console.log('Preparing to send message:', messageData);
-            console.log('Selected files:', selectedFiles);
-            if (selectedFiles.length > 0) {
-                console.log('Uploading files...');
-                const attachmentUrls = await uploadFiles(selectedFiles);
-                messageData.attachmentUrls = attachmentUrls;
+            try {
+                console.log('Preparing to send message:', messageData);
+                console.log('Selected files:', selectedFiles);
+                if (selectedFiles.length > 0) {
+                    console.log('Uploading files...');
+                    const attachmentUrls = await uploadFiles(selectedFiles);
+                    messageData.attachmentUrls = attachmentUrls;
+                }
+
+                console.log('Sending message data:', messageData);
+
+                if (isConnected) {
+                    sendMessageRealTime(messageData);
+                } else {
+                    await createMessageWithAttachments(messageData);
+                }
+
+                setNewMessage('');
+                setSelectedFiles([]);
+                setPreviewUrls([]);
+                scrollToBottom('auto');
+            } catch (error) {
+                console.error('Error sending message:', error);
+            } finally {
+                setIsSending(false);
             }
-
-            console.log('Sending message data:', messageData);
-
-            if (isConnected) {
-                sendMessageRealTime(messageData);
-            } else {
-                await createMessageWithAttachments(messageData);
-            }
-
-            setNewMessage('');
-            setSelectedFiles([]);
-            setPreviewUrls([]);
-            scrollToBottom('auto');
-        } catch (error) {
-            console.error('Error sending message:', error);
-        } finally {
-            setIsSending(false);
         }
-    }
-};
+    };
 
 
     const handleClose = () => {
-    setAnchorEl(null);
-    setShowEmojiPicker(prev => ({
-        ...prev,
-        [chatId]: false
-    }));
-};
+        setAnchorEl(null);
+        setShowEmojiPicker(prev => ({
+            ...prev,
+            [chatId]: false
+        }));
+    };
 
     const open = Boolean(anchorEl);
     const id = open ? 'media-popover' : undefined;
@@ -175,31 +181,31 @@ const ChatWindow = ({ currentUser, otherUser, onClose,onLatestMessage }) => {
     const emojiId = openEmoji ? 'emoji-popper' : undefined;
 
 
- const handleFileUpload = (event) => {
-    const files = Array.from(event.target.files);
-    setSelectedFiles(prevFiles => [...prevFiles, ...files]);
-    
-    files.forEach(file => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setPreviewUrls(prevUrls => [...prevUrls, reader.result]);
-        };
-        reader.readAsDataURL(file);
-    });
-};
- const removeFile = (index) => {
-    setSelectedFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
-    setPreviewUrls(prevUrls => prevUrls.filter((_, i) => i !== index));
-};
+    const handleFileUpload = (event) => {
+        const files = Array.from(event.target.files);
+        setSelectedFiles(prevFiles => [...prevFiles, ...files]);
 
- const handleImageClick = (url) => {
-    setEnlargedImage(url);
-};
- const handleCloseEnlargedImage = (e) => {
-     if(e.target.classList.contains(styles.enlargedImageOverlay)){
-    setEnlargedImage(null);
-    }
-};
+        files.forEach(file => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewUrls(prevUrls => [...prevUrls, reader.result]);
+            };
+            reader.readAsDataURL(file);
+        });
+    };
+    const removeFile = (index) => {
+        setSelectedFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
+        setPreviewUrls(prevUrls => prevUrls.filter((_, i) => i !== index));
+    };
+
+    const handleImageClick = (url) => {
+        setEnlargedImage(url);
+    };
+    const handleCloseEnlargedImage = (e) => {
+        if (e.target.classList.contains(styles.enlargedImageOverlay)) {
+            setEnlargedImage(null);
+        }
+    };
 
 
     const handleLoadMore = () => {
@@ -213,29 +219,29 @@ const ChatWindow = ({ currentUser, otherUser, onClose,onLatestMessage }) => {
             onLatestMessage(latestMessage);
         }
     }, [messages]);
-    
-useEffect(() => {
-    const handleClickOutside = (event) => {
-        if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
-            setShowEmojiPicker(prev => ({
-                ...prev,
-                [chatId]: false
-            }));
-        }
-    };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-    };
-}, [chatId]);
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
+                setShowEmojiPicker(prev => ({
+                    ...prev,
+                    [chatId]: false
+                }));
+            }
+        };
 
-   const toggleEmojiPicker = () => {
-    setShowEmojiPicker(prev => ({
-        ...prev,
-        [chatId]: !prev[chatId]
-    }));
-};
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [chatId]);
+
+    const toggleEmojiPicker = () => {
+        setShowEmojiPicker(prev => ({
+            ...prev,
+            [chatId]: !prev[chatId]
+        }));
+    };
 
 
     const renderMessage = (message) => {
@@ -249,8 +255,8 @@ useEffect(() => {
                 )}
                 <div className={styles.messageCard}>
                     <div className={styles.messageContent}>
-                        {message.content !== "[Attachment]"&&
-                        <p>{message.content}</p>}
+                        {message.content !== "[Attachment]" &&
+                            <p>{message.content}</p>}
                         {message.attachmentUrls && message.attachmentUrls.length > 0 && (
                             <div className={styles.attachments}>
                                 {message.attachmentUrls.map((url, index) => {
@@ -258,7 +264,9 @@ useEffect(() => {
                                     const isVideo = url.match(/\.(mp4|webm|ogg)/i) != null;
 
                                     if (isImage) {
-                                        return <img key={index} src={url} alt="attachment" className={styles.attachmentImage} onClick={()=> handleImageClick(url)}/>;
+                                        return <img key={index} src={url} alt="attachment"
+                                                    className={styles.attachmentImage}
+                                                    onClick={() => handleImageClick(url)}/>;
                                     } else if (isVideo) {
                                         return (
                                             <div key={index} className={styles.videoWrapper}>
@@ -303,8 +311,10 @@ useEffect(() => {
                 </div>
             )}
             <div className={styles.chatHeader}>
-                <Image src={otherUser.userProfilePictureUrl} className={styles.headerAvatar} roundedCircle/>
-                <h5>{`${otherUser.userFirstName} ${otherUser.userLastName}`}</h5>
+                <Link to={`/users/detail/${otherUser.userId}`} className={styles.userLink}>
+                    <Image src={otherUser.userProfilePictureUrl} className={styles.headerAvatar} roundedCircle/>
+                    <h5>{`${otherUser.userFirstName} ${otherUser.userLastName}`}</h5>
+                </Link>
                 <button className={styles.closeButton} onClick={onClose}>&times;</button>
             </div>
             <div className={styles.chatMessages} ref={chatMessagesRef}>

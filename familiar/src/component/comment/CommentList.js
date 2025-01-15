@@ -15,7 +15,9 @@ const CommentList = ({ postId }) => {
   const fetchComments = async () => {
     try {
       const response = await CommentService.getCommentsByPostId(postId);
+      console.log('Fetched comments:', response);
       setComments(response || []);
+      console.log('Fetched comments:', comments);
     } catch (error) {
       console.error('Error fetching comments:', error);
       setComments([]);
@@ -38,7 +40,18 @@ const CommentList = ({ postId }) => {
       console.error('Error adding comment:', error);
     }
   };
-
+// Trong component cha (ví dụ: CommentList.js)
+const refreshComments = async () => {
+    try {
+        const updatedComments = await CommentService.getComments(postId);  // Giả sử postId là ID của bài viết hiện tại
+        setComments(updatedComments);  // Cập nhật state của danh sách comments
+    } catch (error) {
+        console.error('Error refreshing comments:', error);
+    }
+};
+  
+  
+  
   const handleReply = async (parentCommentId, content) => {
     try {
       const parentComment = findCommentById(comments, parentCommentId);
@@ -100,6 +113,7 @@ const CommentList = ({ postId }) => {
           onEdit={handleEdit}
           onDelete={handleDelete}
           currentUserId={currentUserId}
+          refreshComments={refreshComments}
         />
         {comment.replies && comment.replies.length > 0 && renderComments(comment.replies, depth + 1)}
       </Box>
