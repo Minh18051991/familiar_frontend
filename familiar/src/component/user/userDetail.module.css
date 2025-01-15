@@ -33,7 +33,7 @@
 /* nút huỷ kết bạn, xoá bạn */
 
 .actionDeleteBtn {
-  background-color:#f3f9ff;
+  background-color: #f3f9ff;
   font-weight: 500;
   border: 0.5px solid black;
   border-radius: 5px;
@@ -41,10 +41,9 @@
 }
 
 .actionDeleteBtn:hover {
-  background-color: #ebf5ff ;
+  background-color: #ebf5ff;
   color: #0b0b0b;
   border: 0.5px solid black;
-  padding: 10px 15px;
   border-radius: 5px;
   cursor: pointer;
   font-weight: 500;
