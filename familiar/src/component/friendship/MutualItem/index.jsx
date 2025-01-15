@@ -86,7 +86,7 @@ function MutualItem({ data }) {
               ? "Xoá bạn bè"
               : isSendAddRequest
               ? "Huỷ kết bạn"
-              : "Thêm bạn bè"}
+              : "Kết bạn"}
           </button>
         </div>
       </div>
