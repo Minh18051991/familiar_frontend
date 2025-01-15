@@ -60,7 +60,11 @@ const Comment = ({ comment, onReply, onEdit, onDelete, currentUserId }) => {
           borderRadius: '14px',
           maxWidth: 'fit-content',
         }}>
-          <Typography variant="subtitle2">{`${comment.userFirstName} ${comment.userLastName}`}</Typography>
+            <Link to={`/users/detail/${comment.userId}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <Typography variant="subtitle2" sx={{ '&:hover': { textDecoration: 'underline' } }}>
+                    {`${comment.userFirstName} ${comment.userLastName}`}
+                </Typography>
+            </Link>
           {isEditing ? (
             <Box>
               <TextField
