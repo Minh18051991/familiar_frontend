@@ -155,26 +155,26 @@ const PostList = () => {
             }
         }
     };
-const isVideoUrl = (url) => {
-    if (!url) return false;
+    const isVideoUrl = (url) => {
+        if (!url) return false;
 
-    // Danh sách các phần mở rộng video phổ biến
-    const videoExtensions = ['mp4', 'mkv', 'avi', 'webm', 'mov', 'flv', 'wmv'];
+        // Danh sách các phần mở rộng video phổ biến
+        const videoExtensions = ['mp4', 'mkv', 'avi', 'webm', 'mov', 'flv', 'wmv'];
 
-    // Kiểm tra nếu URL chứa phần mở rộng video
-    const hasVideoExtension = videoExtensions.some(ext =>
-        url.toLowerCase().includes(`.${ext}`)
-    );
-
-    // Kiểm tra nếu là URL từ Firebase Storage và chứa tên file video
-    const isFirebaseStorageVideo = url.includes('firebasestorage.googleapis.com') &&
-        videoExtensions.some(ext =>
-            url.toLowerCase().includes(`%2f${ext}`) || // Đối với URL đã được mã hóa
-            url.toLowerCase().includes(`/${ext}`)      // Đối với URL chưa được mã hóa
+        // Kiểm tra nếu URL chứa phần mở rộng video
+        const hasVideoExtension = videoExtensions.some(ext =>
+            url.toLowerCase().includes(`.${ext}`)
         );
 
-    return hasVideoExtension || isFirebaseStorageVideo;
-}
+        // Kiểm tra nếu là URL từ Firebase Storage và chứa tên file video
+        const isFirebaseStorageVideo = url.includes('firebasestorage.googleapis.com') &&
+            videoExtensions.some(ext =>
+                url.toLowerCase().includes(`%2f${ext}`) || // Đối với URL đã được mã hóa
+                url.toLowerCase().includes(`/${ext}`)      // Đối với URL chưa được mã hóa
+            );
+
+        return hasVideoExtension || isFirebaseStorageVideo;
+    }
 
     return (
         <Box sx={{maxWidth: 800, margin: 'auto', p: 2}}>
@@ -269,30 +269,30 @@ const isVideoUrl = (url) => {
                 <Button onClick={fetchPosts}>Load More</Button>
             )}
 
-           <Modal
-        open={!!openImage}
-        onClose={handleCloseImage}
-      >
-        <Box sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          maxWidth: '90%',
-          maxHeight: '90%',
-        }}>
-          {isVideoUrl(openImage) ? (
-            <ReactPlayer
-              url={openImage}
-              width="100%"
-              height="100%"
-              controls={true}
-            />
-          ) : (
-            <img src={openImage} alt="Enlarged view" style={{maxWidth: '100%', maxHeight: '100%'}} />
-          )}
-        </Box>
-      </Modal>
+            <Modal
+                open={!!openImage}
+                onClose={handleCloseImage}
+            >
+                <Box sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    maxWidth: '90%',
+                    maxHeight: '90%',
+                }}>
+                    {isVideoUrl(openImage) ? (
+                        <ReactPlayer
+                            url={openImage}
+                            width="100%"
+                            height="100%"
+                            controls={true}
+                        />
+                    ) : (
+                        <img src={openImage} alt="Enlarged view" style={{maxWidth: '100%', maxHeight: '100%'}}/>
+                    )}
+                </Box>
+            </Modal>
 
             {editingPost && (
                 <EditPost

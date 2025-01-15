@@ -8,38 +8,94 @@ const FriendListWithChat = () => {
     const [friends, setFriends] = useState([]);
     const [activeChats, setActiveChats] = useState([]);
     const [latestMessages, setLatestMessages] = useState({});
+    const [newMessageNotifications,setNewMessageNofications] = useState(false);
+    const [readMessages, setReadMessages] = useState({});
     const currentUser = useSelector(state => state.user.account);
 
+const handleLatestMessage = useCallback((friendId, message) => {
+    console.log("Received message:", message);
+
+    setLatestMessages(prev => ({
+        ...prev,
+        [friendId]: message
+    }));
+
+    // Kiểm tra xem tin nhắn có phải từ bạn bè không
+    const isMessageFromFriend = message.senderUserId === friendId;
+
+    if (isMessageFromFriend) {
+        // Chỉ đặt thông báo mới nếu tin nhắn đến từ bạn bè
+        if (!readMessages[friendId] || readMessages[friendId] !== message.id) {
+            setNewMessageNofications(prev => ({...prev, [friendId]: true }));
+        }
+    } else {
+        // Nếu tin nhắn từ người dùng hiện tại, tắt thông báo mới
+        setNewMessageNofications(prev => ({...prev, [friendId]: false }));
+        setReadMessages(prev => ({...prev, [friendId]: message.id }));
+    }
+
+    // Di chuyển bạn bè lên đầu danh sách, bất kể ai gửi tin nhắn
+    setFriends(prevFriends => {
+        const updatedFriends = prevFriends.filter(f => f.userId !== friendId);
+        const friendToMove = prevFriends.find(f => f.userId === friendId);
+        return [friendToMove, ...updatedFriends];
+    });
+}, [readMessages]);
     useEffect(() => {
+        // Khôi phục các cuộc trò chuyện đang hoạt động từ localStorage
+        const storedActiveChats = JSON.parse(localStorage.getItem('activeChats')) || [];
+        setActiveChats(storedActiveChats);
+    }, []);
+
+    useEffect(() => {
+        // Lưu các cuộc trò chuyện đang hoạt động vào localStorage
+        localStorage.setItem('activeChats', JSON.stringify(activeChats));
+    }, [activeChats]);
+
+useEffect(() => {
         const fetchFriends = async () => {
             try {
                 const friendships = await getFriendShips(currentUser.userId);
                 setFriends(friendships);
+
             } catch (error) {
                 console.error('Error fetching friends:', error);
             }
+
         };
 
         fetchFriends();
     }, [currentUser.userId]);
 
+
+
+
+
     const handleFriendClick = (friend) => {
         if (!activeChats.some(chat => chat.userId === friend.userId)) {
             setActiveChats(prevChats => [...prevChats, friend]);
         }
+        // Đánh dấu tin nhắn là đã đọc
+        markMessageAsRead(friend.userId);
     };
 
     const handleCloseChatWindow = (userId) => {
         setActiveChats(prevChats => prevChats.filter(chat => chat.userId !== userId));
     };
 
+    const markMessageAsRead = (friendId) => {
+        setNewMessageNofications(prev => ({...prev, [friendId]: false }));
+        if (latestMessages[friendId]) {
+            setReadMessages(prev => ({...prev, [friendId]: latestMessages[friendId].id }));
+        }
+    };
 
-    const handleLatestMessage = useCallback((friendId, message) => {
-        setLatestMessages(prev => ({
-            ...prev,
-            [friendId]: message
-        }));
-    }, []);
+    const handleChatOpen = (friendId) => {
+        markMessageAsRead(friendId);
+    };
+
+
+
 
     return (
         <div className={`card ${styles.friendListCard}`}>
@@ -67,11 +123,16 @@ const FriendListWithChat = () => {
                                                     {friend.userFirstName} {friend.userLastName}
                                                 </span>
                                                 {latestMessages[friend.userId] && (
-                                                    <p className={styles.latestMessage}>
+                                                    <p className={`${styles.latestMessage} ${newMessageNotifications[friend.userId] ? styles.newMessageText : ''}`}>
                                                         {latestMessages[friend.userId].content}
                                                     </p>
                                                 )}
                                             </div>
+                                            {newMessageNotifications[friend.userId] && (
+                                                <div className={styles.newMessageNotification}>
+                                                    Mới
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
