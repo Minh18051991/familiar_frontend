@@ -4,7 +4,8 @@ import {
     createMessageWithAttachments,
     getMessagesBetweenUsers,
     sendMessageRealTime,
-    uploadFiles
+    uploadFiles,
+    deleteMessage
 } from '../../services/MessageService';
 import styles from './ChatWindow.module.css';
 import {Button, Form, Image} from 'react-bootstrap';
@@ -16,6 +17,9 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CancelIcon from '@mui/icons-material/Cancel';
 import ReactPlayer from 'react-player';
 import {Link} from 'react-router-dom';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Modal as MuiModal, Box, Typography } from '@mui/material';
+
 
 
 const ChatWindow = ({currentUser, otherUser, onClose, onLatestMessage}) => {
@@ -36,6 +40,8 @@ const ChatWindow = ({currentUser, otherUser, onClose, onLatestMessage}) => {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [previewUrls, setPreviewUrls] = useState([]);
     const [enlargedImage, setEnlargedImage] = useState(null);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [messageToDelete, setMessageToDelete] = useState(null);
 
     const chatId = `${Math.min(currentUser.userId, otherUser.userId)}_${Math.max(currentUser.userId, otherUser.userId)}`;
 
@@ -179,7 +185,29 @@ const ChatWindow = ({currentUser, otherUser, onClose, onLatestMessage}) => {
     };
     const openEmoji = Boolean(emojiAnchorEl);
     const emojiId = openEmoji ? 'emoji-popper' : undefined;
+    const handleDeleteClick = (message) => {
+        setMessageToDelete(message);
+        setDeleteModalOpen(true);
+    };
 
+    const handleDeleteConfirm = async () => {
+        if (messageToDelete) {
+            try {
+                await deleteMessage(messageToDelete.id, currentUser.userId);
+                setMessages(prevMessages => prevMessages.filter(msg => msg.id !== messageToDelete.id));
+                setDeleteModalOpen(false);
+                setMessageToDelete(null);
+            } catch (error) {
+                console.error('Error deleting message:', error);
+                // You might want to show an error message to the user here
+            }
+        }
+    };
+
+    const handleDeleteCancel = () => {
+        setDeleteModalOpen(false);
+        setMessageToDelete(null);
+    };
 
     const handleFileUpload = (event) => {
         const files = Array.from(event.target.files);
@@ -244,15 +272,16 @@ const ChatWindow = ({currentUser, otherUser, onClose, onLatestMessage}) => {
     };
 
 
-    const renderMessage = (message) => {
-        const isSent = message.senderUserId === currentUser.userId;
-        const messageClass = isSent ? styles.sent : styles.received;
+   const renderMessage = (message) => {
+    const isSent = message.senderUserId === currentUser.userId;
+    const messageClass = isSent ? styles.sent : styles.received;
 
-        return (
-            <div key={message.id || message.createdAt} className={`${styles.messageWrapper} ${messageClass}`}>
-                {!isSent && (
-                    <Image src={otherUser.userProfilePictureUrl} className={styles.messageAvatar} roundedCircle/>
-                )}
+    return (
+        <div key={message.id || message.createdAt} className={`${styles.messageWrapper} ${messageClass}`}>
+            {!isSent && (
+                <Image src={otherUser.userProfilePictureUrl} className={styles.messageAvatar} roundedCircle/>
+            )}
+            <div className={styles.messageContainer}>
                 <div className={styles.messageCard}>
                     <div className={styles.messageContent}>
                         {message.content !== "[Attachment]" &&
@@ -287,13 +316,23 @@ const ChatWindow = ({currentUser, otherUser, onClose, onLatestMessage}) => {
                             </div>
                         )}
                         <span className={styles.timestamp}>
-                        {moment(message.createdAt).format('HH:mm')}
-                    </span>
+                            {moment(message.createdAt).format('HH:mm')}
+                        </span>
                     </div>
                 </div>
+                {isSent && (
+                    <IconButton
+                        className={styles.deleteButton}
+                        onClick={() => handleDeleteClick(message)}
+                        size="small"
+                    >
+                        <DeleteIcon fontSize="small" />
+                    </IconButton>
+                )}
             </div>
-        );
-    };
+        </div>
+    );
+};
 
     return (
         <div className={styles.chatWindow} key={chatId}>
@@ -383,6 +422,39 @@ const ChatWindow = ({currentUser, otherUser, onClose, onLatestMessage}) => {
                     </Button>
                 </div>
             </Form>
+            <MuiModal
+                open={deleteModalOpen}
+                onClose={handleDeleteCancel}
+                aria-labelledby="delete-modal-title"
+                aria-describedby="delete-modal-description"
+            >
+                <Box sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 400,
+                    bgcolor: 'background.paper',
+                    border: '2px solid #000',
+                    boxShadow: 24,
+                    p: 4,
+                }}>
+                    <Typography id="delete-modal-title" variant="h6" component="h2">
+                        Xác nhận xóa tin nhắn
+                    </Typography>
+                    <Typography id="delete-modal-description" sx={{ mt: 2 }}>
+                        Bạn có chắc chắn muốn xóa tin nhắn này không?
+                    </Typography>
+                    <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+                        <Button onClick={handleDeleteCancel} sx={{ mr: 1 }}>
+                            Hủy
+                        </Button>
+                        <Button onClick={handleDeleteConfirm} variant="contained" color="error">
+                            Xóa
+                        </Button>
+                    </Box>
+                </Box>
+            </MuiModal>
         </div>
     );
 }

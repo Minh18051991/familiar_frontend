@@ -20,7 +20,7 @@ const Comment = ({comment, onReply, onEdit, onDelete, currentUserId, refreshComm
     const [anchorEl, setAnchorEl] = useState(null);
     const [isExpanded, setIsExpanded] = useState(false);
 
-    const truncateContent = (content, maxLength = 45) => {
+    const truncateContent = (content, maxLength = 120) => {
         if (content.length <= maxLength) return content;
         return content.slice(0, maxLength) + '...';
     };
@@ -119,7 +119,6 @@ const Comment = ({comment, onReply, onEdit, onDelete, currentUserId, refreshComm
                             </Box>
                         )}
                     </Box>
-                    <Paper elevation={0} className={styles.commentPaper}>
                         {isEditing ? (
                             <Box>
                                 <TextField
@@ -149,7 +148,6 @@ const Comment = ({comment, onReply, onEdit, onDelete, currentUserId, refreshComm
                                 )}
                             </Typography>
                         )}
-                    </Paper>
                     <Box className={styles.commentMeta}>
                         <Typography variant="caption" className={styles.timestamp}>
                             {moment(comment.createdAt).format('MMMM D, YYYY [at] h:mm A')}

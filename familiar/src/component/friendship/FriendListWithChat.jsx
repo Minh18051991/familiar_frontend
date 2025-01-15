@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import { useSelector } from 'react-redux';
 import { getFriendShips } from '../../service/friendship/friendshipService';
+import { getMessagesBetweenUsers } from '../../services/MessageService';
 import ChatWindow from '../chat/ChatWindow';
 import styles from './FriendListWithChat.module.css';
 
@@ -41,7 +42,38 @@ const handleLatestMessage = useCallback((friendId, message) => {
         const friendToMove = prevFriends.find(f => f.userId === friendId);
         return [friendToMove, ...updatedFriends];
     });
-}, [readMessages]);
+}, []);
+
+    const fetchLatestMessageForFriend = useCallback(async (friendId) => {
+        try {
+            const response = await getMessagesBetweenUsers(currentUser.userId, friendId, 0, 1);
+            if (response && Array.isArray(response.content) && response.content.length > 0) {
+                const latestMessage = response.content[0];
+                handleLatestMessage(friendId, latestMessage);
+            }
+        } catch (error) {
+            console.error('Error fetching latest message:', error);
+        }
+    }, [currentUser.userId, handleLatestMessage]);
+
+    useEffect(() => {
+        const fetchFriendsAndMessages = async () => {
+            try {
+                const friendships = await getFriendShips(currentUser.userId);
+                setFriends(friendships);
+
+                // Tải tin nhắn mới nhất cho mỗi bạn bè
+                friendships.forEach(friend => {
+                    fetchLatestMessageForFriend(friend.userId);
+                });
+            } catch (error) {
+                console.error('Error fetching friends:', error);
+            }
+        };
+
+        fetchFriendsAndMessages();
+    }, [currentUser.userId, fetchLatestMessageForFriend]);
+
     useEffect(() => {
         // Khôi phục các cuộc trò chuyện đang hoạt động từ localStorage
         const storedActiveChats = JSON.parse(localStorage.getItem('activeChats')) || [];

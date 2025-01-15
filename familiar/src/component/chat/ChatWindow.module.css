@@ -1,7 +1,7 @@
 .chatWindow {
     width: 300px;
     height: 400px;
-    background-color: white;
+    background-color: #f2f4f7;
     border: 1px solid #ccc;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -12,7 +12,7 @@
 
 .chatHeader {
     padding: 10px;
-    background-color: #f0f0f0;
+    background-color: #f2f4f7;
     border-bottom: 1px solid #ccc;
     display: flex;
     align-items: center;
@@ -39,6 +39,7 @@
     display: flex;
     margin-bottom: 15px;
     align-items: flex-end;
+    position: relative;
 }
 
 .messageCard {
@@ -167,7 +168,6 @@
     padding: 8px;
 }
 
-
 .addButton {
     margin-right: 8px;
 }
@@ -185,7 +185,6 @@
     margin-left: -170px;
     margin-bottom: 475px;
 }
-
 
 .sendButton {
     background-color: #0084ff;
@@ -227,8 +226,8 @@
 
 .removeFileButton {
     position: absolute;
-    top: -60px;
-    right: -40px;
+    top: -10px;
+    right: -5px;
     background-color: rgba(255, 255, 255, 0.8);
     border: none;
     border-radius: 0 0 0 4px;
@@ -249,51 +248,53 @@
     background-color: rgba(255, 0, 0, 0.8);
     color: white;
 }
+
 .attachments {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-top: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 5px;
 }
 
 .attachmentImage {
-  max-width: 150px;
-  max-height: 200px;
-  object-fit: cover;
-  border-radius: 8px;
+    max-width: 150px;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
 }
 
 .videoWrapper {
-  width: 150px;
-  height: 150px;
-  position: relative;
-  overflow: hidden;
-  border-radius: 8px;
+    width: 150px;
+    height: 150px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
 }
 
 .reactPlayer {
-  position: absolute;
-  top: 0;
-  left: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .attachmentLink {
-  display: inline-block;
-  padding: 5px 10px;
-  background-color: #f0f0f0;
-  border-radius: 5px;
-  text-decoration: none;
-  color: #333;
-  font-size: 0.9em;
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #333;
+    font-size: 0.9em;
 }
 
 .attachmentLink:hover {
-  background-color: #e0e0e0;
+    background-color: #e0e0e0;
 }
+
 .enlargedImageOverlay {
     position: fixed;
-    top: -300px;
-    left: -1300px;
+    top: -200px;
+    left: 0;
     right: 0;
     bottom: -300px;
     background-color: rgba(0, 0, 0, 0.8);
@@ -301,8 +302,8 @@
     justify-content: center;
     align-items: center;
     z-index: 1000;
-
 }
+
 .userLink {
     display: flex;
     align-items: center;
@@ -343,3 +344,47 @@
 .closeEnlargedImage:hover {
     background-color: rgba(255, 255, 255, 0.4);
 }
+
+.messageContainer {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.deleteButton {
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.messageWrapper:hover .deleteButton {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+.sent .messageContainer {
+    flex-direction: row-reverse;
+}
+
+.received .messageContainer {
+    flex-direction: row;
+}
+
+.sent .deleteIcon {
+    margin-right: 5px;
+    margin-left: 0;
+}
+
+.received .deleteIcon {
+    margin-left: 5px;
+    margin-right: 0;
+}
+
+
+
+
+

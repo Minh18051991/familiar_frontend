@@ -69,7 +69,6 @@ const PostList = () => {
                     setAllPostsLoaded(true);
                 }
             } else {
-                console.error('Unexpected response format:', response.data);
                 setError('Không còn bài viết nào để hiển thị');
                 setHasMore(false);
             }
