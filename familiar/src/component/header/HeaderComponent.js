@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {logout} from "../../redux/login/AccountAction";
 import {useDispatch, useSelector} from "react-redux";
@@ -14,6 +14,24 @@ function HeaderComponent() {
     const navigate = useNavigate();
     const location = useLocation();
     const [isLoading, setIsLoading] = useState(false);
+
+    const avatarUrl = React.useMemo(() => {
+
+        if (info && info.profilePictureUrl) {
+            return info.profilePictureUrl;
+        } else if (account && account.profilePictureUrl) {
+            return account.profilePictureUrl;
+        } else if (account && account.gender) {
+            return account.gender === 'Nam'
+                ? "https://static2.yan.vn/YanNews/2167221/202003/dan-mang-du-trend-thiet-ke-avatar-du-kieu-day-mau-sac-tu-anh-mac-dinh-b0de2bad.jpg"
+                : account.gender === 'Nữ'
+                    ? "https://antimatter.vn/wp-content/uploads/2022/04/anh-avatar-trang-co-gai-toc-tem.jpg"
+                    : "https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg";
+        }
+        return null;
+    }, [info, account]);
+
+    console.log(info.profilePictureUrl)
 
 
     const handleLogout = () => {
@@ -32,7 +50,6 @@ function HeaderComponent() {
             navigate(`/account/change-password/${account.username}`);
         }
     };
-
     return (
         <>
             <nav className={styles.navbar}>
@@ -55,15 +72,11 @@ function HeaderComponent() {
                               title="Bạn bè">
                             <i className="fas fa-user-friends"></i>
                         </Link>
-                        {account && account.role && account.role.includes('ROLE_ADMIN') ? (
+                        {account && account.role && account.role.includes('ROLE_ADMIN') &&
                             <Link className={`${styles.navIcon} ${isActive('/admin/users')}`} to="/admin/users" title="Danh sách người dùng">
                                 <i className="fas fa-users"></i>
                             </Link>
-                        ) : (
-                            <Link className={`${styles.navIcon} ${isActive('/messages')}`} to="/messages" title="Tin nhắn">
-                                <i className="fas fa-comment-alt"></i>
-                            </Link>
-                        )}
+                         }
                     </div>
                     <div className={styles.rightSection}>
                         {!account && (
@@ -75,10 +88,7 @@ function HeaderComponent() {
                                    id="navbarDropdown"
                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <img
-                                        src={account.profilePictureUrl ||
-                                            (account.gender === 'Nam' ? "https://static2.yan.vn/YanNews/2167221/202003/dan-mang-du-trend-thiet-ke-avatar-du-kieu-day-mau-sac-tu-anh-mac-dinh-b0de2bad.jpg" :
-                                                account.gender === 'Nữ' ? "https://antimatter.vn/wp-content/uploads/2022/04/anh-avatar-trang-co-gai-toc-tem.jpg" :
-                                                    "https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg")}
+                                        src={avatarUrl}
                                         alt="Avatar"
                                         className={styles.avatar}
                                     />
@@ -91,9 +101,6 @@ function HeaderComponent() {
                                     <li>
                                         <button className="dropdown-item" onClick={handleChangePassword}>Đổi mật khẩu
                                         </button>
-                                    </li>
-                                    <li>
-                                        <hr className="dropdown-divider"/>
                                     </li>
                                     <li>
                                         <button onClick={handleLogout} className="dropdown-item">Đăng xuất</button>

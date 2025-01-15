@@ -1,9 +1,11 @@
 .dashboardRow {
     margin-right: 0;
     margin-left: 0;
+    background-color: #f2f4f7;
 }
 
 .dashboardRow > div {
+    background-color: #f2f4f7;
     padding-right: 0;
     padding-left: 0;
 }
@@ -28,6 +30,7 @@
         top: 50%;
         transform: translateY(-50%);
         z-index: 1000;
+        background-color: #f2f4f7;
     }
 
     .friendListCard {
