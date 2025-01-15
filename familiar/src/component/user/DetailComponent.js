@@ -53,7 +53,7 @@ function DetailComponent() {
             if (imageUrl) {
                 const updatedUser = await updateUser(userId, {...user, profilePictureUrl: imageUrl});
                 setUser(updatedUser);
-                // dispatch(updateAvatar(imageUrl));
+                dispatch(updateAvatar(imageUrl));
                 console.log(imageUrl)
                 toast.success("Cập nhật ảnh đại diện thành công!");
             }
