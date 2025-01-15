@@ -186,6 +186,23 @@
 @media (max-width: 768px) {
     .friendListCard {
         max-width: 100%;
+        margin: 0;
+    }
+    .scrollableCardBody {
+        max-height: 350px;
+    }
+
+    .friendGrid {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .friendItem {
+        margin-bottom: 10px;
+    }
+
+    .chatWindowsContainer {
+        bottom: -150px;
     }
 
     .chatWindow {
