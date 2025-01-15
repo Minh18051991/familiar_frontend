@@ -1,24 +1,85 @@
-.comment {
+.commentContainer {
   margin-bottom: 16px;
-  padding: 16px;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
 }
 
 .commentHeader {
   display: flex;
-  align-items: center;
-  margin-bottom: 8px;
+  align-items: flex-start;
 }
 
-.commentHeader > *:not(:last-child) {
+.avatarLink {
+  text-decoration: none;
+  margin-right: 12px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+}
+
+.headerContent {
+  flex-grow: 1;
+}
+
+.nameAndOptions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.userNameLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+.userName {
+  font-weight: bold;
+}
+
+.editDeleteContainer {
+  display: flex;
+  align-items: center;
+}
+
+.commentPaper {
+  padding: 8px 12px;
+  background-color: #f0f2f5;
+  border-radius: 18px;
+}
+
+.commentText {
+  word-break: break-word;
+}
+
+.commentMeta {
+  display: flex;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.timestamp {
+  color: #65676B;
   margin-right: 8px;
 }
 
-.commentActions {
-  margin-top: 8px;
+.replyButton {
+  font-size: 0.8rem;
+  color: #65676B;
+  text-transform: none;
 }
 
-.replyForm {
-  margin-top: 16px;
+.replyContainer {
+  margin-top: 8px;
+  margin-left: 52px;
+}
+
+.replyActions {
+  display: flex;
+  align-items: center;
+}
+
+.emojiPickerContainer {
+  margin-top: 8px;
+  margin-left: 52px;
 }

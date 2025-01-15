@@ -12,15 +12,17 @@ const FriendListWithChat = () => {
     const [readMessages, setReadMessages] = useState({});
     const currentUser = useSelector(state => state.user.account);
 
+    const truncateMessage = (message, maxLength = 15) => {
+        if (message.length <= maxLength) return message;
+        return message.slice(0, maxLength) + '...';
+    };
+
 const handleLatestMessage = useCallback((friendId, message) => {
     console.log("Received message:", message);
-
     setLatestMessages(prev => ({
         ...prev,
         [friendId]: message
     }));
-
-    // Kiểm tra xem tin nhắn có phải từ bạn bè không
     const isMessageFromFriend = message.senderUserId === friendId;
 
     if (isMessageFromFriend) {
@@ -33,7 +35,6 @@ const handleLatestMessage = useCallback((friendId, message) => {
         setNewMessageNofications(prev => ({...prev, [friendId]: false }));
         setReadMessages(prev => ({...prev, [friendId]: message.id }));
     }
-
     // Di chuyển bạn bè lên đầu danh sách, bất kể ai gửi tin nhắn
     setFriends(prevFriends => {
         const updatedFriends = prevFriends.filter(f => f.userId !== friendId);
@@ -124,7 +125,7 @@ useEffect(() => {
                                                 </span>
                                                 {latestMessages[friend.userId] && (
                                                     <p className={`${styles.latestMessage} ${newMessageNotifications[friend.userId] ? styles.newMessageText : ''}`}>
-                                                        {latestMessages[friend.userId].content}
+                                                        {truncateMessage(latestMessages[friend.userId].content)}
                                                     </p>
                                                 )}
                                             </div>
