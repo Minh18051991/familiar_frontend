@@ -7,8 +7,7 @@ import styles from './DashboardComponent.module.css';
 
 function DashboardComponent() {
     return (
-        <>
-            <HomeComponent/>
+        <div className={`${styles.container}`}>
             <div className={`${styles.dashboardRow} row vh-100`}>
                 <div className="col-12 col-md-2 order-md-1">
                     <FriendRequestHome/>
@@ -18,7 +17,7 @@ function DashboardComponent() {
                 </div>
             </div>
             <ChatBubble />
-        </>
+        </div>
     );
 }
 

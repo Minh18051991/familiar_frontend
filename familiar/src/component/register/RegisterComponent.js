@@ -48,6 +48,7 @@ export default function RegisterComponent() {
                 return result;
             }),
         dateOfBirth: Yup.date()
+            .required("Ngày sinh không được để trống")
             .nullable()
             .test(
                 "is-over-16",
@@ -212,7 +213,7 @@ export default function RegisterComponent() {
                                             </div>
 
                                             <div className="col-md-6">
-                                                <label htmlFor="dateOfBirth" className="form-label">Ngày sinh</label>
+                                                <label htmlFor="dateOfBirth" className={`form-label ${styles.requiredField}`}>Ngày sinh</label>
                                                 <Field className="form-control" type="date" name="dateOfBirth"
                                                        id="dateOfBirth"/>
                                                 <ErrorMessage name="dateOfBirth" component="div"
