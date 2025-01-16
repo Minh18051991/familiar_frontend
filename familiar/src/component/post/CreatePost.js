@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import PostService from '../../services/PostService';
-import { findUserById } from '../../service/user/userService';
-import { Form, Button, Modal } from 'react-bootstrap';
-import { BsCamera, BsTrash, BsEmojiSmile } from 'react-icons/bs';
+import {findUserById} from '../../service/user/userService';
+import {Form, Button, Modal} from 'react-bootstrap';
+import {BsCamera, BsTrash, BsEmojiSmile} from 'react-icons/bs';
 import EmojiPicker from 'emoji-picker-react';
 import styles from './CreatePost.module.css';
+import {useSelector} from "react-redux";
 
-const CreatePost = ({ onPostCreated }) => {
+const CreatePost = ({onPostCreated}) => {
     const [showModal, setShowModal] = useState(false);
     const [content, setContent] = useState('');
     const [files, setFiles] = useState([]);
@@ -18,6 +19,8 @@ const CreatePost = ({ onPostCreated }) => {
         userLastName: ''
     });
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const info = useSelector(state => state.user);
+    const account = info ? info.account : null;
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -38,7 +41,7 @@ const CreatePost = ({ onPostCreated }) => {
 
         fetchUserData();
     }, []);
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
@@ -77,16 +80,36 @@ const CreatePost = ({ onPostCreated }) => {
         setShowEmojiPicker(false);
     };
 
-    const CompactCreatePost = () => (
-        <div className={styles.compactCreatePost} onClick={() => setShowModal(true)}>
-            <img src={userData.userProfilePictureUrl} alt="Profile" className={styles.profilePicture} />
-            <div className={styles.fakeTextArea}>{`${userData.userFirstName} ${userData.userLastName}, bạn đang nghĩ gì thế?`}</div>
-        </div>
-    );
+    const CompactCreatePost = () => {
+        let profilePicture;
+        let altText = "Profile";
 
+        if (account && account.profilePictureUrl) {
+            profilePicture = account.profilePictureUrl;
+        } else if (account && account.gender) {
+            altText = account.gender;
+            if (account.gender === 'Nam') {
+                profilePicture = "https://static2.yan.vn/YanNews/2167221/202003/dan-mang-du-trend-thiet-ke-avatar-du-kieu-day-mau-sac-tu-anh-mac-dinh-b0de2bad.jpg";
+            } else if (account.gender === 'Nữ') {
+                profilePicture = "https://antimatter.vn/wp-content/uploads/2022/04/anh-avatar-trang-co-gai-toc-tem.jpg";
+            } else {
+                profilePicture = "https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg";
+            }
+        } else {
+            profilePicture = "https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg";
+        }
+
+        return (
+            <div className={styles.compactCreatePost} onClick={() => setShowModal(true)}>
+                <img src={profilePicture} alt={altText} className={styles.profilePicture}/>
+                <div
+                    className={styles.fakeTextArea}>{`${userData.userFirstName} ${userData.userLastName}, bạn đang nghĩ gì thế?`}</div>
+            </div>
+        );
+    };
     return (
         <>
-            <CompactCreatePost />
+            <CompactCreatePost/>
             <Modal show={showModal} onHide={() => setShowModal(false)} size="lg">
                 <Modal.Header closeButton>
                     <Modal.Title>Tạo bài viết</Modal.Title>
@@ -106,7 +129,7 @@ const CreatePost = ({ onPostCreated }) => {
                         <div className={styles.actionBar}>
                             <div className={styles.fileUpload}>
                                 <label htmlFor="file-upload" className={styles.fileUploadLabel}>
-                                    <BsCamera size={20} />
+                                    <BsCamera size={20}/>
                                     <span>Ảnh và Video</span>
                                 </label>
                                 <Form.Control
@@ -118,31 +141,32 @@ const CreatePost = ({ onPostCreated }) => {
                                     className={styles.hiddenInput}
                                 />
                             </div>
-                            <Button 
-                                variant="link" 
+                            <Button
+                                variant="link"
                                 className={styles.emojiButton}
                                 onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                             >
-                                <BsEmojiSmile size={20} />
+                                <BsEmojiSmile size={20}/>
                             </Button>
                         </div>
                         {showEmojiPicker && (
                             <div className={styles.emojiPickerContainer}>
-                                <EmojiPicker onEmojiClick={onEmojiClick} />
+                                <EmojiPicker onEmojiClick={onEmojiClick}/>
                             </div>
                         )}
                         {files.length > 0 && (
                             <div className={styles.previewContainer}>
                                 {files.map((file, index) => (
                                     <div key={index} className={styles.previewItem}>
-                                        <img src={URL.createObjectURL(file)} alt={`Preview ${index}`} className={styles.previewImage} />
-                                        <Button 
-                                            variant="light" 
-                                            size="sm" 
+                                        <img src={URL.createObjectURL(file)} alt={`Preview ${index}`}
+                                             className={styles.previewImage}/>
+                                        <Button
+                                            variant="light"
+                                            size="sm"
                                             className={styles.removeButton}
                                             onClick={() => handleRemoveFile(index)}
                                         >
-                                            <BsTrash />
+                                            <BsTrash/>
                                         </Button>
                                     </div>
                                 ))}

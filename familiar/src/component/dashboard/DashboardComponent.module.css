@@ -57,3 +57,7 @@
         overflow-y: auto;
     }
 }
+
+.container {
+    background-color: #f2f4f7;
+}
