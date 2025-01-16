@@ -106,13 +106,26 @@ const PostList = () => {
         setIsEditModalOpen(false);
     };
 
-    const handlePostUpdated = (updatedPost) => {
-        setPosts(prevPosts => prevPosts.map(post =>
-            post.id === updatedPost.id ? {...post, ...updatedPost} : post
-        ));
-        setEditingPost(null);
-        setIsEditModalOpen(false);
-    };
+  const handlePostUpdated = (updatedPost) => {
+    // Cập nhật bài viết trong state hiện tại
+    setPosts(prevPosts => prevPosts.map(post =>
+        post.id === updatedPost.id ? {...post, ...updatedPost} : post
+    ));
+
+    // Đóng modal chỉnh sửa
+    setEditingPost(null);
+    setIsEditModalOpen(false);
+
+    // Tải lại dữ liệu
+    setPage(0);
+    setHasMore(true);
+    setAllPostsLoaded(false);
+    setPosts([]); // Xóa tất cả bài viết hiện tại
+    setChangePost(prev => !prev); // Trigger re-fetch
+
+    // Hiển thị thông báo thành công
+    toast.success('Bài viết đã được cập nhật thành công');
+};
 
     const handleCommentClick = (post) => {
         setSelectedPost(post);
@@ -142,7 +155,6 @@ const PostList = () => {
                     toast.error('Không thể xóa bài viết. Vui lòng thử lại.');
                 }
             } catch (err) {
-                console.error('Lỗi khi xóa bài viết:', err);
                 toast.error('Xóa thành công');
             } finally {
                 // Đặt lại các state để tải lại dữ liệu, bất kể thành công hay thất bại
