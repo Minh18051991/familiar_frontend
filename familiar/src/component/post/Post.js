@@ -3,46 +3,58 @@ import {
   Box, Card, CardContent, Typography, Avatar, IconButton
 } from '@mui/material';
 import moment from 'moment';
-import EditIcon from '@mui/icons-material/Edit';
 import CommentIcon from '@mui/icons-material/Comment';
 import styles from './PostList.module.css';
 
 const Post = ({ post, currentUserId, onEditClick, onCommentClick, onImageClick }) => {
-  const isCurrentUserPost = currentUserId && currentUserId === post.userId.toString();
+  console.log('Post component rendered with:', { post, currentUserId });
+
+  // if (!post) {
+  //   console.log('Post is null or undefined, not rendering');
+  //   return null;
+  // }
+
+  const safeToString = (value) => {
+    return value != null ? String(value) : '';
+  };
+
+  const isCurrentUserPost = currentUserId && safeToString(currentUserId) === safeToString(post.userId);
+
+  console.log('Post data:', {
+    userProfilePictureUrl: post.userProfilePictureUrl,
+    userFirstName: post.userFirstName,
+    userLastName: post.userLastName,
+    createdAt: post.createdAt,
+    content: post.content,
+    attachmentUrls: post.attachmentUrls,
+    commentCount: post.commentCount
+  });
+
   return (
     <Card className={styles.postCard}>
       <CardContent className={styles.postContent}>
         <Box className={styles.userInfo}>
           <Avatar
-            src={post.userProfilePictureUrl}
-            alt={`${post.userFirstName} ${post.userLastName}`}
+            src={post.userProfilePictureUrl || ''}
+            alt={`${post.userFirstName || ''} ${post.userLastName || ''}`}
           />
           <Box>
             <Typography variant="subtitle1" className={styles.userName}>
-              {`${post.userFirstName} ${post.userLastName}`}
+              {`${post.userFirstName || ''} ${post.userLastName || ''}`}
             </Typography>
             <Typography variant="caption" color="textSecondary">
-              {moment(post.createdAt).format('MMMM D, YYYY [at] h:mm A')}
+              {post.createdAt ? moment(post.createdAt).format('MMMM D, YYYY [at] h:mm A') : ''}
             </Typography>
           </Box>
-          {/*{isCurrentUserPost && (*/}
-          {/*  <IconButton*/}
-          {/*    onClick={() => onEditClick(post)}*/}
-          {/*    size="small"*/}
-          {/*    sx={{ marginLeft: 'auto' }}*/}
-          {/*  >*/}
-          {/*    <EditIcon />*/}
-          {/*  </IconButton>*/}
-          {/*)}*/}
         </Box>
         <Typography variant="body1" className={styles.postText}>
-          {post.content}
+          {post.content || ''}
         </Typography>
         {post.attachmentUrls && post.attachmentUrls.length > 0 && (
           <Box className={styles.attachmentGrid}>
             {post.attachmentUrls.map((url, attachmentIndex) => (
               <img
-                key={`${post.id}-attachment-${attachmentIndex}`}
+                key={`${safeToString(post.id)}-attachment-${attachmentIndex}`}
                 src={url}
                 alt={`Attachment ${attachmentIndex + 1}`}
                 className={styles.attachmentImage}
