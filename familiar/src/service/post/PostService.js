@@ -8,7 +8,6 @@ class PostService {
     constructor() {
         this.axiosInstance = axios.create({
             baseURL: API_URL,
-            withCredentials: true
         });
 
         this.axiosInstance.interceptors.request.use((config) => {
