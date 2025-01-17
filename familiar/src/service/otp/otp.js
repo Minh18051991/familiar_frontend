@@ -1,9 +1,9 @@
 import axios from 'axios';
-
+import { API_URL } from "../url/API_URL";
 export const sendOtp = async (username) => {
     try {
         const token = localStorage.getItem('token');
-        await axios.post(`http://localhost:8080/api/otp/enter-otp`, username, {
+        await axios.post(API_URL +`/api/otp/enter-otp`, username, {
             headers: {Authorization: `Bearer ${token}`}
         });
     } catch (error) {
@@ -16,7 +16,7 @@ export const sendOtp = async (username) => {
 // Hàm mới để bắt đầu quá trình quên mật khẩu
 export const initiatePasswordReset = async (email) => {
     try {
-        const response = await axios.post(`http://localhost:8080/api/forget-password/generate-token`, {email: email });
+        const response = await axios.post(API_URL +`/api/forget-password/generate-token`, {email: email });
         return response.data; // Giả sử response.data chứa { token: 'temporary_token' }
     } catch (error) {
         console.error("Error initiating password reset:", error);
@@ -27,7 +27,7 @@ export const initiatePasswordReset = async (email) => {
 
 export const sendOtpToEmail = async (email, tempToken) => {
     try {
-        const response = await axios.post(`http://localhost:8080/api/otp/enter-otp-by-email`,
+        const response = await axios.post(API_URL +`/api/otp/enter-otp-by-email`,
             { email:email },
             { headers: { Authorization: `Bearer ${tempToken}` } }
         );
@@ -52,7 +52,7 @@ export const verifyOtp = async (username) => {
 
 
 
-        const  response = await axios.post(`http://localhost:8080/api/otp/confirm-otp`, username, {
+        const  response = await axios.post(API_URL +`/api/otp/confirm-otp`, username, {
             headers: {Authorization: `Bearer ${token}`}
         });
         return response.data;

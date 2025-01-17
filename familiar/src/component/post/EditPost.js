@@ -7,7 +7,7 @@ import {
   TextField,
   Button, IconButton
 } from '@mui/material';
-import PostService from "../../services/PostService";
+import PostService from "../../service/post/PostService";
 import EmojiPicker from 'emoji-picker-react';
 import InsertEmotionIcon from '@mui/icons-material/InsertEmoticon';
 

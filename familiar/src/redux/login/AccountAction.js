@@ -46,7 +46,7 @@ export function logout() {
         localStorage.removeItem('userId');
         localStorage.removeItem('resetPasswordToken');
         localStorage.removeItem('usernameAccount');
-        localStorage.removeItem('usernname');
+
 
         purgeStore()
 

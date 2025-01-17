@@ -1,8 +1,8 @@
 import axios from 'axios';
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
-import {storage} from '../firebaseConfig';
-
-const API_URL = 'http://localhost:8080/api/posts';
+import {storage} from '../../firebaseConfig';
+import { API_URL as host } from "../url/API_URL";
+const API_URL = `${host}/api/posts`;
 
 class PostService {
     constructor() {

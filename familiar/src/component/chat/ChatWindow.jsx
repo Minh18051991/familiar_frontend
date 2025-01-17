@@ -6,7 +6,7 @@ import {
     sendMessageRealTime,
     uploadFiles,
     deleteMessage
-} from '../../services/MessageService';
+} from '../../service/post/MessageService';
 import styles from './ChatWindow.module.css';
 import {Button, Form, Image} from 'react-bootstrap';
 import moment from 'moment';

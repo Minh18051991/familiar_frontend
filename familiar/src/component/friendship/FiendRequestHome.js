@@ -45,7 +45,7 @@ function FriendRequestHome() {
             {listFriend && listFriend.length > 0 ? (
                 <div>
                     {listFriend.map((user) => (
-                        <UserItemHome user={user} setListFriend={setListFriend}/>
+                        <UserItemHome key ={user.userId} user={user} setListFriend={setListFriend}/>
                     ))}
                     <div className="" style={{marginLeft: "125px", marginTop: "7px"}}>
                         <Link className="" to={'/friendships/request'} style={{textDecoration: 'none'}}>

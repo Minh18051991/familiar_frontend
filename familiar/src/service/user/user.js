@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API_URL =  'http://localhost:8080';
 
+import { API_URL } from "../url/API_URL";
 
 export async function getUserById(userId) {
     const token = localStorage.getItem('token');
@@ -45,7 +45,7 @@ export async function getUserById(userId) {
 export const updateUser = async (userId, updatedData) => {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.put(`http://localhost:8080/api/user/update/${userId}`, updatedData,{
+        const response = await axios.put(API_URL+`/api/user/update/${userId}`, updatedData,{
             headers: { Authorization: `Bearer ${token}` }
         });
         return response.data;
@@ -59,7 +59,7 @@ export async function createUser(user) {
 
     try {
 
-        const response = await axios.post('http://localhost:8080/api/user/create',user)
+        const response = await axios.post(API_URL+'/api/user/create',user)
         const userReponse = response.data;
         if (userReponse != null) {
             return userReponse;
@@ -73,7 +73,7 @@ export async function createUser(user) {
 
 export async function checkEmailExists(email) {
     try {
-        const response = await axios.post('http://localhost:8080/api/user/checkEmail', email);
+        const response = await axios.post(API_URL+'/api/user/checkEmail', email);
         return response.data;
     } catch (error) {
         console.error("Error checking username:", error);
