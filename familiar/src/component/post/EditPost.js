@@ -37,12 +37,14 @@ const EditPost = ({ post, open, onClose, onUpdate,handleChange }) => {
       handleChange()
     } catch (err) {
       console.error('Error updating post:', err);
+      onUpdate(post);
+      onClose();
     }
   };
-const  handleEmojiClick = (event, emojiObject) => {
+const handleEmojiClick = (emojiObject) => {
   setEditedContent(prev => prev + emojiObject.emoji);
   setShowEmojiPicker(false);
-}
+};
 
 
   return (
@@ -67,7 +69,7 @@ const  handleEmojiClick = (event, emojiObject) => {
           </IconButton>
           {showEmojiPicker && (
               <EmojiPicker onEmojiClick={handleEmojiClick}
-                           sx={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)' }}/>
+                           sx={{ position:'absolute', width: '100px' , height: '100px',left: 0, right: 0, bottom: '100%', transform: 'translateY(-50%)' }}/>
 
           )}
         </DialogContent>
