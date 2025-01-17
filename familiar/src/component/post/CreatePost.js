@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import PostService from '../../services/PostService';
+import PostService from '../../service/post/PostService';
 import {findUserById} from '../../service/user/userService';
 import {Form, Button, Modal} from 'react-bootstrap';
 import {BsCamera, BsTrash, BsEmojiSmile} from 'react-icons/bs';

@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import ReactPlayer from 'react-player';
 import CommentList from './CommentList';
-import CommentService from '../../services/CommentService';
+import CommentService from '../../service/post/CommentService';
 import moment from 'moment';
 
 const CommentModal = ({ open, handleClose, post, currentUserId }) => {

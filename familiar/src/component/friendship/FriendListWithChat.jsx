@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import { useSelector } from 'react-redux';
 import { getFriendShips } from '../../service/friendship/friendshipService';
-import { getMessagesBetweenUsers } from '../../services/MessageService';
+import { getMessagesBetweenUsers } from '../../service/post/MessageService';
 import ChatWindow from '../chat/ChatWindow';
 import styles from './FriendListWithChat.module.css';
 

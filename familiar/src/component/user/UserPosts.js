@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Box, CircularProgress, Typography, Button, Modal } from '@mui/material';
-import PostService from '../../services/PostService';
+import PostService from '../../service/post/PostService';
 import Post from '../post/Post';
 import CommentModal from '../comment/CommentModal';
 import EditIcon from '@mui/icons-material/Edit';

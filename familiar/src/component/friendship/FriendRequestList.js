@@ -44,7 +44,7 @@ function FriendRequestList() {
           {listFriend && listFriend.length > 0 ? (
               <div className={`${customStyles.listFriendContainer} d-flex justify-content-center`}>
                 {listFriend.map((user) => (
-                    <UserItem user={user} setListFriend={setListFriend}/>
+                    <UserItem key = {user.userId} user={user} setListFriend={setListFriend}/>
                 ))}
               </div>
           ) : (

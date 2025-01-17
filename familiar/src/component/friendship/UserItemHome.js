@@ -77,7 +77,7 @@ export default function UserItemHome({user, setListFriend}) {
 
                     <div className="d-flex justify-content-center m-0">
                         <button
-                            className={`${styles.btnAvatarHome} btn btn-primary btn-sm me-2 px-1`}
+                            className={`${styles.btnAvatarHome} btn btn-primary btn-sm d-flex align-items-center py-0 me-2 px-1`}
                             onClick={() => handleConfirm(user.userId)}>
                             Chấp nhận
                         </button>
