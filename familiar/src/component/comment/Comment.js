@@ -8,7 +8,7 @@ import SendIcon from '@mui/icons-material/Send';
 import CancelIcon from '@mui/icons-material/Cancel';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {Link} from "react-router-dom";
-import CommentService from "../../services/CommentService";
+import CommentService from "../../service/post/CommentService";
 
 
 const Comment = ({comment, onReply, onEdit, onDelete, currentUserId, refreshComments}) => {

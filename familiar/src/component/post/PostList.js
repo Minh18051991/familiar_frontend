@@ -15,7 +15,7 @@ import styles from './PostList.module.css';
 import EditPost from './EditPost';
 import CreatePost from './CreatePost';
 import moment from 'moment';
-import PostService from "../../services/PostService";
+import PostService from "../../service/post/PostService";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CommentIcon from '@mui/icons-material/Comment';

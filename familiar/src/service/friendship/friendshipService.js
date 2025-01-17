@@ -1,9 +1,10 @@
 import axios from "axios";
 
+import { API_URL } from "../url/API_URL";
 export async function getFriendShips(userId) {
   const token = localStorage.getItem("token");
   const response = await axios.get(
-    `http://localhost:8080/api/friendships/list/${userId}`,
+    API_URL + `/api/friendships/list/${userId}`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
   return response?.data;
@@ -13,7 +14,7 @@ export async function searchNameFriendship(userId, searchName) {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/friendships/search/${userId}?name_like=${searchName}`,
+      API_URL + `/api/friendships/search/${userId}?name_like=${searchName}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
     return response.data;
@@ -28,7 +29,7 @@ export async function sendFriendship(userId1, userId2) {
   console.log(token);
   try {
     const response = await axios.post(
-      `http://localhost:8080/api/friendships/send/${userId1}/${userId2}`,
+      API_URL + `/api/friendships/send/${userId1}/${userId2}`,
       null,
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -42,7 +43,7 @@ export async function deleteFriendship(userId1, userId2) {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.delete(
-      `http://localhost:8080/api/friendships/delete/${userId1}/${userId2}`,
+      API_URL + `/api/friendships/delete/${userId1}/${userId2}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
     return response.data;
@@ -55,7 +56,7 @@ export async function acceptFriendship(userId1, userId2) {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.put(
-      `http://localhost:8080/api/friendships/accept/${userId1}/${userId2}`,
+      API_URL + `/api/friendships/accept/${userId1}/${userId2}`,
       null,
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -69,7 +70,7 @@ export async function cancelFriendship(userId1, userId2) {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.put(
-      `http://localhost:8080/api/friendships/cancel/${userId1}/${userId2}`,
+      API_URL + `/api/friendships/cancel/${userId1}/${userId2}`,
       null,
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -83,7 +84,7 @@ export async function suggestedFriendsListPage(userId1, userId2, page, size) {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/friendships/suggestions-page/${userId1}/${userId2}?_page=${page}&_limit=${size}`,
+      API_URL + `/api/friendships/suggestions-page/${userId1}/${userId2}?_page=${page}&_limit=${size}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
     const data = response.data.content;
@@ -101,7 +102,7 @@ export async function friendRequestList(userId, page, size) {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/friendships/request/${userId}?_page=${page}&_limit=${size}`,
+      API_URL + `/api/friendships/request/${userId}?_page=${page}&_limit=${size}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
     const data = response.data.content;
@@ -121,7 +122,7 @@ export async function getFriendShipStatus(userId1, userId2) {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/friendships/status/${userId1}/${userId2}`,
+      API_URL + `/api/friendships/status/${userId1}/${userId2}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
     return response.data;
@@ -134,7 +135,7 @@ export async function mutualFriendList(userId1, userId2, page, size) {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/friendships/mutual/${userId1}/${userId2}?_page=${page}&_limit=${size}`,
+      API_URL + `/api/friendships/mutual/${userId1}/${userId2}?_page=${page}&_limit=${size}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
 
@@ -154,7 +155,7 @@ export async function mutualFriendList(userId1, userId2, page, size) {
 export async function getMutualFriends(userId1, userId2, page, size) {
   const token = localStorage.getItem("token");
   const response = await axios.get(
-    `http://localhost:8080/api/friendships/mutual/${userId1}/${userId2}?_page=${page}&_limit=${size}`,
+    API_URL + `/api/friendships/mutual/${userId1}/${userId2}?_page=${page}&_limit=${size}`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
 

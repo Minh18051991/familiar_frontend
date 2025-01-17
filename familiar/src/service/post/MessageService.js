@@ -2,11 +2,12 @@ import axios from 'axios';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from '../firebaseConfig';
+import { storage } from '../../firebaseConfig';
 
+import { API_URL as host} from "../url/API_URL";
 
-const API_URL = 'http://localhost:8080/api/messages';
-const SOCKET_URL = 'http://localhost:8080/ws';
+const API_URL = `${host}/api/messages`;
+const SOCKET_URL = `${host}/ws`;
 
 const axiosInstance = axios.create({
   baseURL: API_URL,

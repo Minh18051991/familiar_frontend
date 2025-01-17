@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Box, Button, IconButton, TextField, Typography} from '@mui/material';
 import Comment from './Comment';
-import CommentService from '../../services/CommentService';
+import CommentService from '../../service/post/CommentService';
 import styles from './CommentList.module.css';
 import EmojiPicker from 'emoji-picker-react';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';

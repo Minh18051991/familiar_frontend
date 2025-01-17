@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {login} from "../../redux/login/AccountAction";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
@@ -20,11 +20,16 @@ function LoginComponent() {
 
     const [showPassword, setShowPassword] = useState(false);
 
+
+
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
 
     useEffect(() => {
+        if (localStorage.getItem('token')) {
+            navigate('/');
+        }
         // Kiểm tra thông tin từ localStorage
         const loginInfo = localStorage.getItem('loginInfo');
         if (loginInfo) {
