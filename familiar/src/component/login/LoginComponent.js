@@ -14,6 +14,7 @@ function LoginComponent() {
     const passwordRef = useRef();
     const [name, setName] = useState('');
     const [avatar, setAvatar] = useState('');
+    const [hasNavigated, setHasNavigated] = useState(false);
     const location = useLocation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -27,12 +28,9 @@ function LoginComponent() {
     };
 
     useEffect(() => {
-        if (localStorage.getItem('token')) {
-            navigate('/');
-        }
         // Kiểm tra thông tin từ localStorage
         const loginInfo = localStorage.getItem('loginInfo');
-        if (loginInfo) {
+        if (loginInfo ) {
             const {username, name, avatar} = JSON.parse(loginInfo);
             setName(name);
             setAvatar(avatar);
@@ -55,7 +53,7 @@ function LoginComponent() {
             usernameRef.current.value = location.state.username;
             passwordRef.current.focus();
         }
-    }, [location]);
+    }, []);
 
     const handleLogin = async () => {
         let username = usernameRef.current.value;
@@ -137,6 +135,7 @@ function LoginComponent() {
                                         type={showPassword ? "text" : "password"}
                                         id="password"
                                         placeholder="Nhập password"
+                                        autoComplete="current-password"
                                     />
                                     <button
                                         type="button"

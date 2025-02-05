@@ -31,9 +31,6 @@ function HeaderComponent() {
         return null;
     }, [info, account]);
 
-    console.log(info.profilePictureUrl)
-
-
     const handleLogout = () => {
         dispatch(logout());
         navigate('/login');
