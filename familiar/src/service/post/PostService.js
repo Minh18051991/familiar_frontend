@@ -7,7 +7,7 @@ const API_URL = `${host}/api/posts`;
 class PostService {
     constructor() {
         this.axiosInstance = axios.create({
-            baseURL: API_URL,
+            baseURL: API_URL
         });
 
         this.axiosInstance.interceptors.request.use((config) => {
